@@ -1,0 +1,91 @@
+Letter = UpperLetter | LowerLetter
+UpperLetter = "A" |...| "Z"
+LowerLetter = "a" |...| "z"
+Zero = "0";
+NonZero = "1" |...| "9";
+Digit = NonZero | Zero;
+Sign = ? ASCII 32-126 ?
+Str = "\"" {(Sign - "{") | ("{", Expression, "}")} "\"" | "'" {Sign} "'"
+Bool = "true" | "false"
+ConstantValue = Int | Dbl | Str | Bool
+
+Int = NonZero, {Digit} | Zero;
+Dbl =  Int, [".", {Digit}];
+
+Variable = LowerLetter, {Letter};
+LowerVar = LowerLetter, {LowerLetter};
+Type = UpperLetter, {Letter};
+Constant = "_", UpperLetter, {UpperLetter};
+
+#ANALIZA SKŁADNIOWA
+
+File = {Statement};
+Statement = CompoundStatement | SimpleStatement;
+
+#SIMPLE
+SimpleStatement = ExpressionStatement | DeleteStatement | ImportStatement | NewStatement | AssignStatement | ControlStatement | AliasStatement;
+
+ExpressionStatement = Expression, Newline;
+DeleteStatement = "delete", Variable, Newline;
+ImportStatement = "import", Library, ["as", Library], Newline;
+NewStatement = NewExpression, Newline;
+AssignStatement = AssignExpression, Newline;
+ControlStatement = ("break" | "continue"), Newline;
+AliasStatement = "alias", Type, (Type | "decltype", '(', Term, ')';
+
+Newline = '\n' | ';';
+
+Expression = [(ArithmeticExpression | NewExpression), {',', (ArithmeticExpression | NewExpression)}];
+
+NewExpression = "new", ["mut"], ["static"], [Type], Variable, ['(', ArgumentList, ')'];
+AssignExpression = NewExpression, AssignOperator, Term;
+
+ConditionalExpression = AndExpression, {"or", AndExpression};
+AndExpression = OrExpression, {"and", OrExpression};
+OrExpression = ["not"], RelativeExpression, {RelativeOperator, ["not"], RelativeExpression};
+RelativeExpression = '(' ConditionalExpression ')' | ArithmeticExpression;
+
+ArithmeticExpression = AddExpression, {AddOperator, AddExpression};
+AddExpression = MultiplyExpression, {MultiplyOperator, MultiplyExpression};
+MultiplyExpression = [UnarySign | PreIncrement], Term;
+Term = ConstantValue | '(', ArithmeticExpression, ')'
+      | ((Variable, [PostIncrement] | Constant | FunctionCall), {ArraySubscript}), {'.', (Variable, [PostIncrement] | Constant | FunctionCall), {ArraySubscript}}
+
+FunctionCall = Variable, '(', ArgumentList, ')';
+ArgumentList = [Argument, {',', Argument}], [NamedArgument, {',', NamedArgument}];
+Argument = Term | ArithmeticExpression;
+NamedArgument = Variable, '=', Argument;
+
+Library = LowerVar;
+AssignOperator = '=' | "+=" | "-=" | "*=" | "/=" | "%=";
+RelativeOperator = "==" | "!=" | "<" | ">" | "<=" | ">=";
+AddOperator = "+" | "-";
+MultiplyOperator = "*" | "/" | "%";
+UnarySign = "+" | "-";
+PreIncrement = "++" | "--";
+PostIncrement = "++" | "--";
+ArraySubscript = "[", (UnsignedIntTerm | ([UnsignedIntTerm], ':', [UnsignedIntTerm]), "]";
+UnsignedIntTerm = Term;
+
+
+#COMPOUND
+CompoundStatement = IfStatement | WhileStatement | ForStatement | ForiStatement | ForeachStatement | FunctionDefinition | ClassDefinition;
+BlockInstruction = "{", {Statement}, "}";
+
+IfStatement = "if", '(', ConditionalExpression, ')', BlockInstruction, ["else", BlockInstruction];
+WhileStatement = "while", '(', ConditionalExpression, ')', BlockInstruction;
+ForStatement = "for", '(', Expression, ';', ConditionalExpression, ';' Expression, ')', BlockInstruction;
+ForiStatement = "fori", '(', UnsignedIntTerm, ')', BlockInstruction;
+ForeachStatement = "foreach", '(', Variable, "in", ListVariable, ')', BlockInstruction;
+FunctionDefinition = "def", [Type], Variable, '(', ParameterList, ')', BlockInstruction;
+ClassDefinition = "class", Type, '(', Type, ')', '{', ClassBody, '}';
+
+ParameterList = [Parameter, {',', Parameter}];
+Parameter = [Type], Variable, ['=', Default];
+Default = Term;
+
+ListVariable = Variable, [ArraySubscript];
+
+ClassBody = {ClassBodyStatement};
+ClassBodyStatement = (MemberDefinition | FunctionDefinition), Newline;
+MemberDefinition = ["public" | "private" | "secret"], ["mut"], ["static"], [Type], Variable, ['(', ArgumentList, ')'];
