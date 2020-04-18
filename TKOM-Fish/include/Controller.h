@@ -7,23 +7,18 @@
 
 #include <memory>
 #include <Analizator/Lexer/Lexer.h>
-#include "Context.h"
-#include <Analizator/Parser/Parser.h>
-
-typedef std::unique_ptr<Lexer> LexerT;
-typedef std::unique_ptr<Parser> ParserT;
+#include <Context.h>
+#include <Src.h>
+#include <Analizator/Parser/LanguageParser.h>
 
 class Controller {
-    static const inline unsigned int MAX_LINE_LENGTH = 1024;
-    Context context;
-    LexerT lexer;
-    ParserT parser;
 
-    void printPrompt(std::ostream &os) const;
-    void printTokenDebug(std::ostream &os, Token const &token) const;
+    static const inline unsigned int MAX_LINE_LENGTH = 1024;
+    std::unique_ptr<Lexer> lexer;
+    std::unique_ptr<LanguageParser> parser;
 public:
-    Controller();
-    void analise(std::istream &is, std::ostream &os);
+    Controller(std::unique_ptr<Src> source);
+    void analise();
 };
 
 

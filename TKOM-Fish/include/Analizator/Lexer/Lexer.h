@@ -9,31 +9,40 @@
 #include <sstream>
 #include <map>
 #include "Token.h"
-#include "LexerState.h"
-#include "Context.h"
+#include <Context.h>
+#include <Src.h>
 
 typedef std::unique_ptr<Token> TokenT;
 
 class Lexer {
-    static const inline std::map<LexerState, size_t> maxLength = {
-            {S_STR_DBL_QUOTE, 1024},
-            {S_STR_SGL_QUOTE, 128},
-            {S_INT,           128},
-            {S_DBL,           256},
-            {S_VARIABLE,      128},
-            {S_LOWER_VAR,     128},
-            {S_TYPE,          128},
-            {S_CONSTANT,      128},
-            {S_ZERO, 128}
+    static const inline std::map<TokenType, size_t> maxLength = {
+            {ONE_SIGN, 8},
+            {STR, 1024},
+            {INT, 128},
+            {DBL, 256},
+            {IDENTIFIER, 128},
+            {CONSTANT, 128},
+            {KEYWORD, 128},
+            {OPERATOR, 64},
     };
 
-    LexerState state;
-    Context &context;
+    std::unique_ptr<Context> context;
+    std::unique_ptr<Src> source;
 
-    void setState(LexerState state);
+    std::string buf;
+    char c;
+    TokenType potentialType;
+
+    void saveAndnext();
+    void next();
+    void save();
 public:
-    explicit Lexer(Context &context);
-    TokenT getNextToken(std::istream &is);
+    Lexer(std::unique_ptr<Context> context, std::unique_ptr<Src> source);
+    TokenT getNextToken();
+
+    const std::unique_ptr<Context> &getContext() const;
+
+    const SrcT &getSource() const;
 
 };
 

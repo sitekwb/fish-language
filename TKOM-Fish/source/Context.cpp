@@ -4,28 +4,28 @@
 
 #include "Context.h"
 
-Context::Context() : line(0), sign(0), signInLine(0) {
+Context::Context() : lineNumber(0), signNumber(0), signNumberInLine(0) {
 
 }
 
-void Context::nextLine() {
-    ++line;
-    signInLine = 0;
+void Context::nextLineNumber() {
+    ++lineNumber;
+    signNumberInLine = 0;
 }
 
-void Context::nextSign() {
-    ++sign;
-    ++signInLine;
+void Context::nextSignNumber() {
+    ++signNumber;
+    ++signNumberInLine;
 }
 
-unsigned int Context::getLine() const {
-    return line;
+unsigned int Context::getLineNumber() const {
+    return lineNumber;
 }
 
-unsigned int Context::getSign() const {
-    return sign;
+unsigned int Context::getSignNumber() const {
+    return signNumber;
 }
 
-unsigned int Context::getSignInLine() const {
-    return signInLine;
+unsigned int Context::getSignNumberInLine() const {
+    return signNumberInLine;
 }

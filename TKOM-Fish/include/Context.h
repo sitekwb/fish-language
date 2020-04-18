@@ -7,17 +7,19 @@
 
 
 class Context {
-    unsigned line, sign, signInLine;
+    unsigned int lineNumber, signNumber, signNumberInLine;
 
 public:
     Context();
 
-    void nextLine();
-    void nextSign();
+    void nextLineNumber();
+    void nextSignNumber();
 
-    unsigned int getLine() const;
-    unsigned int getSign() const;
-    unsigned int getSignInLine() const;
+    unsigned int getLineNumber() const;
+
+    unsigned int getSignNumber() const;
+
+    unsigned int getSignNumberInLine() const;
 };
 
 

@@ -40,7 +40,7 @@ AssignExpression = Variable, AssignOperator, Term;
 
 ConditionalExpression = AndExpression, {"or", AndExpression};
 AndExpression = OrExpression, {"and", OrExpression};
-OrExpression = ["not"], RelativeExpression, {RelativeOperator, ["not"], RelativeExpression};
+OrExpression = UnaryNot, RelativeExpression, {RelativeOperator, UnaryNot, RelativeExpression};
 RelativeExpression = '(' ConditionalExpression ')' | ArithmeticExpression;
 
 ArithmeticExpression = AddExpression, {AddOperator, AddExpression};
@@ -60,6 +60,7 @@ RelativeOperator = "==" | "!=" | "<" | ">" | "<=" | ">=";
 AddOperator = "+" | "-";
 MultiplyOperator = "*" | "/" | "%";
 UnarySign = "+" | "-";
+UnaryNot = "not" | "!";
 
 ArraySubscript = "[", (UnsignedIntTerm | ([UnsignedIntTerm], ':', [UnsignedIntTerm]), "]";
 UnsignedIntTerm = Term;

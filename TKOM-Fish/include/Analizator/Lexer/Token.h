@@ -7,17 +7,35 @@
 
 
 #include <ostream>
+#include <Analizator/Lexer/TokenType.h>
+#include <Src.h>
 
 class Token {
+    TokenType type;
+    std::string value;
 public:
+    Token(TokenType tokenType, std::string tokenValue);
+    Token(Src const &source, char c);
 
     bool operator==(const Token &rhs) const;
-
     bool operator!=(const Token &rhs) const;
+    bool operator==(const char &rhs) const;
+    bool operator!=(const char &rhs) const;
 
-    virtual void print(std::ostream &os) const = 0;
+    TokenType getType() const;
+
+    const std::string &getValue() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Token &token);
+
+    static const inline std::unordered_set<char> oneSignTokenSet = {'+', '-', '*', '/', '%', '.', ',', '{', '[', '(', ')', ']', '}', '=', '<', '>', ';', EOF, '$'};
+    static const inline std::unordered_set<std::string> keywords = {"delete", "import", "as", "break", "continue", "alias",
+                                                                    "new", "mut", "static", "or", "and", "not",
+                                                                    "if", "else", "while", "for", "fori", "foreach", "def", "class",
+                                                                    "public", "private", "secret",
+                                                                    "true", "false"};
+    static const inline std::unordered_set<std::string> operators = {"+=", "-=", "*=", "/=", "%=", "<=", ">=", "==", "!="};
+
 };
 
 
