@@ -26,7 +26,7 @@ Statement = (CompoundStatement | SimpleStatement), [";"];
 SimpleStatement = ExpressionStatement | DeleteStatement | ImportStatement | NewStatement | AssignStatement | ControlStatement | AliasStatement;
 
 ExpressionStatement = Expression;
-DeleteStatement = "delete", Variable;
+DeleteStatement = "delete", Identifier;
 ImportStatement = "import", Library, ["as", Library];
 NewStatement = NewExpression;
 AssignStatement = AssignExpression;
@@ -35,22 +35,22 @@ AliasStatement = "alias", Type, Type;
 
 Expression = [(ArithmeticExpression | NewExpression), {',', (ArithmeticExpression | NewExpression)}];
 
-NewExpression = "new", ["mut"], ["static"], [Type], (Variable | Constant), ['(', ArgumentList, ')'] [AssignOperator, ConditionalExpresion];
-AssignExpression = Variable, AssignOperator, Term;
+NewExpression = "new", ["mut"], ["static"], [Type], (Identifier | Constant), ['(', ArgumentList, ')'] [AssignOperator, ConditionalExpresion];
+AssignExpression = Identifier, AssignOperator, Term;
 
 ConditionalExpression = AndExpression, {"or", AndExpression};
 AndExpression = OrExpression, {"and", OrExpression};
-OrExpression = UnaryNot, RelativeExpression, {RelativeOperator, UnaryNot, RelativeExpression};
+OrExpression = [UnaryNot], RelativeExpression, {RelativeOperator, [UnaryNot], RelativeExpression};
 RelativeExpression = '(' ConditionalExpression ')' | ArithmeticExpression;
 
 ArithmeticExpression = AddExpression, {AddOperator, AddExpression};
 AddExpression = MultiplyExpression, {MultiplyOperator, MultiplyExpression};
-MultiplyExpression = [UnarySign | PreIncrement], Term;
-Term = ConstantValue | '(', ArithmeticExpression, ')'
-      | ((Variable | Constant | FunctionCall), {ArraySubscript}), {'.', (Variable | Constant | FunctionCall), {ArraySubscript}}
+MultiplyExpression = [UnarySign], Term;
+Term = Int | Dbl | Str | Bool | '(', ArithmeticExpression, ')'
+      | ((Identifier | Constant | FunctionCall), {ArraySubscript}), {'.', (Identifier | Constant | FunctionCall), {ArraySubscript}}
 
 
-FunctionCall = Variable, '(', ArgumentList, ')';
+FunctionCall = Identifier, '(', ArgumentList, ')';
 ArgumentList = [Argument, {',', Argument}];
 Argument =  ConditionalExpression;
 
@@ -74,16 +74,16 @@ IfStatement = "if", '(', ConditionalExpression, ')', BlockInstruction, ["else", 
 WhileStatement = "while", '(', ConditionalExpression, ')', BlockInstruction;
 ForStatement = "for", '(', Expression, ';', ConditionalExpression, ';' Expression, ')', BlockInstruction;
 ForiStatement = "fori", '(', UnsignedIntTerm, ')', BlockInstruction;
-ForeachStatement = "foreach", '(', Variable, "in", ListVariable, ')', BlockInstruction;
-FunctionDefinition = "def", [Type], Variable, '(', ParameterList, ')', BlockInstruction;
+ForeachStatement = "foreach", '(', Identifier, "in", ListIdentifier, ')', BlockInstruction;
+FunctionDefinition = "def", [Type], Identifier, '(', ParameterList, ')', BlockInstruction;
 ClassDefinition = "class", Type, '{', ClassBody, '}';
 
 ParameterList = [Parameter, {',', Parameter}];
-Parameter = [Type], Variable, ['=', Default];
+Parameter = [Type], Identifier, ['=', Default];
 Default = Term;
 
-ListVariable = Variable, [ArraySubscript];
+ListIdentifier = Identifier, [ArraySubscript];
 
 ClassBody = {ClassBodyStatement};
 ClassBodyStatement = (MemberDefinition | FunctionDefinition), Newline;
-MemberDefinition = ["public" | "private" | "secret"], ["mut"], ["static"], [Type], Variable, ['(', ArgumentList, ')'];
+MemberDefinition = ["public" | "private" | "secret"], ["mut"], ["static"], [Type], Identifier, ['(', ArgumentList, ')'];

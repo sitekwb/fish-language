@@ -2,7 +2,7 @@
 // Created by Wojtek on 16/04/2020.
 //
 
-#include <Analizator/Parser/LanguageParser.h>
+#include <Analizator/Parser/Parser.h>
 #include <Analizator/Lexer/TokenType.h>
 #include <iostream>
 #include <memory>
@@ -13,7 +13,7 @@ using namespace std;
 
 Controller::Controller(std::unique_ptr<Src> source) {
     lexer = make_unique<Lexer>(make_unique<Context>(), unique_ptr<Src>(move(source)));
-    parser = make_unique<LanguageParser>();
+    parser = make_unique<Parser>();
 }
 
 void Controller::analise() {

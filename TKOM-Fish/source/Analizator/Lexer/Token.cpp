@@ -50,7 +50,9 @@ Token::Token(TokenType tokenType, std::string val) : type(tokenType), value(val)
     // check if tokens are valid
     switch (type) {
         case ONE_SIGN:
-            throw std::runtime_error("Wrong constructor to one sign");
+            if(val.length() != 1 || !oneSignTokenSet.count(val[0])){
+                throw std::runtime_error("Wrong one-sign");
+            }
             break;
         case INT:
             // throws exceptions if incompatible value
@@ -103,4 +105,9 @@ bool Token::operator!=(const char &rhs) const {
 
 bool Token::operator==(const char &rhs) const {
     return this->type == ONE_SIGN && this->value[0] == rhs;
+}
+
+
+Token::Token(TokenType tokenType) : Token(tokenType, "") {
+
 }

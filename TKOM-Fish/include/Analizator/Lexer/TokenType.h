@@ -16,5 +16,6 @@ enum TokenType{
     CONSTANT,
     KEYWORD,
     OPERATOR,
+    NO_TOKEN,
 };
 #endif //FISH_TOKENTYPE_H

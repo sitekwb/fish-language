@@ -16,6 +16,7 @@ class Token {
 public:
     Token(TokenType tokenType, std::string tokenValue);
     Token(Src const &source, char c);
+    explicit Token(TokenType tokenType);
 
     bool operator==(const Token &rhs) const;
     bool operator!=(const Token &rhs) const;

@@ -9,13 +9,13 @@
 #include <Analizator/Lexer/Lexer.h>
 #include <Context.h>
 #include <Src.h>
-#include <Analizator/Parser/LanguageParser.h>
+#include <Analizator/Parser/Parser.h>
 
 class Controller {
 
     static const inline unsigned int MAX_LINE_LENGTH = 1024;
     std::unique_ptr<Lexer> lexer;
-    std::unique_ptr<LanguageParser> parser;
+    std::unique_ptr<Parser> parser;
 public:
     Controller(std::unique_ptr<Src> source);
     void analise();
