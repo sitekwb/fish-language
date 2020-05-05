@@ -10,40 +10,43 @@
 #include <map>
 #include "Token.h"
 #include <Context.h>
-#include <Src.h>
+#include <Source.h>
 
-typedef std::unique_ptr<Token> TokenT;
+typedef std::unique_ptr<Token> TokenUP;
 
 class Lexer {
-    static const inline std::map<TokenType, size_t> maxLength = {
-            {ONE_SIGN, 8},
-            {STR, 1024},
-            {INT, 128},
-            {DBL, 256},
-            {IDENTIFIER, 128},
-            {CONSTANT, 128},
-            {KEYWORD, 128},
-            {OPERATOR, 64},
-    };
 
-    std::unique_ptr<Context> context;
-    std::unique_ptr<Src> source;
+    Context context;
+    std::unique_ptr<Source> source;
 
     std::string buf;
     char c;
-    TokenType potentialType;
+    TokenUP currentToken;
 
-    void saveAndnext();
+    bool buildLetterToken();
+    bool buildNumberToken();
+    bool buildDoubleToken();
+    bool buildConstantToken();
+    bool buildStringToken();
+    bool buildSignToken();
+
+    void collectDigits();
+    void collectUpperLetters();
+    void collectEscapedString();
+    void collectIdentifier();
+    void collectString();
+    void collect();
+
+    void collectStringSign();
+    void nextStringSign();
+
     void next();
     void save();
 public:
-    Lexer(std::unique_ptr<Context> context, std::unique_ptr<Src> source);
-    TokenT getNextToken();
+    explicit Lexer(std::unique_ptr<Source> source);
+    TokenUP getNextToken();
 
-    const std::unique_ptr<Context> &getContext() const;
-
-    const SrcT &getSource() const;
-
+    [[nodiscard]] const SourceUP &getSource() const;
 };
 
 

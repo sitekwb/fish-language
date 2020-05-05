@@ -4,7 +4,10 @@
 
 #include "Analizator/Parser/Parser.h"
 
-Parser::Parser() : startSymbol(File), ;
+Parser::Parser() : startSymbol(File) {
+
+}
+
 
 void Parser::parse() {
 

@@ -4,18 +4,18 @@
 
 #include <sstream>
 #include "../../../include/Analizator/Lexer/Token.h"
+#include <iomanip>
+
+using namespace std;
 
 bool Token::operator!=(const Token &rhs) const {
     return !(rhs == *this);
 }
 
 std::ostream &operator<<(std::ostream &os, const Token &token) {
-    os << token.value << "\t\t";
+    os << setw(15) << token.value << "\t\t" << setw(10);
 
     switch (token.type) {
-        case ONE_SIGN:
-            os << "[ONE_SIGN]";
-            break;
         case STR:
             os << "[STR]";
             break;
@@ -34,8 +34,86 @@ std::ostream &operator<<(std::ostream &os, const Token &token) {
         case KEYWORD:
             os << "[KEYWORD]";
             break;
-        case OPERATOR:
-            os << "[OPERATOR]";
+        case PLUS:
+            os << '+';
+            break;
+        case MULTIPLY:
+            os << '*';
+            break;
+        case DIVIDE:
+            os << '/';
+            break;
+        case PERCENT:
+            os << '%';
+            break;
+        case POINT:
+            os << '.';
+            break;
+        case COMMA:
+            os << ',';
+            break;
+        case BLOCK_OPEN:
+            os << '{';
+            break;
+        case BLOCK_CLOSE:
+            os << '}';
+            break;
+        case SQUARE_OPEN:
+            os << '[';
+            break;
+        case SQUARE_CLOSE:
+            os << ']';
+            break;
+        case BRACKET_OPEN:
+            os << '(';
+            break;
+        case BRACKET_CLOSE:
+            os << ')';
+            break;
+        case EQUAL:
+            os << '=';
+            break;
+        case LESS:
+            os << '<';
+            break;
+        case MORE:
+            os << '>';
+            break;
+        case SEMICOLON:
+            os << ';';
+            break;
+        case EOF_TOKEN:
+            os << "[EOF]";
+            break;
+        case PLUS_EQ:
+            os << "+=";
+            break;
+        case MINUS_EQ:
+            os << "-=";
+            break;
+        case MULTIPLY_EQ:
+            os << "*=";
+            break;
+        case DIVIDE_EQ:
+            os << "/=";
+            break;
+        case PERCENT_EQ:
+            os << "%=";
+            break;
+        case LESS_EQ:
+            os << "<=";
+            break;
+        case MORE_EQ:
+            os << ">=";
+            break;
+        case EQ_EQ:
+            os << "==";
+            break;
+        case NOT_EQ:
+            os << "!=";
+            break;
+        case MINUS:
+            os << "-";
             break;
     }
     os << std::endl;
@@ -46,49 +124,40 @@ bool Token::operator==(const Token &rhs) const {
     return this->type == rhs.type && this->value == rhs.value;
 }
 
-Token::Token(TokenType tokenType, std::string val) : type(tokenType), value(val) {
-    // check if tokens are valid
-    switch (type) {
-        case ONE_SIGN:
-            if(val.length() != 1 || !oneSignTokenSet.count(val[0])){
-                throw std::runtime_error("Wrong one-sign");
-            }
-            break;
-        case INT:
-            // throws exceptions if incompatible value
-            stoi(val);
-            break;
-        case DBL:
-            stod(val);
-            break;
-        case IDENTIFIER:
-            if (!isalpha(val[0])){
-                throw std::runtime_error("Identifier not starting with letter");
-            }
-                break;
-        case CONSTANT:
-            if(val.length() < 2 || val[0] != '_' || !isupper(val[1])){
-                throw std::runtime_error("Constant error");
-            }
-            break;
-        case KEYWORD:
-            if (keywords.count(val) != 1) {
-                throw std::runtime_error("Keyword error");
-            }
-            break;
-        case OPERATOR:
-            if (operators.count(val) != 1) {
-                throw std::runtime_error("Keyword error");
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-Token::Token(Src const &source, char c) : type(ONE_SIGN), value() {
-    value.push_back(c);
-    value = source.exchangeToken(type, value);
+Token::Token(TokenType tokenType, std::string val, Context context_)
+        : type(tokenType), value(val), context(context_) {
+//    // check if tokens are valid
+//    switch (type) {
+//        case INT:
+//            // throws exceptions if incompatible value
+//            stoi(val);
+//            break;
+//        case DBL:
+//            stod(val);
+//            break;
+//        case IDENTIFIER:
+//            if (!isalpha(val[0])) {
+//                throw std::runtime_error("Identifier not starting with letter");
+//            }
+//            break;
+//        case CONSTANT:
+//            if (val.length() < 2 || val[0] != '_' || !isupper(val[1])) {
+//                throw std::runtime_error("Constant error");
+//            }
+//            break;
+//        case KEYWORD:
+//            if (keywords.count(val) != 1) {
+//                throw std::runtime_error("Keyword error");
+//            }
+//            break;
+//        case STR:
+//            break;
+//        default:
+//            if (val.length() != 0) {
+//                throw std::runtime_error("Non empty token value with operator or one-sign token");
+//            }
+//            break;
+//    }
 }
 
 TokenType Token::getType() const {
@@ -99,15 +168,89 @@ const std::string &Token::getValue() const {
     return value;
 }
 
-bool Token::operator!=(const char &rhs) const {
-    return !(*this == rhs);
+std::unique_ptr<Token> Token::buildKeyword(const std::string &buf) {
+    auto keywordIterator = Token::keywords.find(buf);
+    if (keywordIterator != Token::keywords.end()) {
+        return std::make_unique<Token>(KEYWORD, buf);
+    }
+    return nullptr;
 }
 
-bool Token::operator==(const char &rhs) const {
-    return this->type == ONE_SIGN && this->value[0] == rhs;
+bool Token::isTwoSignTokenSign(char c) {
+    auto signIterator = operatorFirstSigns.find(c);
+    return signIterator != operatorFirstSigns.end();
 }
 
-
-Token::Token(TokenType tokenType) : Token(tokenType, "") {
-
+bool Token::isSignToken(char c) {
+    auto signIterator = oneSigns.find(c);
+    return signIterator != oneSigns.end();
 }
+
+TokenType Token::getTwoSignTokenType(char c) {
+    switch (c) {
+        case '+':
+            return PLUS_EQ;
+        case '-':
+            return MINUS_EQ;
+        case '*':
+            return MULTIPLY_EQ;
+        case '/':
+            return DIVIDE_EQ;
+        case '%':
+            return PERCENT_EQ;
+        case '<':
+            return LESS_EQ;
+        case '>':
+            return MORE_EQ;
+        case '=':
+            return EQ_EQ;
+        case '!':
+            return NOT_EQ;
+        default:
+            throw std::runtime_error("no operator starting from this sign");
+    }
+}
+
+TokenType Token::getOneSignTokenType(char c) {
+    switch (c) {
+        case '+':
+            return PLUS;
+        case '-':
+            return MINUS;
+        case '*':
+            return MULTIPLY;
+        case '/':
+            return DIVIDE;
+        case '%':
+            return PERCENT;
+        case '.':
+            return POINT;
+        case ',':
+            return COMMA;
+        case '{':
+            return BLOCK_OPEN;
+        case '}':
+            return BLOCK_CLOSE;
+        case '[':
+            return SQUARE_OPEN;
+        case ']':
+            return SQUARE_CLOSE;
+        case '(':
+            return BRACKET_OPEN;
+        case ')':
+            return BRACKET_CLOSE;
+        case '=':
+            return EQUAL;
+        case '<':
+            return LESS;
+        case '>':
+            return MORE;
+        case ';':
+            return SEMICOLON;
+        case EOF:
+            return EOF_TOKEN;
+        default:
+            throw std::runtime_error("no one sign token from this sign");
+    }
+}
+

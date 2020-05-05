@@ -2,8 +2,6 @@
 // Created by Wojtek on 16/04/2020.
 //
 
-#include <Analizator/Parser/Parser.h>
-#include <Analizator/Lexer/TokenType.h>
 #include <iostream>
 #include <memory>
 #include "Controller.h"
@@ -11,18 +9,24 @@
 
 using namespace std;
 
-Controller::Controller(std::unique_ptr<Src> source) {
-    lexer = make_unique<Lexer>(make_unique<Context>(), unique_ptr<Src>(move(source)));
+Controller::Controller(std::unique_ptr<Source> source, bool debug) : isDebug(debug){
+    lexer = make_unique<Lexer>(unique_ptr<Source>(move(source)));
     parser = make_unique<Parser>();
 }
 
-void Controller::analise() {
-    auto token = lexer->getNextToken();
-    lexer->getSource()->printDebug(token->getType(), token->getValue());
-    auto eof = (char)EOF;
-    while (*token != eof) {
+void Controller::execute() {
+    Token eof = Token(EOF_TOKEN);
+    TokenUP token;
+    do {
         token = lexer->getNextToken();
-        lexer->getSource()->printDebug(token->getType(), token->getValue());
+        printDebug(*token);
         parser->parse();
+    } while (*token != eof);
+}
+
+void Controller::printDebug(const Token &token) {
+    if(isDebug) {
+        std::cout << token << std::endl;
+        std::cout.flush();
     }
 }

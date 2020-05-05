@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Symbol::Symbol(SymbolType symbolType) : type(move(symbolType)), token(NO_TOKEN) {
+Symbol::Symbol(SymbolType symbolType) : type(symbolType), token(NO_TOKEN) {
 
 }
 

@@ -6,28 +6,36 @@
 #include <Analizator/Lexer/Token.h>
 #include "Sources/CommandLineSource.h"
 
+using namespace std;
+
 char CommandLineSource::peek() {
     serve();
-    return buf.peek();
+    return exchangeEOF(buf.peek());
 }
 
 char CommandLineSource::get() {
-    serve();
-    return buf.get();
+    return exchangeEOF(buf.get());
 }
 
-void CommandLineSource::serve() {
-    while(! buf.rdbuf()->in_avail()) {
-        if(!last){
-            last = true;
-            break;
-        }
-        printPrompt();
-        char line[MAX_LINE_LEN];
-        std::cin.getline(line, MAX_LINE_LEN);
-        std::stringstream().swap(buf);
-        buf.str(line);
+void CommandLineSource::serve(bool isString) {
+    bool needNew = ! buf.rdbuf()->in_avail();
+    if(needNew && !last){
+        last = true;
+        needNew = false;
+    }
+    if(initialisation || needNew) {
         last = false;
+        initialisation = false;
+
+        (isString) ? printStringPrompt() : printPrompt();
+        std::string str;
+        std::getline(std::cin, str);
+        std::stringstream().swap(buf);
+        buf.str(str);
+        // Try to finish
+        if(!isString && *(--(str.end())) == FINISH_SIGN){
+            exit(0);
+        }
     }
 }
 
@@ -36,31 +44,24 @@ void CommandLineSource::printPrompt() const {
     std::cout.flush();
 }
 
-void CommandLineSource::printDebug(TokenType const &tokenType, std::string const &value) {
-    if(tokenType == ONE_SIGN){
-        std::cout << Token(*this, value[0]);
-    }
-    else {
-        std::cout << Token(tokenType, value);
-    }
-
+void CommandLineSource::printStringPrompt() const {
+    std::cout << "> ";
     std::cout.flush();
 }
 
-std::string CommandLineSource::exchangeToken(TokenType tokenType, std::string &value) const{
-    if(tokenType == ONE_SIGN && value[0] == (char)EOF){
-        std::string s;
-        s.push_back('\n');
-        return std::move(s);
-    }
-    if(tokenType == ONE_SIGN && value[0] == '$'){
-        std::string s;
-        s.push_back((char)EOF);
-        return std::move(s);
-    }
-    return std::move(value);
+CommandLineSource::CommandLineSource() : last(true), initialisation(true) {
+
 }
 
-CommandLineSource::CommandLineSource() : last(true) {
+char CommandLineSource::getStringSign() {
+    return exchangeEOF(buf.get());
+}
 
+char CommandLineSource::peekStringSign() {
+    serve(true);
+    return exchangeEOF(buf.peek());
+}
+
+char CommandLineSource::exchangeEOF(char c) {
+    return (c == EOF) ? '\n' : c;
 }

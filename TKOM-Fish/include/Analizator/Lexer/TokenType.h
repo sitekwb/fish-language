@@ -8,14 +8,42 @@
 #include <unordered_set>
 
 enum TokenType{
-    ONE_SIGN,
     STR,
     INT,
     DBL,
     IDENTIFIER,
     CONSTANT,
     KEYWORD,
-    OPERATOR,
+    // ONE SIGN
+    PLUS,
+    MINUS,
+    MULTIPLY,
+    DIVIDE,
+    PERCENT,
+    POINT,
+    COMMA,
+    BLOCK_OPEN,
+    BLOCK_CLOSE,
+    SQUARE_OPEN,
+    SQUARE_CLOSE,
+    BRACKET_OPEN,
+    BRACKET_CLOSE,
+    EQUAL,
+    LESS,
+    MORE,
+    SEMICOLON,
+    EOF_TOKEN,
+    // OPERATORS:
+    PLUS_EQ,
+    MINUS_EQ,
+    MULTIPLY_EQ,
+    DIVIDE_EQ,
+    PERCENT_EQ,
+    LESS_EQ,
+    MORE_EQ,
+    EQ_EQ,
+    NOT_EQ,
+    // NO TOKEN:
     NO_TOKEN,
 };
 #endif //FISH_TOKENTYPE_H

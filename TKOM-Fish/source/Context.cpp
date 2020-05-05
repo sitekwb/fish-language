@@ -29,3 +29,8 @@ unsigned int Context::getSignNumber() const {
 unsigned int Context::getSignNumberInLine() const {
     return signNumberInLine;
 }
+
+Context::Context(unsigned int lineNumber_, unsigned int signNumber_, unsigned int signNumberInLine_)
+: lineNumber(lineNumber_), signNumber(signNumber_), signNumberInLine(signNumberInLine_){
+
+}

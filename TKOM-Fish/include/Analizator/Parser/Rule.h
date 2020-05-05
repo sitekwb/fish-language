@@ -22,13 +22,13 @@ class Rule {
     Mode mode;
 public:
     Rule(std::initializer_list<Rule> rules);
-    Rule(Symbol symbol);
-    Rule(SymbolType symbolType);
-    Rule(Token token);
-    Rule(TokenType tokenType);
+    explicit Rule(Symbol symbol);
+    explicit Rule(SymbolType symbolType);
+    explicit Rule(Token token);
+    explicit Rule(TokenType tokenType);
     Rule(TokenType tokenType, std::string tokenValue);
-    Rule(char c);
-    Rule(std::string tokenValue);
+    explicit Rule(char c);
+    explicit Rule(std::string tokenValue);
     Rule(Mode mode, std::initializer_list<Rule> rules);
     Rule(Mode mode, Rule rule);
 };
