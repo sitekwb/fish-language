@@ -6,21 +6,23 @@
 #define FISH_COMMANDLINESOURCE_H
 
 
-#include <Src.h>
+#include <Source.h>
 #include <sstream>
 
-class CommandLineSource : public Src {
+class CommandLineSource : public Source {
+    const char FINISH_SIGN = '$';
     std::stringstream buf;
-    static const unsigned int MAX_LINE_LEN = 256;
-    bool last;
+    bool initialisation, last;
     void printPrompt() const;
-    void printDebug(TokenType const &tokenType, std::string const &value) override;
+    void printStringPrompt() const;
+    static char exchangeEOF(char c) ;
 public:
     CommandLineSource();
-    void serve();
+    void serve(bool isString = false);
     char peek() override;
     char get() override;
-    std::string exchangeToken(TokenType tokenType, std::string &value) const override;
+    char getStringSign() override;
+    char peekStringSign() override;
     ~CommandLineSource() override = default;
 };
 

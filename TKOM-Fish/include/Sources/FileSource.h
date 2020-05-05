@@ -6,17 +6,17 @@
 #define FISH_FILESOURCE_H
 
 
-#include <Src.h>
+#include <Source.h>
 #include <fstream>
 
-class FileSource : public Src {
+class FileSource : public Source {
     std::unique_ptr<std::ifstream> buf;
 public:
     explicit FileSource(std::unique_ptr<std::ifstream> buf);
     char peek() override;
     char get() override;
-    void printDebug(TokenType const &tokenType, std::string const &value) override;
-    std::string exchangeToken(TokenType tokenType, std::string &value) const  override;
+    char getStringSign() override;
+    char peekStringSign() override;
     virtual ~FileSource(){}
 };
 

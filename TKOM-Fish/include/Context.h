@@ -11,6 +11,7 @@ class Context {
 
 public:
     Context();
+    Context(unsigned int lineNumber, unsigned int signNumber, unsigned int signNumberInLine);
 
     void nextLineNumber();
     void nextSignNumber();
