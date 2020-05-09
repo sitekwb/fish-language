@@ -15,7 +15,9 @@ class Token {
     std::string value;
     Context context;
 public:
-    Token(TokenType tokenType, std::string tokenValue="", Context context=Context());
+    Token(TokenType tokenType=NO_TOKEN, std::string tokenValue="", Context context=Context());
+    Token(char c);
+    Token(std::string tokenValue);
 
     TokenType getType() const;
     const std::string &getValue() const;

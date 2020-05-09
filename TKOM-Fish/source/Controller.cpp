@@ -20,7 +20,7 @@ void Controller::execute() {
     do {
         token = lexer->getNextToken();
         printDebug(*token);
-        parser->parse();
+        parser->parse(*token);
     } while (*token != eof);
 }
 

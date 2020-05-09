@@ -254,3 +254,12 @@ TokenType Token::getOneSignTokenType(char c) {
     }
 }
 
+Token::Token(char c) {
+    type = getOneSignTokenType(c);
+}
+
+Token::Token(string tokenValue) : value(move(tokenValue)) {
+    type = (keywords.count(tokenValue)) ? KEYWORD : IDENTIFIER;
+}
+
+

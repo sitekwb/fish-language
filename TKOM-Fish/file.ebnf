@@ -62,12 +62,12 @@ MultiplyOperator = "*" | "/" | "%";
 UnarySign = "+" | "-";
 UnaryNot = "not" | "!";
 
-ArraySubscript = "[", (UnsignedIntTerm | ([UnsignedIntTerm], ':', [UnsignedIntTerm]), "]";
+ArraySubscript = "[", (UnsignedIntTerm | ([UnsignedIntTerm], ':', [UnsignedIntTerm])), "]";
 UnsignedIntTerm = Term;
 
 
 #COMPOUND
-CompoundStatement = IfStatement | WhileStatement | ForStatement | ForiStatement | ForeachStatement | FunctionDefinition | ClassDefinition;
+CompoundStatement = IfStatement | WhileStatement | ForStatement | ForiStatement | ForeachStatement;
 BlockInstruction = ("{", {Statement}, "}") | Statement;
 
 IfStatement = "if", '(', ConditionalExpression, ')', BlockInstruction, ["else", BlockInstruction];
@@ -85,5 +85,5 @@ Default = Term;
 ListIdentifier = Identifier, [ArraySubscript];
 
 ClassBody = {ClassBodyStatement};
-ClassBodyStatement = (MemberDefinition | FunctionDefinition), Newline;
+ClassBodyStatement = MemberDefinition | FunctionDefinition;
 MemberDefinition = ["public" | "private" | "secret"], ["mut"], ["static"], [Type], Identifier, ['(', ArgumentList, ')'];

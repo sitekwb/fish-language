@@ -55,11 +55,13 @@ enum SymbolType {
     ParameterList,
     Parameter,
     Default,
-    ListVariable,
     ClassBody,
     ClassBodyStatement,
     MemberDefinition,
     TOKEN,
+    ListIdentifier,
 };
+
+
 
 #endif //FISH_SYMBOLTYPE_H
