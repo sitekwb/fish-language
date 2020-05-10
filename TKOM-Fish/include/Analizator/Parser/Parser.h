@@ -9,12 +9,20 @@
 #include <map>
 #include <unordered_map>
 #include <list>
+#include <queue>
 #include "Symbol.h"
 
 using R = Symbol;
 
 class Parser {
     std::unique_ptr<Symbol> symbol;
+    std::queue<Token> tokenQueue;
+    void expandTreeUntilFoundToken();
+    void goDown();
+    void goUp();
+    void serveFailure();
+    void serveSuccess();
+    void saveToken(Token &token);
 public:
     Parser();
 

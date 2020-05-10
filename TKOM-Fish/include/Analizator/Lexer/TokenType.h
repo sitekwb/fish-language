@@ -33,6 +33,8 @@ enum TokenType{
     MORE,
     SEMICOLON,
     EOF_TOKEN,
+    NOT,//!
+    COLON,//:
     // OPERATORS:
     PLUS_EQ,
     MINUS_EQ,

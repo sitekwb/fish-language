@@ -3,16 +3,68 @@
 //
 
 #include "Analizator/Parser/Parser.h"
+#include <iostream>
 
 using namespace std;
 
 
 void Parser::parse(Token &token) {
-    while (!symbol->checkToken(token)) {
-        ++(*symbol);
+    expandTreeUntilFoundToken();
+    while (!symbol->parseToken(token)) {
+        serveFailure();
+        expandTreeUntilFoundToken();
+    }
+    saveToken(token);
+    serveSuccess();
+}
+
+
+void Parser::serveSuccess() {
+    while(symbol->nextRuleAfterSuccess()){
+        // we should go up in parse tree
+        goUp();
+        if(!symbol){
+            throw runtime_error("No symbol after success");
+        }
     }
 }
 
+void Parser::serveFailure() {
+    while(symbol->nextRuleAfterFailure()){
+        // we should go up in parse tree
+        goUp();
+        if(!symbol){
+            throw runtime_error("Parsing error");
+        }
+    }
+}
+
+void Parser::expandTreeUntilFoundToken() {
+    while(!symbol->isTerminal()) {
+        symbol->buildChildren();
+        if(!symbol->isTerminal()) {
+            goDown();
+        }
+    }
+}
+
+void Parser::goDown() {
+    auto child = move(symbol->getCurrentChild());
+    child->setParent(move(symbol));
+    symbol = move(child);
+}
+
+void Parser::goUp() {
+    auto child = move(symbol);
+    symbol = move(child->getParent());
+    if(symbol) {
+        symbol->setCurrentChild(move(child));
+    }
+}
+
+void Parser::saveToken(Token &token) {
+    tokenQueue.push(token);
+}
 Parser::Parser() : symbol(make_unique<Symbol>(File)) {
     auto &rules = Symbol::getRules();
     rules[Bool] = R(Or, {
@@ -21,7 +73,13 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
     });
     rules[Type] = R(IDENTIFIER);
     rules[Library] = R(IDENTIFIER);
-    rules[File] = R(Or, {
+    rules[File] = R(Normal, {
+        R(Repeat, {
+            R(FilePart),
+            R(Optional, {R(SEMICOLON)})
+        })
+    });
+    rules[FilePart] = R(Or, {
             R(Statement),
             R(FunctionDefinition),
             R(ClassDefinition)
@@ -45,7 +103,7 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
                                });
     rules[ImportStatement] = R({
                                        R("import"),
-                                       R(Symbol(Library)),
+                                       R(Library),
                                        R(Optional, {
                                                R("as"),
                                                R(Library)
@@ -211,6 +269,10 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
             R('%')
     });
     rules[UnarySign] = R(Or, {
+            R('+'),
+            R('-')
+    });
+    rules[UnaryNot] = R(Or, {
             R("not"),
             R('!')
     });

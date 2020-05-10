@@ -12,6 +12,7 @@ enum SymbolType {
     Type,
     Library,
     File,
+    FilePart,
     Statement,
     SimpleStatement,
     ExpressionStatement,
@@ -58,6 +59,7 @@ enum SymbolType {
     ClassBody,
     ClassBodyStatement,
     MemberDefinition,
+    NotNamed,
     TOKEN,
     ListIdentifier,
 };

@@ -23,7 +23,12 @@ public:
     const std::string &getValue() const;
 
     bool operator==(const Token &rhs) const;
+    bool operator==(const TokenType &rhs) const;
+
+
     bool operator!=(const Token &rhs) const;
+    bool operator!=(const TokenType &rhs) const;
+
 
 
     friend std::ostream &operator<<(std::ostream &os, const Token &token);

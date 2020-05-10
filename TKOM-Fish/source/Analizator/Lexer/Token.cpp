@@ -120,8 +120,11 @@ std::ostream &operator<<(std::ostream &os, const Token &token) {
     return os;
 }
 
-bool Token::operator==(const Token &rhs) const {
-    return this->type == rhs.type && this->value == rhs.value;
+bool Token::operator==(const Token &token) const {
+    if(type == KEYWORD){
+        return type == token.type && value == token.value;
+    }
+    return type == token.type;
 }
 
 Token::Token(TokenType tokenType, std::string val, Context context_)
@@ -249,8 +252,12 @@ TokenType Token::getOneSignTokenType(char c) {
             return SEMICOLON;
         case EOF:
             return EOF_TOKEN;
+        case '!':
+            return NOT;
+        case ':':
+            return COLON;
         default:
-            throw std::runtime_error("no one sign token from this sign");
+            throw std::runtime_error("no one sign token from this sign"+to_string(c));
     }
 }
 
@@ -259,7 +266,15 @@ Token::Token(char c) {
 }
 
 Token::Token(string tokenValue) : value(move(tokenValue)) {
-    type = (keywords.count(tokenValue)) ? KEYWORD : IDENTIFIER;
+    type = (keywords.count(value)) ? KEYWORD : IDENTIFIER;
+}
+
+bool Token::operator==(const TokenType &rhs) const {
+    return type == rhs;
+}
+
+bool Token::operator!=(const TokenType &rhs) const {
+    return ! (*this == rhs);
 }
 
 

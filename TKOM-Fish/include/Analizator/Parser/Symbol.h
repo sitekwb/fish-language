@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <stack>
 #include <memory>
+#include <queue>
 
 
 enum Mode {
@@ -23,76 +24,83 @@ enum Mode {
     Or,
 };
 
+enum ParsingState{
+    NotProcessed,
+    Success,
+    Failed,
+};
+
 class Symbol {
+    using childIt = std::vector<std::unique_ptr<Symbol>>::iterator;
+    using TokenUP = std::unique_ptr<Token>;
+    using SymbolUP = std::unique_ptr<Symbol>;
 
-    std::vector<std::unique_ptr<Symbol>> children;
-    SymbolType type;
-    std::unique_ptr<Symbol> parent;
+    // MEMBER FIELDS
+    ParsingState parsingState = NotProcessed;
+    Mode mode = Normal;
+    SymbolType symbolType = NotNamed;
+    std::vector<SymbolUP> children;
+    SymbolUP parent;
     Token token;
-    Mode mode;
-    size_t currentChildNumber;
+    childIt currentChildIt;
     [[maybe_unused]] static inline std::unordered_map<SymbolType, Symbol> rules;
-    std::stack<Token> tokenStack;
 
-    void buildChildren();
+    // PRIVATE METHODS
     Symbol &getCurrentRule();
-
+    void copyChildren(const std::vector<std::unique_ptr<Symbol>>&other);
+    bool isCompleted();
+    void rebuildRepeatRule();
 public:
-
-    // Contructors
-
-    Symbol(Symbol const &);
-    Symbol(Symbol&&)=default; //move
+    // USER-DEFINED DEFAULT CONSTRUCTORS
+    Symbol(Symbol const &);//copy2
+    Symbol(Symbol&&); //move
     Symbol(Symbol &); //copy
-    Symbol& operator=(const Symbol &other);//copy assignment
     Symbol();
+    Symbol& operator=(const Symbol &other);//copy assignment
 
-    Symbol(std::vector<Symbol> rules);
-
+    // CONSTRUCTORS
     Symbol(Mode mode, std::vector<Symbol> symbols);
-
+    Symbol(std::vector<Symbol> rules);
     explicit Symbol(SymbolType symbolType);
-
     explicit Symbol(Token token);
-
     explicit Symbol(TokenType tokenType);
-
     Symbol(TokenType tokenType, std::string tokenValue);
-
     explicit Symbol(char c);
-
     explicit Symbol(std::string tokenValue);
+    Symbol(Mode mode, SymbolType symbolType, Token token);
 
 
+    // GETTERS
+    std::unique_ptr<Symbol> getParent();
+    Mode getMode() const;
+    std::unique_ptr<Symbol> getCurrentChild();
+    const childIt &getCurrentChildIt() const;
+    bool isTerminal() const;
+    const Token &getToken() const;
+    SymbolType getSymbolType() const;
 
+    static std::unordered_map<SymbolType, Symbol> &getRules();
+    const std::vector<std::unique_ptr<Symbol>> &getChildren() const;
+
+    // SETTERS
+    void setCurrentChild(std::unique_ptr<Symbol> child);
+    void setParent(std::unique_ptr<Symbol>parent);
+
+    // EQUALITY OPERATORS
     bool operator==(const Token &token);
+    bool operator==(const TokenType &tokenType);
     bool operator==(const Mode &mode);
 
     bool operator!=(const Token &token);
     bool operator!=(const Mode &mode);
+    bool operator!=(const TokenType &tokenType);
 
-
-    bool isTerminal();
-
-    void addChild(Symbol child);
-
-    size_t getCurrentChildNumber() const;
-
-    const Token &getToken() const;
-
-    SymbolType getType() const;
-
-    Symbol &operator++();
-
-    std::unique_ptr<Symbol> operator++(int);
-
-//    std::unique_ptr<Symbol> getParent();
-
-    static std::unordered_map<SymbolType, Symbol> &getRules();
-
-    bool checkToken(const Token &token);
-
-
+    // BUILDERS
+    void buildChildren();
+    bool nextRuleAfterSuccess();
+    bool nextRuleAfterFailure();
+    bool parseToken(const Token &token);
+    std::list<Token> &getFailedTokenList();
 };
 
 
