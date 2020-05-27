@@ -6,9 +6,14 @@
 #define FISH_TYPE_H
 
 
-class Type {
+#include <Analizator/Interpreter/Symbol.h>
 
+class Type : public Symbol{
+    using TypeUP = std::unique_ptr<Type>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_TYPE_H

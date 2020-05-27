@@ -6,9 +6,14 @@
 #define FISH_ASSIGNOPERATOR_H
 
 
-class AssignOperator {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AssignOperator: public Symbol{
+    using AssignOperatorUP = std::unique_ptr<AssignOperator>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_ASSIGNOPERATOR_H

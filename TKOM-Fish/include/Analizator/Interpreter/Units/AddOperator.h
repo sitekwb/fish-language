@@ -6,8 +6,14 @@
 #define FISH_ADDOPERATOR_H
 
 
-class AddOperator {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AddOperator : public Symbol{
+    using AddOperatorUP = std::unique_ptr<AddOperator>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

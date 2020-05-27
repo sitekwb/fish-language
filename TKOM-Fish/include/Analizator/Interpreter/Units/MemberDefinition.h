@@ -6,9 +6,14 @@
 #define FISH_MEMBERDEFINITION_H
 
 
-class MemberDefinition {
+#include <Analizator/Interpreter/Symbol.h>
 
+class MemberDefinition : public Symbol{
+    using MemberDefinitionUP = std::unique_ptr<MemberDefinition>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_MEMBERDEFINITION_H

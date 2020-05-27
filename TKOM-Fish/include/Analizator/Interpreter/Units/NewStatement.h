@@ -6,9 +6,14 @@
 #define FISH_NEWSTATEMENT_H
 
 
-class NewStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class NewStatement : public Symbol{
+    using NewStatementUP = std::unique_ptr<NewStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_NEWSTATEMENT_H

@@ -6,9 +6,14 @@
 #define FISH_COMPOUNDSTATEMENT_H
 
 
-class CompoundStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class CompoundStatement : public Symbol{
+    using CompoundStatementUP = std::unique_ptr<CompoundStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_COMPOUNDSTATEMENT_H

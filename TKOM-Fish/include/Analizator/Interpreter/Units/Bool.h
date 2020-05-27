@@ -6,9 +6,14 @@
 #define FISH_BOOL_H
 
 
+#include <Analizator/Interpreter/Symbol.h>
 
-class Bool{
+class Bool : public Symbol{
+    using BoolUP = std::unique_ptr<Bool>;
+protected:
 
+public:
+    void execute() override;
 };
 
 

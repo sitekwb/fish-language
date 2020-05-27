@@ -6,8 +6,14 @@
 #define FISH_ALIASSTATEMENT_H
 
 
-class AliasStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AliasStatement : public Symbol{
+    using AliasStatementUP = std::unique_ptr<AliasStatement>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

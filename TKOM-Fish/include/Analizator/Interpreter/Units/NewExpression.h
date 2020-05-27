@@ -6,9 +6,14 @@
 #define FISH_NEWEXPRESSION_H
 
 
-class NewExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class NewExpression : public Symbol{
+    using NewExpressionUP = std::unique_ptr<NewExpression>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_NEWEXPRESSION_H

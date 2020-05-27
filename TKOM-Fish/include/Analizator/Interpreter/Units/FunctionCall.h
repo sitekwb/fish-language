@@ -6,9 +6,14 @@
 #define FISH_FUNCTIONCALL_H
 
 
-class FunctionCall {
+#include <Analizator/Interpreter/Symbol.h>
 
+class FunctionCall: public Symbol{
+    using FunctionCallUP = std::unique_ptr<FunctionCall>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_FUNCTIONCALL_H

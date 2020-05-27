@@ -6,9 +6,14 @@
 #define FISH_BLOCKINSTRUCTION_H
 
 
-class BlockInstruction {
+#include <Analizator/Interpreter/Symbol.h>
 
+class BlockInstruction : public Symbol{
+    using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_BLOCKINSTRUCTION_H

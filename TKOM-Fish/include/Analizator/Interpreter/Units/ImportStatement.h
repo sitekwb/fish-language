@@ -6,9 +6,14 @@
 #define FISH_IMPORTSTATEMENT_H
 
 
-class ImportStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ImportStatement : public Symbol{
+    using ImportStatementUP = std::unique_ptr<ImportStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_IMPORTSTATEMENT_H

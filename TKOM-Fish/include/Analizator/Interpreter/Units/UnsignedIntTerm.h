@@ -6,8 +6,14 @@
 #define FISH_UNSIGNEDINTTERM_H
 
 
-class UnsignedIntTerm {
+#include <Analizator/Interpreter/Symbol.h>
 
+class UnsignedIntTerm : public Symbol{
+    using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

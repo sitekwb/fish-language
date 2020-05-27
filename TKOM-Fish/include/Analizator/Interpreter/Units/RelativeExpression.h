@@ -6,8 +6,14 @@
 #define FISH_RELATIVEEXPRESSION_H
 
 
-class RelativeExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class RelativeExpression : public Symbol{
+        using RelativeExpressionUP = std::unique_ptr<RelativeExpression>;
+        protected:
+
+        public:
+        void execute() override;
 };
 
 

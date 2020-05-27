@@ -6,9 +6,14 @@
 #define FISH_ASSIGNSTATEMENT_H
 
 
-class AssignStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AssignStatement : public Symbol{
+    using AssignStatementUP = std::unique_ptr<AssignStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_ASSIGNSTATEMENT_H

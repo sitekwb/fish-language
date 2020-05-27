@@ -6,11 +6,14 @@
 #define FISH_CLASSDEFINITION_H
 
 
-#include <Analizator/Parser/Symbol.h>
+#include <Analizator/Interpreter/Symbol.h>
 
-class ClassDefinition {
+class ClassDefinition : public Symbol{
+    using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;
+protected:
+
 public:
-    ClassDefinition(Symbol &symbol);
+    void execute() override;
 };
 
 

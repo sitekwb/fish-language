@@ -6,8 +6,14 @@
 #define FISH_OREXPRESSION_H
 
 
-class OrExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class OrExpression : public Symbol{
+    using OrExpressionUP = std::unique_ptr<OrExpression>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

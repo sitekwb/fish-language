@@ -6,8 +6,14 @@
 #define FISH_MULTIPLYEXPRESSION_H
 
 
-class MultiplyExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class MultiplyExpression : public Symbol{
+    using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

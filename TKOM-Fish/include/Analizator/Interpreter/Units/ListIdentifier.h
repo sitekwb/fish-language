@@ -6,9 +6,14 @@
 #define FISH_LISTIDENTIFIER_H
 
 
-class ListIdentifier {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ListIdentifier: public Symbol{
+    using ListIdentifierUP = std::unique_ptr<ListIdentifier>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_LISTIDENTIFIER_H

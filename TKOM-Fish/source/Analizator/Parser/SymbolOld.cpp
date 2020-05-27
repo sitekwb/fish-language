@@ -2,7 +2,7 @@
 // Created by Wojtek on 20/04/2020.
 //
 
-#include "Analizator/Parser/Symbol.h"
+#include "Analizator/Parser/SymbolOld.h"
 
 #include <utility>
 #include <memory>
@@ -15,7 +15,7 @@ Symbol::Symbol(std::vector<Symbol> symbols) : Symbol(Normal, symbols) {
 
 }
 
-Symbol::Symbol(SymbolType symbolType_) : Symbol() {
+Symbol::Symbol(SymbolTypeOld symbolType_) : Symbol() {
     symbolType = symbolType_;
 }
 
@@ -71,7 +71,7 @@ Symbol::Symbol() {
 }
 
 
-std::unordered_map<SymbolType, Symbol> &Symbol::getRules() {
+std::unordered_map<SymbolTypeOld, Symbol> &Symbol::getRules() {
     return rules;
 }
 
@@ -224,7 +224,7 @@ void Symbol::rebuildRepeatRule() {
     currentChildIt = children.insert(currentChildIt + 1, move(repeatedChild));
 }
 
-SymbolType Symbol::getSymbolType() const {
+SymbolTypeOld Symbol::getSymbolType() const {
     return symbolType;
 }
 
@@ -232,7 +232,7 @@ const Symbol::childIt &Symbol::getCurrentChildIt() const {
     return currentChildIt;
 }
 
-Symbol::Symbol(Mode mode_, SymbolType symbolType, Token token_) : Symbol(symbolType) {
+Symbol::Symbol(Mode mode_, SymbolTypeOld symbolType, Token token_) : Symbol(symbolType) {
     mode = mode_;
     token = move(token_);
 }

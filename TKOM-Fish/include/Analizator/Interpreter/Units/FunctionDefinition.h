@@ -6,11 +6,28 @@
 #define FISH_FUNCTIONDEFINITION_H
 
 
-#include <Analizator/Parser/Symbol.h>
+#include <Analizator/Interpreter/Symbol.h>
+#include "Type.h"
+#include "ParameterList.h"
+#include "BlockInstruction.h"
 
-class FunctionDefinition {
+class FunctionDefinition : public Symbol {
+    using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
+
+    TokenUP def = std::make_unique<Token>("def");
+    TypeUP typeOpt;
+    TokenUP identifier = std::make_unique<Token>(IDENTIFIER);
+    TokenUP bracketOpen = std::make_unique<Token>('(');
+    ParameterListUP parameterList;
+    TokenUP  bracketClose = std::make_unique<Token>(')');
+    BlockInstructionUP blockInstruction;
+
+    bool buildTypeOpt();
+    bool buildParameterList();
+    bool buildBlockInstruction();
 public:
-    FunctionDefinition(Symbol &symbol);
+    FunctionDefinition();
+    void execute() override;
 };
 
 

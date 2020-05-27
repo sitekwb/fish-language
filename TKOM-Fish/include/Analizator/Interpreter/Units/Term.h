@@ -6,9 +6,14 @@
 #define FISH_TERM_H
 
 
-class Term {
+#include <Analizator/Interpreter/Symbol.h>
 
+class Term : public Symbol{
+    using TermUP = std::unique_ptr<Term>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_TERM_H

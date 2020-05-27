@@ -6,9 +6,14 @@
 #define FISH_EXPRESSIONSTATEMENT_H
 
 
-class ExpressionStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ExpressionStatement : public Symbol{
+    using ExpressionStatementUP = std::unique_ptr<ExpressionStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_EXPRESSIONSTATEMENT_H

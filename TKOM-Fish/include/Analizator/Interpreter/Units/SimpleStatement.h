@@ -7,8 +7,14 @@
 #define FISH_SIMPLESTATEMENT_H
 
 
-class SimpleStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class SimpleStatement : public Symbol{
+    using SimpleStatementUP = std::unique_ptr<SimpleStatement>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

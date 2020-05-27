@@ -6,9 +6,14 @@
 #define FISH_CLASSBODY_H
 
 
-class ClassBody {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ClassBody: public Symbol{
+    using ClassBodyUP = std::unique_ptr<ClassBody>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_CLASSBODY_H

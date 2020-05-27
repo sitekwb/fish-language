@@ -6,8 +6,14 @@
 #define FISH_WHILESTATEMENT_H
 
 
-class WhileStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class WhileStatement : public Symbol{
+    using WhileStatementUP = std::unique_ptr<WhileStatement>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

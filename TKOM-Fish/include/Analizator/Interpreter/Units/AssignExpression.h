@@ -6,8 +6,14 @@
 #define FISH_ASSIGNEXPRESSION_H
 
 
-class AssignExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AssignExpression : public Symbol{
+    using AssignExpressionUP = std::unique_ptr<AssignExpression>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

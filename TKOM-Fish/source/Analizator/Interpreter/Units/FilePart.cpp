@@ -6,24 +6,43 @@
 
 using namespace std;
 
-FilePart::FilePart(Symbol &symbol) {
-    if(symbol.getSymbolType() != FilePart){
-        throw runtime_error("Wrong symbol type in FilePartClass constructor");
-    }
-
-    auto &child = symbol.getCurrentChildRef();
-    switch(child.getSymbolType()){
-        case Statement:
-            statement = make_unique<Statement>(child);
-            break;
-        case FunctionDefinition:
-            functionDefinition = make_unique<FunctionDefinition>(child);
-            break;
-        case ClassDefinition:
-            classDefinition = make_unique<ClassDefinition>(child);
-            break;
-        default:
-            throw runtime_error("Unexpected type");
-    }
-
+FilePart::FilePart() {
+    constructed = buildFunctionDefinition() or buildClassDefinition() or buildStatement();
 }
+
+bool FilePart::buildFunctionDefinition() {
+    functionDefinition = make_unique<FunctionDefinition>();
+    if(functionDefinition->isConstructed()){
+        return true;
+    }
+    functionDefinition.reset();
+    return false;
+}
+
+
+bool FilePart::buildClassDefinition() {
+    classDefinition = make_unique<ClassDefinition>();
+    if(classDefinition->isConstructed()){
+        return true;
+    }
+    classDefinition.reset();
+    return false;
+}
+
+bool FilePart::buildStatement() {
+    statement = make_unique<Statement>();
+    if(statement->isConstructed()){
+        return true;
+    }
+    statement.reset();
+    return false;
+}
+
+void FilePart::execute() {
+    if(isConstructed()){
+        functionDefinition->execute();
+        classDefinition->execute();
+        statement->execute();
+    }
+}
+

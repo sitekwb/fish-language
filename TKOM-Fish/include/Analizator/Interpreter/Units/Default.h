@@ -6,9 +6,14 @@
 #define FISH_DEFAULT_H
 
 
-class Default {
+#include <Analizator/Interpreter/Symbol.h>
 
+class Default : public Symbol{
+    using DefaultUP = std::unique_ptr<Default>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_DEFAULT_H

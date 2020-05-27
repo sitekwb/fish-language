@@ -6,8 +6,14 @@
 #define FISH_FOREACHSTATEMENT_H
 
 
-class ForeachStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ForeachStatement : public Symbol{
+    using ForeachStatementUP = std::unique_ptr<ForeachStatement>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

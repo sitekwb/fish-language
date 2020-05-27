@@ -6,8 +6,14 @@
 #define FISH_ARGUMENT_H
 
 
-class Argument {
+#include <Analizator/Interpreter/Symbol.h>
 
+class Argument: public Symbol{
+    using ArgumentUP = std::unique_ptr<Argument>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

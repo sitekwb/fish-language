@@ -6,9 +6,14 @@
 #define FISH_DELETESTATEMENT_H
 
 
-class DeleteStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class DeleteStatement: public Symbol{
+    using DeleteStatementUP = std::unique_ptr<DeleteStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_DELETESTATEMENT_H

@@ -6,9 +6,14 @@
 #define FISH_ARGUMENTLIST_H
 
 
-class ArgumentList {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ArgumentList : public Symbol{
+    using ArgumentListUP = std::unique_ptr<ArgumentList>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_ARGUMENTLIST_H

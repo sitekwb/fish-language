@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <list>
 #include <queue>
-#include "Symbol.h"
+#include "SymbolOld.h"
 
 using R = Symbol;
 

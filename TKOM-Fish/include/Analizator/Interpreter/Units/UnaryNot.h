@@ -6,8 +6,14 @@
 #define FISH_UNARYNOT_H
 
 
-class UnaryNot {
+#include <Analizator/Interpreter/Symbol.h>
 
+class UnaryNot : public Symbol{
+    using UnaryNotUP = std::unique_ptr<UnaryNot>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

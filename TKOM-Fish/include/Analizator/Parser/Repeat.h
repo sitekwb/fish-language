@@ -6,7 +6,7 @@
 #define FISH_REPEAT_H
 
 
-#include "Symbol.h"
+#include "SymbolOld.h"
 
 class Repeat {
 

@@ -6,8 +6,14 @@
 #define FISH_CLASSBODYSTATEMENT_H
 
 
-class ClassBodyStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ClassBodyStatement : public Symbol{
+    using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

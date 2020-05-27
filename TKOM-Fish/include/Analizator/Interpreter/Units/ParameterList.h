@@ -6,8 +6,14 @@
 #define FISH_PARAMETERLIST_H
 
 
-class ParameterList {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ParameterList : public Symbol{
+    using ParameterListUP = std::unique_ptr<ParameterList>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

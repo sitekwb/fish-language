@@ -5,19 +5,25 @@
 #ifndef FISH_FILEPART_H
 #define FISH_FILEPART_H
 
-
-#include <Analizator/Parser/Symbol.h>
+#include <Analizator/Interpreter/Symbol.h>
 #include "FunctionDefinition.h"
 #include "ClassDefinition.h"
 #include "Statement.h"
 
-class FilePart {
+class FilePart : public Symbol {
+    using FilePartUP = std::unique_ptr<FilePart>;
+
     std::unique_ptr<Statement> statement;
     std::unique_ptr<FunctionDefinition> functionDefinition;
     std::unique_ptr<ClassDefinition> classDefinition;
+
+    bool buildFunctionDefinition();
+    bool buildClassDefinition();
+    bool buildStatement();
+
 public:
-    FilePart(Symbol &symbol);
-    void execute();
+    FilePart();
+    void execute() override;
 };
 
 

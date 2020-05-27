@@ -6,8 +6,14 @@
 #define FISH_MULTIPLYOPERATOR_H
 
 
-class MultiplyOperator {
+#include <Analizator/Interpreter/Symbol.h>
 
+class MultiplyOperator: public Symbol{
+    using MultiplyOperatorUP = std::unique_ptr<MultiplyOperator>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

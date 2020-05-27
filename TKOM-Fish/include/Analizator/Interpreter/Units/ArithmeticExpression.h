@@ -6,8 +6,14 @@
 #define FISH_ARITHMETICEXPRESSION_H
 
 
-class ArithmeticExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ArithmeticExpression : public Symbol{
+    using ArithmeticExpressionUP = std::unique_ptr<ArithmeticExpression>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

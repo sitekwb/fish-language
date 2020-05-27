@@ -6,11 +6,15 @@
 #define FISH_STATEMENT_H
 
 
-#include <Analizator/Parser/Symbol.h>
+#include <Analizator/Parser/SymbolOld.h>
+#include <Analizator/Interpreter/Symbol.h>
 
-class Statement {
+class Statement: public Symbol{
+    using StatementUP = std::unique_ptr<Statement>;
+protected:
+
 public:
-    Statement(Symbol &symbol);
+    void execute() override;
 };
 
 

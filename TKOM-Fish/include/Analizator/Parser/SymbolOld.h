@@ -2,13 +2,13 @@
 // Created by Wojtek on 20/04/2020.
 //
 
-#ifndef FISH_SYMBOL_H
-#define FISH_SYMBOL_H
+#ifndef FISH_SYMBOLOLD_H
+#define FISH_SYMBOLOLD_H
 
 
 #include <vector>
 #include "Repeat.h"
-#include "SymbolType.h"
+#include "SymbolTypeOld.h"
 #include <list>
 #include <initializer_list>
 #include <unordered_map>
@@ -24,19 +24,19 @@ enum Mode {
     Or,
 };
 
-class Symbol {
+class SymbolOld {
     using childIt = std::vector<std::unique_ptr<Symbol>>::iterator;
     using TokenUP = std::unique_ptr<Token>;
     using SymbolUP = std::unique_ptr<Symbol>;
 
     // MEMBER FIELDS
     Mode mode = Normal;
-    SymbolType symbolType = NotNamed;
+    SymbolTypeOld symbolType = NotNamed;
     std::vector<SymbolUP> children;
     SymbolUP parent;
     Token token;
     childIt currentChildIt;
-    [[maybe_unused]] static inline std::unordered_map<SymbolType, Symbol> rules;
+    [[maybe_unused]] static inline std::unordered_map<SymbolTypeOld, Symbol> rules;
 
     // PRIVATE METHODS
     Symbol &getCurrentRule();
@@ -60,7 +60,7 @@ public:
     Symbol(TokenType tokenType, std::string tokenValue);
     explicit Symbol(char c);
     explicit Symbol(std::string tokenValue);
-    Symbol(Mode mode, SymbolType symbolType, Token token);
+    Symbol(Mode mode, SymbolTypeOld symbolType, Token token);
 
 
     // GETTERS
@@ -71,7 +71,7 @@ public:
     Symbol &getCurrentChildRef() const;
     bool isTerminal() const;
     const Token &getToken() const;
-    SymbolType getSymbolType() const;
+    SymbolTypeOld getSymbolType() const;
     bool hasChildren() const;
     bool isCompleted() const;
     Mode getChildMode() const;
@@ -106,4 +106,4 @@ public:
 };
 
 
-#endif //FISH_SYMBOL_H
+#endif //FISH_SYMBOLOLD_H

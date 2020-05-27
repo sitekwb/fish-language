@@ -6,8 +6,19 @@
 #define FISH_FILE_H
 
 
-class File {
+#include <list>
+#include <Analizator/Lexer/Lexer.h>
+#include <Analizator/Interpreter/Symbol.h>
+#include "FilePart.h"
 
+class File : public Symbol {
+    using FileUP = std::unique_ptr<File>;
+
+    std::list<FilePart> filePartList;
+    bool buildFilePart();
+public:
+    File(Lexer &lexer);
+    void execute() override;
 };
 
 

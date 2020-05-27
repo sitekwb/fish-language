@@ -6,8 +6,14 @@
 #define FISH_ADDEXPRESSION_H
 
 
-class AddExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AddExpression : public Symbol{
+    using AddExpressionUP = std::unique_ptr<AddExpression>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

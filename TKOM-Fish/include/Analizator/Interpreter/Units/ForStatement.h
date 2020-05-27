@@ -6,9 +6,14 @@
 #define FISH_FORSTATEMENT_H
 
 
-class ForStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ForStatement : public Symbol{
+    using ForStatementUP = std::unique_ptr<ForStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_FORSTATEMENT_H

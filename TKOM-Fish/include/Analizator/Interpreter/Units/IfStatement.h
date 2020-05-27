@@ -6,9 +6,14 @@
 #define FISH_IFSTATEMENT_H
 
 
-class IfStatement {
+#include <Analizator/Interpreter/Symbol.h>
 
+class IfStatement : public Symbol{
+    using IfStatementUP = std::unique_ptr<IfStatement>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_IFSTATEMENT_H

@@ -6,8 +6,14 @@
 #define FISH_UNARYSIGN_H
 
 
-class UnarySign {
+#include <Analizator/Interpreter/Symbol.h>
 
+class UnarySign : public Symbol{
+    using UnarySignUP = std::unique_ptr<UnarySign>;
+protected:
+
+public:
+    void execute() override;
 };
 
 

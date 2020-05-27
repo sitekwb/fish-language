@@ -6,9 +6,14 @@
 #define FISH_ANDEXPRESSION_H
 
 
-class AndExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class AndExpression : public Symbol{
+    using AndExpressionUP = std::unique_ptr<AndExpression>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_ANDEXPRESSION_H

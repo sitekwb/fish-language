@@ -6,9 +6,14 @@
 #define FISH_CONDITIONALEXPRESSION_H
 
 
-class ConditionalExpression {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ConditionalExpression : public Symbol{
+    using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
+protected:
+
+public:
+    void execute() override;
 };
-
 
 #endif //FISH_CONDITIONALEXPRESSION_H

@@ -6,8 +6,14 @@
 #define FISH_ARRAYSUBSCRIPT_H
 
 
-class ArraySubscript {
+#include <Analizator/Interpreter/Symbol.h>
 
+class ArraySubscript : public Symbol{
+    using ArraySubscriptUP = std::unique_ptr<ArraySubscript>;
+protected:
+
+public:
+    void execute() override;
 };
 
 
