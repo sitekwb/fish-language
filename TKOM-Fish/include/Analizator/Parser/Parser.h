@@ -16,17 +16,20 @@ using R = Symbol;
 
 class Parser {
     std::unique_ptr<Symbol> symbol;
-    std::queue<Token> tokenQueue;
+    std::unique_ptr<std::list<Token>> tokenList;
     void expandTreeUntilFoundToken();
     void goDown();
     void goUp();
-    void serveFailure();
+    bool serveFailure();
     void serveSuccess();
-    void saveToken(Token &token);
+    void parseToken();
+    void cleanChild();
 public:
     Parser();
 
-    void parse(Token &nextToken);
+    bool parse(Token &nextToken);
+    void cleanTree();
+    Symbol &getTree();
 };
 
 

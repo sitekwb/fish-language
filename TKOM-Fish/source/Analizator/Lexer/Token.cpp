@@ -266,7 +266,16 @@ Token::Token(char c) {
 }
 
 Token::Token(string tokenValue) : value(move(tokenValue)) {
-    type = (keywords.count(value)) ? KEYWORD : IDENTIFIER;
+    if(value.size() == 2 && value.ends_with('=') && isTwoSignTokenSign(value[0])){
+        type = getTwoSignTokenType(value[0]);
+        value = "";
+    }
+    else if(keywords.count(value)){
+        type = KEYWORD;
+    }
+    else{
+        type = IDENTIFIER;
+    }
 }
 
 bool Token::operator==(const TokenType &rhs) const {
@@ -275,6 +284,12 @@ bool Token::operator==(const TokenType &rhs) const {
 
 bool Token::operator!=(const TokenType &rhs) const {
     return ! (*this == rhs);
+}
+
+const std::string Token::getErrorMessage() const {
+    return "Parsing error with token value '"+getValue()
+    +"' at line "+to_string(context.getLineNumber())
+    +" and sign "+to_string(context.getSignNumberInLine())+".";
 }
 
 

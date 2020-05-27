@@ -33,7 +33,7 @@ AssignStatement = AssignExpression;
 ControlStatement = "break" | "continue";
 AliasStatement = "alias", Type, Type;
 
-Expression = [(ArithmeticExpression | NewExpression), {',', (ArithmeticExpression | NewExpression)}];
+Expression = [ArithmeticExpression | NewExpression];
 
 NewExpression = "new", ["mut"], ["static"], [Type], (Identifier | Constant), ['(', ArgumentList, ')'] [AssignOperator, ConditionalExpresion];
 AssignExpression = Identifier, AssignOperator, Term;

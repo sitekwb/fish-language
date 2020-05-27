@@ -16,6 +16,7 @@ class Controller {
     static const inline unsigned int MAX_LINE_LENGTH = 1024;
     std::unique_ptr<Lexer> lexer;
     std::unique_ptr<Parser> parser;
+    std::unique_ptr<Interpreter> interpreter;
     bool isDebug;
 
     void printDebug(const Token &token);

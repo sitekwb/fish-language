@@ -12,6 +12,7 @@ enum SymbolType {
     Type,
     Library,
     File,
+    FileRepeat,
     FilePart,
     Statement,
     SimpleStatement,
@@ -23,6 +24,7 @@ enum SymbolType {
     ControlStatement,
     AliasStatement,
     Expression,
+    ExpressionRepeat,
     NewExpression,
     AssignExpression,
     ConditionalExpression,
@@ -62,6 +64,15 @@ enum SymbolType {
     NotNamed,
     TOKEN,
     ListIdentifier,
+    ConditionalExpressionRepeat,
+    AndExpressionRepeat,
+    OrExpressionRepeat,
+    ArithmeticExpressionRepeat,
+    AddExpressionRepeat,
+    TermRepeat,
+    ArgumentListRepeat,
+    ParameterListRepeat,
+    TermAddition,
 };
 
 

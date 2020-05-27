@@ -24,19 +24,12 @@ enum Mode {
     Or,
 };
 
-enum ParsingState{
-    NotProcessed,
-    Success,
-    Failed,
-};
-
 class Symbol {
     using childIt = std::vector<std::unique_ptr<Symbol>>::iterator;
     using TokenUP = std::unique_ptr<Token>;
     using SymbolUP = std::unique_ptr<Symbol>;
 
     // MEMBER FIELDS
-    ParsingState parsingState = NotProcessed;
     Mode mode = Normal;
     SymbolType symbolType = NotNamed;
     std::vector<SymbolUP> children;
@@ -48,8 +41,8 @@ class Symbol {
     // PRIVATE METHODS
     Symbol &getCurrentRule();
     void copyChildren(const std::vector<std::unique_ptr<Symbol>>&other);
-    bool isCompleted();
     void rebuildRepeatRule();
+    bool isAlmostCompleted() const;
 public:
     // USER-DEFINED DEFAULT CONSTRUCTORS
     Symbol(Symbol const &);//copy2
@@ -75,9 +68,13 @@ public:
     Mode getMode() const;
     std::unique_ptr<Symbol> getCurrentChild();
     const childIt &getCurrentChildIt() const;
+    Symbol &getCurrentChildRef() const;
     bool isTerminal() const;
     const Token &getToken() const;
     SymbolType getSymbolType() const;
+    bool hasChildren() const;
+    bool isCompleted() const;
+    Mode getChildMode() const;
 
     static std::unordered_map<SymbolType, Symbol> &getRules();
     const std::vector<std::unique_ptr<Symbol>> &getChildren() const;
@@ -85,6 +82,7 @@ public:
     // SETTERS
     void setCurrentChild(std::unique_ptr<Symbol> child);
     void setParent(std::unique_ptr<Symbol>parent);
+    void nextChild();
 
     // EQUALITY OPERATORS
     bool operator==(const Token &token);
@@ -98,9 +96,13 @@ public:
     // BUILDERS
     void buildChildren();
     bool nextRuleAfterSuccess();
-    bool nextRuleAfterFailure();
     bool parseToken(const Token &token);
-    std::list<Token> &getFailedTokenList();
+    std::unique_ptr<std::list<Token>> cleanChild();
+    std::unique_ptr<std::list<Token>> getFailedTokenList();
+
+    // CLEANERS
+    void previousChild();
+    void cleanSymbol();
 };
 
 

@@ -21,6 +21,7 @@ public:
 
     TokenType getType() const;
     const std::string &getValue() const;
+    const std::string getErrorMessage() const;
 
     bool operator==(const Token &rhs) const;
     bool operator==(const TokenType &rhs) const;

@@ -11,24 +11,13 @@
 
 using namespace std;
 
-Symbol::Symbol(std::vector<Symbol> symbols) {
-    for (auto e: symbols) {
-        children.push_back(make_unique<Symbol>(e));
-    }
-    currentChildIt = children.begin();
+Symbol::Symbol(std::vector<Symbol> symbols) : Symbol(Normal, symbols) {
+
 }
 
 Symbol::Symbol(SymbolType symbolType_) : Symbol() {
     symbolType = symbolType_;
 }
-
-
-//    Mode mode = Normal;
-//    SymbolType symbolType = NotNamed;
-//    std::vector<SymbolUP> children;
-//    SymbolUP parent;
-//    Token token;
-//    childIt currentChildIt;
 
 Symbol::Symbol(Token token_) : Symbol() {
     token = token_;
@@ -50,13 +39,19 @@ Symbol::Symbol(std::string tokenValue) : Symbol(Token(move(tokenValue))) {
 
 }
 
-Symbol::Symbol(Mode mode_, std::vector<Symbol> symbols) : Symbol(symbols) {
+Symbol::Symbol(Mode mode_, std::vector<Symbol> symbols) {
+    if (mode_ == Normal || mode_ == Or) {
+        for (auto e: symbols) {
+            children.push_back(make_unique<Symbol>(e));
+        }
+    } else if (mode_ == Repeat) {
+        children.push_back(make_unique<Symbol>(symbols[0]));
+    } else {
+        children.push_back(make_unique<Symbol>(symbols));
+    }
+    currentChildIt = children.begin();
     mode = mode_;
 }
-
-//Symbol::Symbol(Mode mode_, Symbol rule) : mode(mode_) {
-//    children.push_back(rule);
-//}
 
 bool Symbol::operator==(const Token &token2) {
     return isTerminal() && token == token2;
@@ -113,12 +108,12 @@ bool Symbol::operator==(const Mode &mode_) {
     return this->mode == mode_;
 }
 
-bool Symbol::operator!=(const Token &token) {
-    return !(*this == token);
+bool Symbol::operator!=(const Token &token_) {
+    return !(*this == token_);
 }
 
-bool Symbol::operator!=(const Mode &mode) {
-    return !(*this == mode);
+bool Symbol::operator!=(const Mode &mode_) {
+    return !(*this == mode_);
 }
 
 void Symbol::buildChildren() {
@@ -141,6 +136,7 @@ Symbol &Symbol::getCurrentRule() {
 bool Symbol::parseToken(const Token &token_) {
     if (getCurrentRule() == token_) {
         token = token_;
+        symbolType = TOKEN;
         return true;
     }
     return false;
@@ -166,7 +162,11 @@ bool Symbol::nextRuleAfterSuccess() {
     if (isTerminal()) {
         return true;
     }
-    ++currentChildIt;
+    // if symbol is "Or" - go out, because we found one of symbols
+    if (*this == Or) {
+        return true;
+    }
+    nextChild();
     if (isCompleted()) {
         // this symbol is completed - go out
         return true;
@@ -174,30 +174,11 @@ bool Symbol::nextRuleAfterSuccess() {
     // rule not completed
     // there are other symbols left in this rule
 
-    // if symbol is "Or" - go out, because we found one of symbols
-    if(*this == Or){
-        return true;
-    }
     // if symbol is "Normal" or "Optional" - go to next
     return false;
 }
 
-bool Symbol::nextRuleAfterFailure() {
-    if (isTerminal()) {
-        return true;
-    }
-    if (*this == Normal) {
-        // it's not this symbol - go up
-        return true;
-    }
-    // optional was not used - go next
-    // or was not used - go next
-    // repeat was not used - go next
-    // if all symbols are used - go up
-    return isCompleted();
-}
-
-bool Symbol::isCompleted() {
+bool Symbol::isCompleted() const {
     return currentChildIt == children.end();
 }
 
@@ -210,6 +191,9 @@ Mode Symbol::getMode() const {
 }
 
 std::unique_ptr<Symbol> Symbol::getCurrentChild() {
+    if (!*currentChildIt) {
+        return nullptr;
+    }
     return move(*currentChildIt);
 }
 
@@ -248,19 +232,74 @@ const Symbol::childIt &Symbol::getCurrentChildIt() const {
     return currentChildIt;
 }
 
-Symbol::Symbol(Mode mode_, SymbolType symbolType, Token token_) : Symbol(symbolType){
+Symbol::Symbol(Mode mode_, SymbolType symbolType, Token token_) : Symbol(symbolType) {
     mode = mode_;
     token = move(token_);
 }
 
-list<Token> &Symbol::getFailedTokenList() {
-        list<Token> mainList;
+unique_ptr<list<Token>> Symbol::getFailedTokenList() {
+    auto mainList = make_unique<list<Token>>();
+    if (isTerminal() && symbolType == TOKEN) {
+        mainList->push_back(getToken());
+    }
+    for (auto childIt = children.begin(); childIt != currentChildIt; ++childIt) {
+        auto l = (*childIt)->getFailedTokenList();
+        mainList->insert(mainList->end(), l->begin(), l->end());
+    }
+    return move(mainList);
+}
 
-        for (auto &child: children){
-            mainList.merge(child->getFailedTokenList());
-        }
-        return mainList;
+std::unique_ptr<std::list<Token>> Symbol::cleanChild() {
+    auto tokenList = move(getCurrentChild()->getFailedTokenList());
+    currentChildIt = children.erase(currentChildIt);
+    return move(tokenList);
+}
+
+bool Symbol::hasChildren() const {
+    return !children.empty();
+}
+
+void Symbol::nextChild() {
+    ++currentChildIt;
 }
 
 
+Mode Symbol::getChildMode() const {
+    if (currentChildIt == children.end()) {
+        return Normal;
+    }
+    return (*currentChildIt)->getMode();
+}
 
+void Symbol::previousChild() {
+    if (currentChildIt == children.begin()) {
+        throw runtime_error("Error in symbol.previousChild()");
+    }
+    --currentChildIt;
+}
+
+void Symbol::cleanSymbol() {
+    // Iterative part
+    if (mode == Or) {
+        children.erase(currentChildIt + 1, children.end());
+    }
+    mode = Normal;
+    // Recursion part
+    for (auto childIt = children.begin(); childIt != children.end();) {
+        auto &child = *childIt;
+        if (child->getSymbolType() != NotNamed) {
+            ++childIt;
+            continue;
+        }
+        // here child is not named, so we can erase this
+        for (auto &grandchild: child->getChildren()) {
+            children.insert(childIt, grandchild);
+        }
+        childIt = children.erase(childIt);
+    }
+
+}
+
+Symbol &Symbol::getCurrentChildRef() const {
+    return **currentChildIt;
+}

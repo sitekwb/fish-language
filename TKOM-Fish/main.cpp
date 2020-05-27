@@ -8,19 +8,23 @@
 using namespace std;
 namespace po = boost::program_options;
 
+unique_ptr<Source> getSource(ProgramOptions &programOptions){
+    auto inputFile = programOptions.getInputFile();
+
+    unique_ptr<Source> source;
+    if(inputFile) {
+        return make_unique<FileSource>(move(inputFile));
+    }
+
+    return make_unique<CommandLineSource>();
+}
+
 int main(int argc, char *argv[]) {
 
     try {
         ProgramOptions programOptions(argc, argv);
         cout << programOptions;
-
-        auto inputFile = programOptions.getInputFile();
-
-        unique_ptr<Source> source;
-        if(inputFile)
-            source = make_unique<FileSource>(move(inputFile));
-        else
-            source = make_unique<CommandLineSource>();
+        auto source = move(getSource(programOptions));
 
         Controller controller(move(source), programOptions.isDebug());
         controller.execute();

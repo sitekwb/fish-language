@@ -8,64 +8,94 @@
 using namespace std;
 
 
-void Parser::parse(Token &token) {
+bool Parser::parse(Token &token_) {
+    tokenList->push_back(token_);
     expandTreeUntilFoundToken();
-    while (!symbol->parseToken(token)) {
-        serveFailure();
-        expandTreeUntilFoundToken();
+    while (!tokenList->empty()) {
+        parseToken();
     }
-    saveToken(token);
-    serveSuccess();
+    // if symbol type is FileRepeat, then we can interprete some values.
+    return symbol->getSymbolType() == FileRepeat;
 }
 
 
 void Parser::serveSuccess() {
-    while(symbol->nextRuleAfterSuccess()){
-        // we should go up in parse tree
+
+
+    while (symbol->nextRuleAfterSuccess()) {
         goUp();
-        if(!symbol){
-            throw runtime_error("No symbol after success");
-        }
     }
 }
 
-void Parser::serveFailure() {
-    while(symbol->nextRuleAfterFailure()){
-        // we should go up in parse tree
-        goUp();
-        if(!symbol){
-            throw runtime_error("Parsing error");
+bool Parser::serveFailure() {
+    const bool CONTINUE_SERVING = true, FINISH_SERVING = false;
+    auto childMode = symbol->getChildMode();
+    if (childMode == Optional || childMode == Repeat) {
+        cleanChild();
+        if (!symbol->hasChildren()) {
+            goUp();
+            return CONTINUE_SERVING;
         }
+        // if has children and was completed - optional value was last
+        if (symbol->isCompleted()) {
+            goUp();
+            serveSuccess();
+        }
+        return FINISH_SERVING;
     }
+    if (!symbol->hasChildren() && !symbol->isTerminal()) {
+        goUp();
+        return CONTINUE_SERVING;
+    }
+    if (*symbol == Normal || *symbol == Optional || *symbol == Repeat) {
+        goUp();
+        return CONTINUE_SERVING;
+    }
+    if (*symbol == Or) {
+        cleanChild();
+        if (!symbol->hasChildren()) {
+            goUp();
+            return CONTINUE_SERVING;
+        }
+        // if has children and was completed - optional value was last
+        if (symbol->isCompleted()) {
+            goUp();
+            serveSuccess();
+        }
+        return FINISH_SERVING;
+    }
+    return FINISH_SERVING;
 }
 
 void Parser::expandTreeUntilFoundToken() {
-    while(!symbol->isTerminal()) {
+    while (!symbol->isTerminal()) {
         symbol->buildChildren();
-        if(!symbol->isTerminal()) {
+        if (!symbol->isTerminal()) {
             goDown();
         }
     }
 }
 
 void Parser::goDown() {
-    auto child = move(symbol->getCurrentChild());
-    child->setParent(move(symbol));
-    symbol = move(child);
+    if (symbol->hasChildren()) {
+        auto child = move(symbol->getCurrentChild());
+        child->setParent(move(symbol));
+        symbol = move(child);
+    }
 }
 
 void Parser::goUp() {
     auto child = move(symbol);
     symbol = move(child->getParent());
-    if(symbol) {
+    if (symbol) {
         symbol->setCurrentChild(move(child));
+    }
+    if (!symbol) {
+        throw tokenList->back();
     }
 }
 
-void Parser::saveToken(Token &token) {
-    tokenQueue.push(token);
-}
-Parser::Parser() : symbol(make_unique<Symbol>(File)) {
+Parser::Parser() : symbol(make_unique<Symbol>(File)), tokenList(make_unique<list<Token>>()) {
     auto &rules = Symbol::getRules();
     rules[Bool] = R(Or, {
             Symbol("true"),
@@ -73,28 +103,27 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
     });
     rules[Type] = R(IDENTIFIER);
     rules[Library] = R(IDENTIFIER);
-    rules[File] = R(Normal, {
-        R(Repeat, {
-            R(FilePart),
-            R(Optional, {R(SEMICOLON)})
-        })
-    });
-    rules[FilePart] = R(Or, {
-            R(Statement),
-            R(FunctionDefinition),
-            R(ClassDefinition)
-    });
+    rules[File] = R(FileRepeat);
+    rules[FileRepeat] = R(Repeat, {R(FilePart)});
+    rules[FilePart] = R({
+                                R(Or, {
+                                        R(Statement),
+                                        R(FunctionDefinition),
+                                        R(ClassDefinition)
+                                }),
+                                R(Optional, {R(SEMICOLON)})
+                        });
     rules[Statement] = R(Or, {
             R(CompoundStatement),
             R(SimpleStatement)
     });
     rules[SimpleStatement] = R(Or, {
-            R(ExpressionStatement),
             R(DeleteStatement),
             R(ImportStatement),
             R(NewStatement),
             R(AssignStatement),
-            R(ControlStatement)
+            R(ControlStatement),
+            R(ExpressionStatement)
     });
     rules[ExpressionStatement] = R(Expression);
     rules[DeleteStatement] = R({
@@ -122,29 +151,34 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
                               });
     rules[Expression] = R({
                                   R(Optional, {
-                                          R(Or, {R(ArithmeticExpression), R(NewExpression)}),
-                                          R(Repeat, {
-                                                  R(','),
-                                                  R(Or, {R(ArithmeticExpression),
-                                                         R(NewExpression)}),
+                                          R(Or, {
+                                                  R(AssignExpression),
+                                                  R(ArithmeticExpression),
+                                                  R(NewExpression)
                                           })
-                                  })
-                          });
+                                  })});
     rules[NewExpression] = R({
                                      R("new"),
                                      R(Optional, {R("mut")}),
                                      R(Optional, {R("static")}),
                                      R(Optional, {R(Type)}),
-                                     R(Or, {R(IDENTIFIER), R(CONSTANT)}),
-                                     R(Optional, {
-                                             R('('),
-                                             R(ArgumentList),
-                                             R(')'),
-                                     }),
-                                     R(Optional, {
-                                             R(AssignOperator),
-                                             R(ConditionalExpression)
-                                     })
+                                     R(Or,
+                                       {
+                                               R(IDENTIFIER), R(CONSTANT)
+                                       }),
+                                     R(Optional,
+                                       {
+                                               R({
+                                                         R('('),
+                                                         R(ArgumentList),
+                                                         R(')'),
+                                                 })}),
+                                     R(Optional,
+                                       {
+                                               R({
+                                                         R(AssignOperator),
+                                                         R(ConditionalExpression)
+                                                 })})
                              });
     rules[AssignExpression] = R({
                                         R(IDENTIFIER),
@@ -153,175 +187,215 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
                                 });
     rules[ConditionalExpression] = R({
                                              R(AndExpression),
-                                             R(Repeat, {
-                                                     R("or"),
-                                                     R(AndExpression)
-                                             })
+                                             R(Repeat, {R(ConditionalExpressionRepeat)})
                                      });
+    rules[ConditionalExpressionRepeat] = R({
+                                                   R("or"),
+                                                   R(AndExpression)
+                                           });
     rules[AndExpression] = R({
                                      R(OrExpression),
-                                     R(Repeat, {
-                                             R("and"),
-                                             R(OrExpression)
-                                     })
-                             });
+                                     R(Repeat, {R(AndExpressionRepeat)})});
+    rules[AndExpressionRepeat] = R({
+                                           R("and"),
+                                           R(OrExpression)
+                                   });
     rules[OrExpression] = R({
-                                    R(Optional, {R(UnaryNot)}),
+                                    R(Optional,
+                                      {
+                                              R(UnaryNot)
+                                      }),
                                     R(RelativeExpression),
-                                    R(Repeat, {
-                                            R(RelativeOperator),
-                                            R(Optional, {R(UnaryNot)}),
-                                            R(RelativeExpression)
-                                    })
+                                    R(Repeat, {R(OrExpressionRepeat)})
                             });
-    rules[RelativeExpression] = R(Or, {
-            R({
-                      R('('),
-                      R(ConditionalExpression),
-                      R(')'),
-              }),
-            R(ArithmeticExpression)
-    });
+    rules[OrExpressionRepeat] = R({
+                                          R(RelativeOperator),
+                                          R(Optional, {R(UnaryNot)}),
+                                          R(RelativeExpression)
+                                  });
+    rules[RelativeExpression] =
+            R(Or,
+              {
+                      R({
+                                R('('),
+                                R(ConditionalExpression),
+                                R(')'),
+                        }),
+                      R(ArithmeticExpression)
+              });
     rules[ArithmeticExpression] = R({
                                             R(AddExpression),
-                                            R(Repeat, {
-                                                    R(AddOperator),
-                                                    R(AddExpression)
-                                            })
+                                            R(Repeat, {R(ArithmeticExpressionRepeat)})
                                     });
+    rules[ArithmeticExpressionRepeat] = R({
+                                                  R(AddOperator),
+                                                  R(AddExpression)
+                                          });
     rules[AddExpression] = R({
                                      R(MultiplyExpression),
-                                     R(Repeat, {
-                                             R(MultiplyOperator),
-                                             R(MultiplyExpression)
-                                     })
+                                     R(Repeat, {R(AddExpressionRepeat)})
                              });
+    rules[AddExpressionRepeat] = R({
+                                           R(MultiplyOperator),
+                                           R(MultiplyExpression)
+                                   });
     rules[MultiplyExpression] = R({
-                                          R(Optional, {R(UnarySign)}),
+                                          R(Optional,
+                                            {
+                                                    R(UnarySign)
+                                            }),
                                           R(Term)
                                   });
 
-    rules[Term] = R(Or, {
-            R(INT),
-            R(DBL),
-            R(STR),
-            R(Bool),
-            R({
-                      R('('),
-                      R(ArithmeticExpression),
-                      R(')'),
-              }),
-            R({
-                      R(Or, {
-                              R(IDENTIFIER),
-                              R(CONSTANT),
-                              R(FunctionCall)
-                      }),
-                      R(Repeat, {R(ArraySubscript)}),
-                      R(Repeat, {
-                              R('.'),
-                              R(Or, {
-                                      R(IDENTIFIER),
-                                      R(CONSTANT),
-                                      R(FunctionCall)
-                              }),
-                              R(Repeat, {R(ArraySubscript)})
-                      })
-              })
-    });
+    rules[Term] =
+            R(Or,
+              {
+                      R(INT),
+                      R(DBL),
+                      R(STR),
+                      R(Bool),
+                      R({
+                                R('('),
+                                R(ArithmeticExpression),
+                                R(')'),
+                        }),
+                      R(TermAddition)
+              });
+    rules[TermAddition] = R({
+                                    R(Or, {
+                                            R(FunctionCall),
+                                            R(IDENTIFIER),
+                                            R(CONSTANT)
+                                    }),
+                                    R(Repeat, {R(ArraySubscript)}),
+                                    R(Repeat, {R(TermRepeat)})
+                            });
+    rules[TermRepeat] = R({
+                                  R('.'),
+                                  R(Or, {
+                                          R(FunctionCall),
+                                          R(IDENTIFIER),
+                                          R(CONSTANT)
+                                  }),
+                                  R(Repeat, {R(ArraySubscript)})
+                          });
     rules[FunctionCall] = R({
                                     R(IDENTIFIER),
                                     R('('),
                                     R(ArgumentList),
                                     R(')')
                             });
-    rules[ArgumentList] = R(Optional, {
-            R(Argument),
-            R(Repeat, {
-                    R(','),
-                    R(Argument)
-            })
-    });
-    rules[Argument] = R(ConditionalExpression);
-    rules[AssignOperator] = R(Or, {
-            R('='),
-            R("+="),
-            R("-="),
-            R("*="),
-            R("/="),
-            R("%="),
-    });
-    rules[RelativeOperator] = R(Or, {
-            R("=="),
-            R("!="),
-            R('<'),
-            R('>'),
-            R("<="),
-            R(">="),
-    });
-    rules[AddOperator] = R(Or, {
-            R('+'),
-            R('-')
-    });
-    rules[MultiplyOperator] = R(Or, {
-            R('*'),
-            R('/'),
-            R('%')
-    });
-    rules[UnarySign] = R(Or, {
-            R('+'),
-            R('-')
-    });
-    rules[UnaryNot] = R(Or, {
-            R("not"),
-            R('!')
-    });
+    rules[ArgumentList] =
+            R(Optional,
+              {
+                      R({
+                                R(Argument),
+                                R(Repeat, {R(ArgumentListRepeat)})
+                        })});
+    rules[ArgumentListRepeat] = R({
+                                          R(','),
+                                          R(Argument)
+                                  });
+    rules[Argument] =
+            R(ConditionalExpression);
+    rules[AssignOperator] =
+            R(Or,
+              {
+                      R('='),
+                      R("+="),
+                      R("-="),
+                      R("*="),
+                      R("/="),
+                      R("%="),
+              });
+    rules[RelativeOperator] =
+            R(Or,
+              {
+                      R("=="),
+                      R("!="),
+                      R('<'),
+                      R('>'),
+                      R("<="),
+                      R(">="),
+              });
+    rules[AddOperator] =
+            R(Or,
+              {
+                      R('+'),
+                      R('-')
+              });
+    rules[MultiplyOperator] =
+            R(Or,
+              {
+                      R('*'),
+                      R('/'),
+                      R('%')
+              });
+    rules[UnarySign] =
+            R(Or,
+              {
+                      R('+'),
+                      R('-')
+              });
+    rules[UnaryNot] =
+            R(Or,
+              {
+                      R("not"),
+                      R('!')
+              });
     rules[ArraySubscript] = R({
                                       R('['),
-                                      R(Or, {
-                                              R(UnsignedIntTerm),
-                                              R({
-                                                        R(Optional, {R(UnsignedIntTerm)}),
-                                                        R(':'),
-                                                        R(Optional, {R(UnsignedIntTerm)}),
-                                                })
-                                      }),
+                                      R(Or,
+                                        {
+                                                R(UnsignedIntTerm),
+                                                R({
+                                                          R(Optional, {R(UnsignedIntTerm)}),
+                                                          R(':'),
+                                                          R(Optional, {R(UnsignedIntTerm)}),
+                                                  })
+                                        }),
                                       R(']')
                               });
-    rules[UnsignedIntTerm] = R(Term);
-    rules[CompoundStatement] = R(Or, {
-            R(IfStatement),
-            R(WhileStatement),
-            R(ForStatement),
-            R(ForiStatement),
-            R(ForeachStatement)
-    });
-    rules[BlockInstruction] = R(Or, {
-            R(Statement),
-            R({
-                      R('{'),
-                      R(Repeat, {R(Statement)}),
-                      R('}')
-              })
-    });
+    rules[UnsignedIntTerm] =
+            R(Term);
+    rules[CompoundStatement] =
+            R(Or,
+              {
+                      R(IfStatement),
+                      R(WhileStatement),
+                      R(ForStatement),
+                      R(ForiStatement),
+                      R(ForeachStatement)
+              });
+    rules[BlockInstruction] =
+            R(Or, {
+                    R({
+                              R('{'),
+                              R(Repeat, {R(Statement)}),
+                              R('}')
+                      }),
+                    R(Statement)
+            });
     rules[IfStatement] = R({
                                    R("if"),
                                    R('('),
                                    R(ConditionalExpression),
                                    R(')'),
                                    R(BlockInstruction),
-                                   R(Optional, {
-                                           R("else"),
-                                           R(BlockInstruction)
-                                   })
+                                   R(Optional, {R({
+                                                          R("else"),
+                                                          R(BlockInstruction)
+                                                  })})
                            });
-    rules[WhileStatement] = R(Normal, {
-            R("while"),
-            R('('),
-            R(ConditionalExpression),
-            R(')'),
-            R(BlockInstruction)
-    });
+    rules[WhileStatement] =
+            R(Normal,
+              {
+                      R("while"),
+                      R('('),
+                      R(ConditionalExpression),
+                      R(')'),
+                      R(BlockInstruction)
+              });
     rules[ForStatement] = R({
                                     R("for"),
                                     R('('),
@@ -351,7 +425,10 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
                                 });
     rules[FunctionDefinition] = R({
                                           R("def"),
-                                          R(Optional, {R(Type)}),
+                                          R(Optional,
+                                            {
+                                                    R(Type)
+                                            }),
                                           R(IDENTIFIER),
                                           R('('),
                                           R(ParameterList),
@@ -365,47 +442,97 @@ Parser::Parser() : symbol(make_unique<Symbol>(File)) {
                                        R(ClassBody),
                                        R('}')
                                });
-    rules[ParameterList] = R(Optional, {
-            R(Parameter),
-            R(Repeat, {
-                    R(','),
-                    R(Parameter)
-            })
-    });
+    rules[ParameterList] =
+            R(Optional,
+              {
+                      R({
+                                R(Parameter),
+                                R(Repeat, {R(ParameterListRepeat)})
+                        })});
+    rules[ParameterListRepeat] = R({
+                                           R(','),
+                                           R(Parameter)
+                                   });
     rules[Parameter] = R({
-                                 R(Optional, {R(Type)}),
+                                 R(Optional,
+                                   {
+                                           R(Type)
+                                   }),
                                  R(IDENTIFIER),
                                  R(Optional, {R({
-                                                       R('='),
-                                                       R(Default)
-                                               })})
+                                                        R('='),
+                                                        R(Default)
+                                                })})
                          });
-    rules[Default] = R(Term);
+    rules[Default] =
+            R(Term);
     rules[ListIdentifier] = R({
                                       R(IDENTIFIER),
                                       R(Optional, {R(ArraySubscript)})
                               });
-    rules[ClassBody] = R(Repeat, {R(ClassBodyStatement)});
-    rules[ClassBodyStatement] = R(Or, {
-            R(MemberDefinition),
-            R(FunctionDefinition)
-    });
+    rules[ClassBody] =
+            R(Repeat, {R(ClassBodyStatement)});
+    rules[ClassBodyStatement] =
+            R(Or,
+              {
+                      R(MemberDefinition),
+                      R(FunctionDefinition)
+              });
     rules[MemberDefinition] = R({
-                                        R(Optional, {R(Or, {
-                                                R("public"),
-                                                R("private"),
-                                                R("secret")
-                                        })}),
-                                        R(Optional, {R("mut")}),
-                                        R(Optional, {R("static")}),
-                                        R(Optional, {R(Type)}),
+                                        R(Optional,
+                                          {
+                                                  R(Or,
+                                                    {
+                                                            R("public"),
+                                                            R("private"),
+                                                            R("secret")
+                                                    })}),
+                                        R(Optional,
+                                          {
+                                                  R("mut")}),
+                                        R(Optional,
+                                          {
+                                                  R("static")}),
+                                        R(Optional,
+                                          {
+                                                  R(Type)
+                                          }),
                                         R(IDENTIFIER),
-                                        R(Optional, {
-                                                R('('),
-                                                R(ArgumentList),
-                                                R(')')
-                                        })
+                                        R(Optional, {R({
+                                                               R('('),
+                                                               R(ArgumentList),
+                                                               R(')')
+                                                       })})
                                 });
 }
 
+void Parser::parseToken() {
+
+    while (!symbol->parseToken(tokenList->front())) {
+        while (serveFailure());
+        expandTreeUntilFoundToken();
+    }
+    serveSuccess();
+    tokenList->pop_front();
+}
+
+void Parser::cleanChild() {
+    auto b = symbol->cleanChild();
+    tokenList->insert(tokenList->begin(), b->begin(), b->end());
+}
+
+void Parser::cleanTree() {
+    if (symbol->getSymbolType() != FileRepeat) {
+        throw runtime_error("Cleaning non file repeat");
+    }
+    goUp();
+    symbol->previousChild();
+    for (auto &child: symbol->getChildren()) {
+        child->cleanSymbol();
+    }
+}
+
+Symbol &Parser::getTree() {
+    return *symbol;
+}
 
