@@ -7,13 +7,16 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ClassBodyStatement.h"
 
 class ClassBody: public Symbol{
-    using ClassBodyUP = std::unique_ptr<ClassBody>;
 protected:
-
+    std::list<ClassBodyStatementUP> classBodyStatementList;
 public:
+    ClassBody();
     void execute() override;
+
 };
+using ClassBodyUP = std::unique_ptr<ClassBody>;
 
 #endif //FISH_CLASSBODY_H

@@ -7,14 +7,19 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ConditionalExpression.h"
+
+class ConditionalExpression;
+using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
 
 class Argument: public Symbol{
-    using ArgumentUP = std::unique_ptr<Argument>;
 protected:
-
+    ConditionalExpressionUP conditionalExpression;
 public:
+    Argument();
     void execute() override;
 };
+using ArgumentUP = std::unique_ptr<Argument>;
 
 
 #endif //FISH_ARGUMENT_H

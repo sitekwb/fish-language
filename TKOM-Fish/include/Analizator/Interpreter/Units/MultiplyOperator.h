@@ -9,12 +9,16 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class MultiplyOperator: public Symbol{
-    using MultiplyOperatorUP = std::unique_ptr<MultiplyOperator>;
 protected:
+    TokenUPD operatorToken;
+    char value;
 
 public:
+    MultiplyOperator();
     void execute() override;
+    char getChar();
 };
+using MultiplyOperatorUP = std::unique_ptr<MultiplyOperator>;
 
 
 #endif //FISH_MULTIPLYOPERATOR_H

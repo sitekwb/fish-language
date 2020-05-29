@@ -11,20 +11,15 @@
 #include "Statement.h"
 
 class FilePart : public Symbol {
-    using FilePartUP = std::unique_ptr<FilePart>;
-
-    std::unique_ptr<Statement> statement;
-    std::unique_ptr<FunctionDefinition> functionDefinition;
-    std::unique_ptr<ClassDefinition> classDefinition;
-
-    bool buildFunctionDefinition();
-    bool buildClassDefinition();
-    bool buildStatement();
-
+    FunctionDefinitionUP functionDefinition;
+    ClassDefinitionUP classDefinition;
+    StatementUP statement;
 public:
     FilePart();
     void execute() override;
+    LexerUP recoverLexerUP();
 };
+using FilePartUP = std::unique_ptr<FilePart>;
 
 
 #endif //FISH_FILEPART_H

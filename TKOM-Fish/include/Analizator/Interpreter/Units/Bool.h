@@ -9,12 +9,15 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class Bool : public Symbol{
-    using BoolUP = std::unique_ptr<Bool>;
 protected:
-
+    TokenUPD boolToken;
+    bool value;
 public:
+    Bool();
     void execute() override;
+    bool getValue();
 };
+using BoolUP = std::unique_ptr<Bool>;
 
 
 #endif //FISH_BOOL_H

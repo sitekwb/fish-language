@@ -7,33 +7,16 @@
 using namespace std;
 
 FunctionDefinition::FunctionDefinition() {
-    constructed = buildToken(def)
-            and buildTypeOpt()
+    constructed = buildToken("def", def)
+            and buildOptionalSymbol<Type>(typeOptional)
             and buildToken(identifier)
-            and buildToken(bracketOpen)
+            and buildToken("(", bracketOpen)
             and buildSymbol<ParameterList>(parameterList)
-            and buildToken(bracketClose)
-            and buildBlockInstruction();
+            and buildToken(")", bracketClose)
+            and buildSymbol<BlockInstruction>(blockInstruction);
 }
 
 void FunctionDefinition::execute() {
-//TODO here
+//TODO interprete
 }
-
-bool FunctionDefinition::buildTypeOpt() {
-    typeOpt = make_unique<Type>();
-    // Optional, so always true
-    return true;
-}
-
-bool FunctionDefinition::buildParameterList() {
-    parameterList = make_unique<ParameterList>();
-    return parameterList->isConstructed();
-}
-
-bool FunctionDefinition::buildBlockInstruction() {
-    blockInstruction = make_unique<BlockInstruction>();
-    return blockInstruction->isConstructed();
-}
-
 

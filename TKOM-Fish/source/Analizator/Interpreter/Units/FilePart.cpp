@@ -7,42 +7,27 @@
 using namespace std;
 
 FilePart::FilePart() {
-    constructed = buildFunctionDefinition() or buildClassDefinition() or buildStatement();
-}
-
-bool FilePart::buildFunctionDefinition() {
-    functionDefinition = make_unique<FunctionDefinition>();
-    if(functionDefinition->isConstructed()){
-        return true;
-    }
-    functionDefinition.reset();
-    return false;
-}
-
-
-bool FilePart::buildClassDefinition() {
-    classDefinition = make_unique<ClassDefinition>();
-    if(classDefinition->isConstructed()){
-        return true;
-    }
-    classDefinition.reset();
-    return false;
-}
-
-bool FilePart::buildStatement() {
-    statement = make_unique<Statement>();
-    if(statement->isConstructed()){
-        return true;
-    }
-    statement.reset();
-    return false;
+    constructed = buildSymbol<FunctionDefinition>(functionDefinition)
+                  or buildSymbol<ClassDefinition>(classDefinition)
+                  or buildSymbol<Statement>(statement);
 }
 
 void FilePart::execute() {
-    if(isConstructed()){
+    if(!constructed) {
+        return;
+    }
+    if(functionDefinition) {
         functionDefinition->execute();
+    }
+    else if(classDefinition) {
         classDefinition->execute();
+    }
+    else if(statement) {
         statement->execute();
     }
 }
 
+
+LexerUP FilePart::recoverLexerUP() {
+    return move(lexer);
+}

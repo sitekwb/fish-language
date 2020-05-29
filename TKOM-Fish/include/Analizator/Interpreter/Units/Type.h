@@ -9,11 +9,12 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class Type : public Symbol{
-    using TypeUP = std::unique_ptr<Type>;
 protected:
-
+    IdentifierUPD identifier;
 public:
+    Type();
     void execute() override;
 };
+using TypeUP = std::unique_ptr<Type>;
 
 #endif //FISH_TYPE_H

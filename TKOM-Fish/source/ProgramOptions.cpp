@@ -44,3 +44,7 @@ std::unique_ptr<std::ifstream> ProgramOptions::getInputFile() {
 bool ProgramOptions::isDebug() const {
     return debug;
 }
+
+bool ProgramOptions::isFileSource() {
+    return vm.count("input");
+}

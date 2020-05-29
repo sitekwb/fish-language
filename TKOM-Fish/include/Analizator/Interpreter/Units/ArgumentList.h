@@ -7,13 +7,20 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Argument.h"
+
+class Argument;
+using ArgumentUP = std::unique_ptr<Argument>;
 
 class ArgumentList : public Symbol{
-    using ArgumentListUP = std::unique_ptr<ArgumentList>;
 protected:
-
+    ArgumentUP argumentOptional;
+    std::list<std::pair<TokenUPD, ArgumentUP>>repeatListOptional;
+    bool buildRepeat();
 public:
+    ArgumentList();
     void execute() override;
 };
+using ArgumentListUP = std::unique_ptr<ArgumentList>;
 
 #endif //FISH_ARGUMENTLIST_H

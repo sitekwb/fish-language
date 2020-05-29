@@ -3,3 +3,16 @@
 //
 
 #include "Analizator/Interpreter/Units/ImportStatement.h"
+
+ImportStatement::ImportStatement() {
+    constructed = buildToken("import", importToken)
+            and buildToken(library);
+    if(constructed and buildToken("as", asTokenOptional)){
+        constructed = buildToken(library2);
+    }
+}
+
+void ImportStatement::execute() {
+    //TODO interpreter
+}
+

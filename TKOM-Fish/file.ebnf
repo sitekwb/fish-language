@@ -33,7 +33,7 @@ AssignStatement = AssignExpression;
 ControlStatement = "break" | "continue";
 AliasStatement = "alias", Type, Type;
 
-Expression = [ArithmeticExpression | NewExpression];
+Expression = ArithmeticExpression | NewExpression;
 
 NewExpression = "new", ["mut"], ["static"], [Type], (Identifier | Constant), ['(', ArgumentList, ')'] [AssignOperator, ConditionalExpresion];
 AssignExpression = Identifier, AssignOperator, Term;
@@ -41,18 +41,19 @@ AssignExpression = Identifier, AssignOperator, Term;
 ConditionalExpression = AndExpression, {"or", AndExpression};
 AndExpression = OrExpression, {"and", OrExpression};
 OrExpression = [UnaryNot], RelativeExpression, {RelativeOperator, [UnaryNot], RelativeExpression};
-RelativeExpression = '(' ConditionalExpression ')' | ArithmeticExpression;
+RelativeExpression = ArithmeticExpression;
 
 ArithmeticExpression = AddExpression, {AddOperator, AddExpression};
 AddExpression = MultiplyExpression, {MultiplyOperator, MultiplyExpression};
 MultiplyExpression = [UnarySign], Term;
-Term = Int | Dbl | Str | Bool | '(', ArithmeticExpression, ')'
-      | ((Identifier | Constant | FunctionCall), {ArraySubscript}), {'.', (Identifier | Constant | FunctionCall), {ArraySubscript}}
+Term = Int | Dbl | Str | Bool
+      | (Identifier | Constant | FunctionCall), {ArraySubscript}, {'.', (Identifier | Constant | FunctionCall), {ArraySubscript}}
 
 
 FunctionCall = Identifier, '(', ArgumentList, ')';
 ArgumentList = [Argument, {',', Argument}];
-Argument =  ConditionalExpression;
+Argument =  Int | Dbl | Str | Bool
+                  | (Identifier | Constant), {ArraySubscript}, {'.', (Identifier | Constant), {ArraySubscript}};
 
 
 AssignOperator = '=' | "+=" | "-=" | "*=" | "/=" | "%=";
@@ -62,8 +63,8 @@ MultiplyOperator = "*" | "/" | "%";
 UnarySign = "+" | "-";
 UnaryNot = "not" | "!";
 
-ArraySubscript = "[", (UnsignedIntTerm | ([UnsignedIntTerm], ':', [UnsignedIntTerm])), "]";
-UnsignedIntTerm = Term;
+ArraySubscript = "[", [[UnsignedIntTerm], [':', [UnsignedIntTerm]]], "]";
+UnsignedIntTerm = Int | Identifier | Constant;
 
 
 #COMPOUND
@@ -72,7 +73,7 @@ BlockInstruction = ("{", {Statement}, "}") | Statement;
 
 IfStatement = "if", '(', ConditionalExpression, ')', BlockInstruction, ["else", BlockInstruction];
 WhileStatement = "while", '(', ConditionalExpression, ')', BlockInstruction;
-ForStatement = "for", '(', Expression, ';', ConditionalExpression, ';' Expression, ')', BlockInstruction;
+ForStatement = "for", '(', [Expression], ';', ConditionalExpression, ';' [Expression], ')', BlockInstruction;
 ForiStatement = "fori", '(', UnsignedIntTerm, ')', BlockInstruction;
 ForeachStatement = "foreach", '(', Identifier, "in", ListIdentifier, ')', BlockInstruction;
 FunctionDefinition = "def", [Type], Identifier, '(', ParameterList, ')', BlockInstruction;

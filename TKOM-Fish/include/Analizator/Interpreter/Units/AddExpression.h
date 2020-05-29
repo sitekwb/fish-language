@@ -7,14 +7,29 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "MultiplyExpression.h"
+#include "MultiplyOperator.h"
+
+class MultiplyExpression;
+using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;
 
 class AddExpression : public Symbol{
-    using AddExpressionUP = std::unique_ptr<AddExpression>;
 protected:
+    MultiplyExpressionUP multiplyExpression;
+    std::list<std::pair<MultiplyOperatorUP, MultiplyExpressionUP>> repeatList;
+    bool isDouble;
+    double doubleValue;
+    int intValue;
 
+    bool buildRepeat();
 public:
+    AddExpression();
     void execute() override;
+    bool isDoubleValue();
+    bool getDouble();
+    bool getInt();
 };
+using AddExpressionUP = std::unique_ptr<AddExpression>;
 
 
 #endif //FISH_ADDEXPRESSION_H

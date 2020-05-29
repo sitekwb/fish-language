@@ -9,12 +9,16 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class AddOperator : public Symbol{
-    using AddOperatorUP = std::unique_ptr<AddOperator>;
 protected:
-
+    TokenUPD operatorToken;
+    char value;
 public:
+    AddOperator();
     void execute() override;
+    char getChar();
+
 };
+using AddOperatorUP = std::unique_ptr<AddOperator>;
 
 
 #endif //FISH_ADDOPERATOR_H

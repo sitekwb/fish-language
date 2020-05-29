@@ -9,11 +9,13 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class DeleteStatement: public Symbol{
-    using DeleteStatementUP = std::unique_ptr<DeleteStatement>;
 protected:
-
+    TokenUPD deleteToken;
+    IdentifierUPD identifier;
 public:
+    DeleteStatement();
     void execute() override;
 };
 
+using DeleteStatementUP = std::unique_ptr<DeleteStatement>;
 #endif //FISH_DELETESTATEMENT_H

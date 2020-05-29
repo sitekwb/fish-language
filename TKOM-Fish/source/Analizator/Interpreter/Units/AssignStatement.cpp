@@ -3,3 +3,15 @@
 //
 
 #include "Analizator/Interpreter/Units/AssignStatement.h"
+
+AssignStatement::AssignStatement() {
+    constructed = buildSymbol<AssignExpression>(assignExpression);
+}
+
+void AssignStatement::execute() {
+    if(!constructed){
+        return;
+    }
+    assignExpression->execute();
+}
+

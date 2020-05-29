@@ -4,19 +4,19 @@
 
 #include "Analizator/Interpreter/Units/File.h"
 
-File::File(Lexer &lexer) : Symbol(lexer) {
-    while(buildFilePart());
-}
-
-bool File::buildFilePart() {
-    filePartList.push_back(FilePart());
-    return filePartList.back().isConstructed();
+File::File() {
+    FilePartUP filePart;
+    while (buildSymbol<FilePart>(filePart)) {
+        filePartList.push_back(move(filePart));
+    }
 }
 
 void File::execute() {
-    if(isConstructed()) {
-        for (auto &e: filePartList) {
-            e.execute();
-        }
+    if (!constructed) {
+        return;
+    }
+    for (auto &e: filePartList) {
+        e->execute();
     }
 }
+

@@ -3,3 +3,14 @@
 //
 
 #include "Analizator/Interpreter/Units/Argument.h"
+
+Argument::Argument() {
+    constructed = buildSymbol<ConditionalExpression>(conditionalExpression);
+}
+
+void Argument::execute() {
+    if(!constructed){
+        return;
+    }
+    conditionalExpression->execute();
+}

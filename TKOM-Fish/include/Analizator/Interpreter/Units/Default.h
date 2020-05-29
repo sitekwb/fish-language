@@ -7,13 +7,15 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Term.h"
 
 class Default : public Symbol{
-    using DefaultUP = std::unique_ptr<Default>;
 protected:
-
+    TermUP term;
 public:
+    Default();
     void execute() override;
 };
+using DefaultUP = std::unique_ptr<Default>;
 
 #endif //FISH_DEFAULT_H

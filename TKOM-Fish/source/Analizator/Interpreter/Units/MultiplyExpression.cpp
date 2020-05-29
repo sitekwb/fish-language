@@ -3,3 +3,32 @@
 //
 
 #include "Analizator/Interpreter/Units/MultiplyExpression.h"
+
+MultiplyExpression::MultiplyExpression() {
+    buildSymbol<UnarySign>(unarySignOptional);
+    constructed = buildSymbol<Term>(term);
+}
+
+void MultiplyExpression::execute() {
+    if(!constructed){
+        return;
+    }
+    term->execute();
+    // TODO interprete
+}
+
+bool MultiplyExpression::isDoubleValue() {
+    return isDouble;
+}
+
+double MultiplyExpression::getDouble() {
+    return doubleValue;
+}
+
+int MultiplyExpression::getInt() {
+    return intValue;
+}
+
+
+
+

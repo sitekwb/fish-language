@@ -12,12 +12,12 @@
 #include <Context.h>
 #include <Source.h>
 
-typedef std::unique_ptr<Token> TokenUP;
+using TokenUP = std::unique_ptr<Token>;
 
 class Lexer {
 
     Context context;
-    std::unique_ptr<Source> source;
+    Source &source;
 
     std::string buf;
     char c;
@@ -43,11 +43,14 @@ class Lexer {
     void next();
     void save();
 public:
-    explicit Lexer(std::unique_ptr<Source> source);
+    explicit Lexer(Source &source);
     TokenUP getNextToken();
 
-    [[nodiscard]] const SourceUP &getSource() const;
+    Lexer &operator= (const Lexer&lexer);
+    [[nodiscard]] const Source &getSource() const;
 };
+
+using LexerUP = std::unique_ptr<Lexer>;
 
 
 #endif //FISH_LEXER_H

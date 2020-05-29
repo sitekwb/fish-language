@@ -7,14 +7,17 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Parameter.h"
 
 class ParameterList : public Symbol{
-    using ParameterListUP = std::unique_ptr<ParameterList>;
 protected:
-
+    ParameterUP parameter;
+    std::list<std::pair<TokenUPD, ParameterUP>> repeatList;
 public:
+    ParameterList();
     void execute() override;
 };
 
+using ParameterListUP = std::unique_ptr<ParameterList>;
 
 #endif //FISH_PARAMETERLIST_H

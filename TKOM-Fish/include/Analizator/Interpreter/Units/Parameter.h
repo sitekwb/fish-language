@@ -7,13 +7,19 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Type.h"
+#include "Default.h"
 
 class Parameter : public Symbol{
-    using ParameterUP = std::unique_ptr<Parameter>;
 protected:
-
+    TypeUP typeOptional;
+    IdentifierUPD identifier;
+    TokenUPD equalTokenOptional;
+    DefaultUP defaultTokenOptional;
 public:
+    Parameter();
     void execute() override;
 };
+using ParameterUP = std::unique_ptr<Parameter>;
 
 #endif //FISH_PARAMETER_H

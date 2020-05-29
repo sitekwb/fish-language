@@ -3,3 +3,16 @@
 //
 
 #include "Analizator/Interpreter/Units/FunctionCall.h"
+
+FunctionCall::FunctionCall() {
+    constructed = buildToken(identifier)
+            and buildToken("(", bracketOpen)
+            and buildSymbol<ArgumentList>(argumentList)
+            and buildToken(")", bracketClose);
+}
+
+void FunctionCall::execute() {
+//TODO interprete
+}
+
+

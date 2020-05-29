@@ -22,11 +22,11 @@ unique_ptr<Source> getSource(ProgramOptions &programOptions){
 int main(int argc, char *argv[]) {
 
     try {
-        ProgramOptions programOptions(argc, argv);
-        cout << programOptions;
-        auto source = move(getSource(programOptions));
+        ProgramOptions po(argc, argv);
+        cout << po;
+        auto source = move(getSource(po));
 
-        Controller controller(move(source), programOptions.isDebug());
+        Controller controller(*source, po.isDebug(), po.isFileSource());
         controller.execute();
     }
     catch (std::runtime_error &e) {

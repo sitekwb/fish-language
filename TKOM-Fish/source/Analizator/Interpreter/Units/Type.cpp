@@ -3,3 +3,11 @@
 //
 
 #include "Analizator/Interpreter/Units/Type.h"
+
+Type::Type() {
+    constructed = buildToken(identifier);
+}
+
+void Type::execute() {
+    // nothing
+}

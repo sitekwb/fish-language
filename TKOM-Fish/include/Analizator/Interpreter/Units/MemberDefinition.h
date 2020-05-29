@@ -7,13 +7,23 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Type.h"
+#include "ArgumentList.h"
 
 class MemberDefinition : public Symbol{
-    using MemberDefinitionUP = std::unique_ptr<MemberDefinition>;
 protected:
-
+    TokenUPD publicToken;
+    TokenUPD mutToken;
+    TokenUPD staticToken;
+    TypeUP type;
+    IdentifierUPD identifier;
+    TokenUPD bracketOpenOptional;
+    ArgumentListUP argumentListOptional;
+    TokenUPD bracketCloseOptional;
 public:
+    MemberDefinition();
     void execute() override;
 };
+using MemberDefinitionUP = std::unique_ptr<MemberDefinition>;
 
 #endif //FISH_MEMBERDEFINITION_H

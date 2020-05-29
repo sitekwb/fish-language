@@ -7,13 +7,28 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Type.h"
+#include "ArgumentList.h"
+#include "AssignOperator.h"
+#include "ConditionalExpression.h"
 
 class NewExpression : public Symbol{
-    using NewExpressionUP = std::unique_ptr<NewExpression>;
 protected:
-
+    TokenUPD newToken;
+    TokenUPD mutTokenOptional;
+    TokenUPD staticTokenOptional;
+    TypeUP typeOptional;
+    IdentifierUPD identifier;
+    TokenUPD constant;
+    TokenUPD bracketOpenOptional;
+    ArgumentListUP argumentListOptional;
+    TokenUPD bracketCloseOptional;
+    AssignOperatorUP assignOperatorOptional;
+    ConditionalExpressionUP conditionalExpression;
 public:
+    NewExpression();
     void execute() override;
 };
+using NewExpressionUP = std::unique_ptr<NewExpression>;
 
 #endif //FISH_NEWEXPRESSION_H

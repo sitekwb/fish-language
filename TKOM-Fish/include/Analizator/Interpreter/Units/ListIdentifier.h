@@ -7,13 +7,16 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ArraySubscript.h"
 
 class ListIdentifier: public Symbol{
-    using ListIdentifierUP = std::unique_ptr<ListIdentifier>;
 protected:
-
+    IdentifierUPD identifier;
+    ArraySubscriptUP arraySubscriptOptional;
 public:
+    ListIdentifier();
     void execute() override;
 };
+using ListIdentifierUP = std::unique_ptr<ListIdentifier>;
 
 #endif //FISH_LISTIDENTIFIER_H

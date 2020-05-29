@@ -7,14 +7,19 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "FunctionDefinition.h"
+#include "MemberDefinition.h"
 
 class ClassBodyStatement : public Symbol{
-    using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
 protected:
-
+    MemberDefinitionUP memberDefinition;
+    FunctionDefinitionUP functionDefinition;
 public:
+    ClassBodyStatement();
     void execute() override;
+
 };
+using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
 
 
 #endif //FISH_CLASSBODYSTATEMENT_H

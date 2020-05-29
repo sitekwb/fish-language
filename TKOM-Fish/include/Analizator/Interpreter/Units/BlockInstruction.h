@@ -7,13 +7,21 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Statement.h"
+
+class Statement;
+using StatementUP = std::unique_ptr<Statement>;
 
 class BlockInstruction : public Symbol{
-    using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
 protected:
-
+    TokenUPD blockOpen;
+    std::list<StatementUP>statementList;
+    TokenUPD blockClose;
 public:
+    BlockInstruction();
     void execute() override;
+
 };
+using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
 
 #endif //FISH_BLOCKINSTRUCTION_H

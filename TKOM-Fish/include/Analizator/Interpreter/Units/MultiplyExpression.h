@@ -7,14 +7,28 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "UnarySign.h"
+#include "Term.h"
+
+class Term;
+using TermUP = std::unique_ptr<Term>;
 
 class MultiplyExpression : public Symbol{
-    using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;
 protected:
+    UnarySignUP unarySignOptional;
+    TermUP term;
 
+    bool isDouble;
+    double doubleValue;
+    int intValue;
 public:
+    MultiplyExpression();
     void execute() override;
+    bool isDoubleValue();
+    double getDouble();
+    int getInt();
 };
+using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;
 
 
 #endif //FISH_MULTIPLYEXPRESSION_H

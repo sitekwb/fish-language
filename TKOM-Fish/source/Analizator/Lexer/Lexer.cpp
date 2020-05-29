@@ -9,15 +9,15 @@
 
 using namespace std;
 
-Lexer::Lexer(unique_ptr<Source> source_)
-        : context(), source(move(source_)), c(0) {
+Lexer::Lexer(Source &source_)
+        : context(), source(source_), c(0) {
 
 }
 
 
 TokenUP Lexer::getNextToken() {
     buf.clear();
-    c = source->peek();
+    c = source.peek();
     while (isspace(c)) {
         next();
     }
@@ -96,18 +96,18 @@ void Lexer::collect() {
 }
 
 void Lexer::next() {
-    if (source->get() == '\n') {
+    if (source.get() == '\n') {
         context.nextLineNumber();
     }
     context.nextSignNumber();
-    c = source->peek();
+    c = source.peek();
 }
 
 void Lexer::save() {
     buf += c;
 }
 
-const SourceUP &Lexer::getSource() const {
+const Source &Lexer::getSource() const {
     return source;
 }
 
@@ -198,7 +198,16 @@ void Lexer::collectStringSign() {
 }
 
 void Lexer::nextStringSign() {
-    source->getStringSign();
-    c = source->peekStringSign();
+    source.getStringSign();
+    c = source.peekStringSign();
+}
+
+Lexer &Lexer::operator=(const Lexer &l) {
+    context = l.context;
+    source = l.source;
+    buf = l.buf;
+    c = l.c;
+    currentToken = make_unique<Token>(*(l.currentToken));
+    return *this;
 }
 

@@ -10,26 +10,15 @@
 #include <unordered_map>
 #include <list>
 #include <queue>
-#include "SymbolOld.h"
+#include <Analizator/Lexer/Lexer.h>
+#include <Analizator/Interpreter/Units/File.h>
 
-using R = Symbol;
 
 class Parser {
-    std::unique_ptr<Symbol> symbol;
-    std::unique_ptr<std::list<Token>> tokenList;
-    void expandTreeUntilFoundToken();
-    void goDown();
-    void goUp();
-    bool serveFailure();
-    void serveSuccess();
-    void parseToken();
-    void cleanChild();
 public:
-    Parser();
-
-    bool parse(Token &nextToken);
-    void cleanTree();
-    Symbol &getTree();
+    Parser(LexerUP lexer);
+    FileUP parseFile();
+    FilePartUP parseFilePart();
 };
 
 

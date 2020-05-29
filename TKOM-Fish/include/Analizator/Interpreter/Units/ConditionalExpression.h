@@ -7,13 +7,23 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "AndExpression.h"
 
-class ConditionalExpression : public Symbol{
-    using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
-protected:
+class AndExpression;
+using AndExpressionUP = std::unique_ptr<AndExpression>;
 
+class ConditionalExpression : public Symbol {
+    bool value;
+    AndExpressionUP andExpression;
+    std::list<std::pair<TokenUPD,AndExpressionUP>> repeatList;
+
+    bool buildRepeat();
 public:
+    ConditionalExpression();
     void execute() override;
+    bool getValue();
+
 };
+using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
 
 #endif //FISH_CONDITIONALEXPRESSION_H

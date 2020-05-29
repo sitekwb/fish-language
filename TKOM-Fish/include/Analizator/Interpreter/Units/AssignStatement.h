@@ -7,13 +7,15 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "AssignExpression.h"
 
 class AssignStatement : public Symbol{
-    using AssignStatementUP = std::unique_ptr<AssignStatement>;
 protected:
-
+    AssignExpressionUP assignExpression;
 public:
+    AssignStatement();
     void execute() override;
 };
+using AssignStatementUP = std::unique_ptr<AssignStatement>;
 
 #endif //FISH_ASSIGNSTATEMENT_H

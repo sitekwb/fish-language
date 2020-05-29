@@ -3,3 +3,15 @@
 //
 
 #include "Analizator/Interpreter/Units/ClassBody.h"
+
+ClassBody::ClassBody() {
+    buildRepeatSymbol<ClassBodyStatement>(classBodyStatementList);
+    constructed = true;
+}
+
+void ClassBody::execute() {
+    // TODO interprete
+    for(auto &e:classBodyStatementList){
+        e->execute();
+    }
+}

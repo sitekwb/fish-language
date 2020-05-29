@@ -7,7 +7,7 @@
 
 class Interpreter {
 public:
-    void interprete(Parser &parser);
+    //void interprete(Parser &parser);
 };
 
 

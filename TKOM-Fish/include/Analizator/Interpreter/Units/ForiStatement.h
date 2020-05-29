@@ -7,13 +7,20 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "UnsignedIntTerm.h"
+#include "BlockInstruction.h"
 
 class ForiStatement : public Symbol{
-    using ForiStatementUP = std::unique_ptr<ForiStatement>;
 protected:
-
+    TokenUPD foriToken;
+    TokenUPD bracketOpen;
+    UnsignedIntTermUP unsignedIntTerm;
+    TokenUPD bracketClose;
+    BlockInstructionUP blockInstruction;
 public:
+    ForiStatement();
     void execute() override;
 };
+using ForiStatementUP = std::unique_ptr<ForiStatement>;
 
 #endif //FISH_FORISTATEMENT_H

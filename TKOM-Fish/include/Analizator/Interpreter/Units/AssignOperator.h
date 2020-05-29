@@ -9,11 +9,14 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class AssignOperator: public Symbol{
-    using AssignOperatorUP = std::unique_ptr<AssignOperator>;
 protected:
-
+    TokenUPD assignOperator;
+    std::string value;
 public:
+    AssignOperator();
     void execute() override;
+    const std::string &getValue() const;
 };
+using AssignOperatorUP = std::unique_ptr<AssignOperator>;
 
 #endif //FISH_ASSIGNOPERATOR_H

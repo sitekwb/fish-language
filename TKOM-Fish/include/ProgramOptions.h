@@ -21,6 +21,7 @@ public:
     std::unique_ptr<std::ifstream> getInputFile();
 
     bool isDebug() const;
+    bool isFileSource();
 
     friend std::ostream &operator<<(std::ostream &os, const ProgramOptions &options);
 };

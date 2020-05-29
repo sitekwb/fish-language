@@ -12,14 +12,12 @@
 #include "FilePart.h"
 
 class File : public Symbol {
-    using FileUP = std::unique_ptr<File>;
-
-    std::list<FilePart> filePartList;
-    bool buildFilePart();
+    std::list<FilePartUP> filePartList;
 public:
-    File(Lexer &lexer);
+    File();
     void execute() override;
 };
+using FileUP = std::unique_ptr<File>;
 
 
 #endif //FISH_FILE_H

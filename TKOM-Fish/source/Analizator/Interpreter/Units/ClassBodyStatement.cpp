@@ -3,3 +3,21 @@
 //
 
 #include "Analizator/Interpreter/Units/ClassBodyStatement.h"
+
+ClassBodyStatement::ClassBodyStatement() {
+    constructed = buildSymbol<MemberDefinition>(memberDefinition)
+                  or buildSymbol<FunctionDefinition>(functionDefinition);
+}
+
+void ClassBodyStatement::execute() {
+    // TODO interprete with class environment
+    if(!constructed){
+        return;
+    }
+    if(memberDefinition){
+        memberDefinition->execute();
+    }
+    else if(functionDefinition){
+        functionDefinition->execute();
+    }
+}

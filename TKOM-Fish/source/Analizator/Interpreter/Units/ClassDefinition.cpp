@@ -3,3 +3,15 @@
 //
 
 #include "Analizator/Interpreter/Units/ClassDefinition.h"
+
+ClassDefinition::ClassDefinition() {
+    constructed = buildToken("class", classToken)
+            and buildSymbol<Type>(type)
+            and buildToken("{", blockOpen)
+            and buildSymbol<ClassBody>(classBody)
+            and buildToken("}", blockClose);
+}
+
+void ClassDefinition::execute() {
+//TODO create environment and send to children
+}

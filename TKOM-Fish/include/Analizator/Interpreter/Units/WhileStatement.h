@@ -7,14 +7,24 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ConditionalExpression.h"
+#include "BlockInstruction.h"
+
+class BlockInstruction;
+using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
+
 
 class WhileStatement : public Symbol{
-    using WhileStatementUP = std::unique_ptr<WhileStatement>;
 protected:
-
+    TokenUPD whileToken, bracketOpen;
+    ConditionalExpressionUP conditionalExpression;
+    TokenUPD bracketClose;
+    BlockInstructionUP blockInstruction;
 public:
+    WhileStatement();
     void execute() override;
 };
+using WhileStatementUP = std::unique_ptr<WhileStatement>;
 
 
 #endif //FISH_WHILESTATEMENT_H

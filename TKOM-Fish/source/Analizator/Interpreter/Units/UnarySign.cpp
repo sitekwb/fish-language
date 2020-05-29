@@ -3,3 +3,11 @@
 //
 
 #include "Analizator/Interpreter/Units/UnarySign.h"
+
+UnarySign::UnarySign() {
+    constructed = buildToken("+", token) or buildToken("-", token);
+}
+
+void UnarySign::execute() {
+
+}

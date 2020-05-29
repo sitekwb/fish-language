@@ -7,13 +7,15 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Expression.h"
 
 class ExpressionStatement : public Symbol{
-    using ExpressionStatementUP = std::unique_ptr<ExpressionStatement>;
 protected:
-
+    ExpressionUP expression;
 public:
+    ExpressionStatement();
     void execute() override;
 };
+using ExpressionStatementUP = std::unique_ptr<ExpressionStatement>;
 
 #endif //FISH_EXPRESSIONSTATEMENT_H

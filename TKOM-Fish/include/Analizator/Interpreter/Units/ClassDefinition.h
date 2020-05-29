@@ -7,14 +7,23 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "Type.h"
+#include "ClassBody.h"
 
 class ClassDefinition : public Symbol{
-    using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;
 protected:
+    TokenUPD classToken;
+    TypeUP type;
 
+    TokenUPD blockOpen;
+    ClassBodyUP classBody;
+    TokenUPD blockClose;
 public:
+    ClassDefinition();
     void execute() override;
+
 };
+using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;
 
 
 #endif //FISH_CLASSDEFINITION_H

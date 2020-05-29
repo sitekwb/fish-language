@@ -14,14 +14,13 @@
 class Controller {
 
     static const inline unsigned int MAX_LINE_LENGTH = 1024;
-    std::unique_ptr<Lexer> lexer;
     std::unique_ptr<Parser> parser;
-    std::unique_ptr<Interpreter> interpreter;
+    Source &source;
     bool isDebug;
+    bool isFileSource;
 
-    void printDebug(const Token &token);
 public:
-    Controller(std::unique_ptr<Source> source, bool isDebug);
+    Controller(Source &source, bool isDebug, bool isFileSource);
     void execute();
 };
 

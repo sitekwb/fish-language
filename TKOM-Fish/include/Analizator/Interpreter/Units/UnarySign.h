@@ -9,12 +9,13 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class UnarySign : public Symbol{
-    using UnarySignUP = std::unique_ptr<UnarySign>;
 protected:
-
+    TokenUPD token;
 public:
+    UnarySign();
     void execute() override;
 };
+using UnarySignUP = std::unique_ptr<UnarySign>;
 
 
 #endif //FISH_UNARYSIGN_H

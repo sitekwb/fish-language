@@ -3,3 +3,13 @@
 //
 
 #include "Analizator/Interpreter/Units/ExpressionStatement.h"
+
+ExpressionStatement::ExpressionStatement() {
+    constructed = buildSymbol<Expression>(expression);
+}
+
+void ExpressionStatement::execute() {
+    if(constructed) {
+        expression->execute();
+    }
+}

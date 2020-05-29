@@ -12,23 +12,18 @@
 #include "BlockInstruction.h"
 
 class FunctionDefinition : public Symbol {
-    using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
-
-    TokenUP def = std::make_unique<Token>("def");
-    TypeUP typeOpt;
-    TokenUP identifier = std::make_unique<Token>(IDENTIFIER);
-    TokenUP bracketOpen = std::make_unique<Token>('(');
+    TokenUPD def;
+    TypeUP typeOptional;
+    IdentifierUPD identifier;
+    TokenUPD bracketOpen;
     ParameterListUP parameterList;
-    TokenUP  bracketClose = std::make_unique<Token>(')');
+    TokenUPD  bracketClose;
     BlockInstructionUP blockInstruction;
-
-    bool buildTypeOpt();
-    bool buildParameterList();
-    bool buildBlockInstruction();
 public:
     FunctionDefinition();
     void execute() override;
 };
+using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
 
 
 #endif //FISH_FUNCTIONDEFINITION_H

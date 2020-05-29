@@ -9,11 +9,15 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class ImportStatement : public Symbol{
-    using ImportStatementUP = std::unique_ptr<ImportStatement>;
 protected:
-
+    TokenUPD importToken;
+    IdentifierUPD library;
+    TokenUPD asTokenOptional;
+    IdentifierUPD library2;
 public:
+    ImportStatement();
     void execute() override;
 };
+using ImportStatementUP = std::unique_ptr<ImportStatement>;
 
 #endif //FISH_IMPORTSTATEMENT_H

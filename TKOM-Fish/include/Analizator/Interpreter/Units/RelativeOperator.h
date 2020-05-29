@@ -9,12 +9,15 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class RelativeOperator : public Symbol{
-    using RelativeOperatorUP = std::unique_ptr<RelativeOperator>;
 protected:
-
+    TokenUPD operatorToken;
+    std::string value;
 public:
+    RelativeOperator();
     void execute() override;
+    const std::string &getValue() const;
 };
+using RelativeOperatorUP = std::unique_ptr<RelativeOperator>;
 
 
 #endif //FISH_RELATIVEOPERATOR_H

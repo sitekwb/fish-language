@@ -8,14 +8,24 @@
 
 #include <Analizator/Parser/SymbolOld.h>
 #include <Analizator/Interpreter/Symbol.h>
+#include "CompoundStatement.h"
+#include "SimpleStatement.h"
 
-class Statement: public Symbol{
-    using StatementUP = std::unique_ptr<Statement>;
+class CompoundStatement;
+using CompoundStatementUP = std::unique_ptr<CompoundStatement>;
+
+class Statement : public Symbol {
 protected:
-
+    CompoundStatementUP compoundStatement;
+    SimpleStatementUP simpleStatement;
+    TokenUPD semicolonOptional;
 public:
+    Statement();
+
     void execute() override;
 };
+
+using StatementUP = std::unique_ptr<Statement>;
 
 
 #endif //FISH_STATEMENT_H

@@ -7,13 +7,25 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ConditionalExpression.h"
+#include "BlockInstruction.h"
+
+class BlockInstruction;
+using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
 
 class IfStatement : public Symbol{
-    using IfStatementUP = std::unique_ptr<IfStatement>;
 protected:
-
+    TokenUPD ifToken;
+    TokenUPD bracketOpen;
+    ConditionalExpressionUP conditionalExpression;
+    TokenUPD  bracketClose;
+    BlockInstructionUP blockInstruction;
+    TokenUPD elseOptional;
+    BlockInstructionUP elseBlockInstruction;
 public:
+    IfStatement();
     void execute() override;
 };
+using IfStatementUP = std::unique_ptr<IfStatement>;
 
 #endif //FISH_IFSTATEMENT_H

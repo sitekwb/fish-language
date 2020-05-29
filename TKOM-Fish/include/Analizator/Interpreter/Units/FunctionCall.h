@@ -6,14 +6,23 @@
 #define FISH_FUNCTIONCALL_H
 
 
+#include "ArgumentList.h"
 #include <Analizator/Interpreter/Symbol.h>
 
-class FunctionCall: public Symbol{
-    using FunctionCallUP = std::unique_ptr<FunctionCall>;
-protected:
 
+class ArgumentList;
+using ArgumentListUP = std::unique_ptr<ArgumentList>;
+
+class FunctionCall: public Symbol{
+protected:
+    IdentifierUPD identifier;
+    TokenUPD bracketOpen;
+    ArgumentListUP argumentList;
+    TokenUPD bracketClose;
 public:
+    FunctionCall();
     void execute() override;
 };
+using FunctionCallUP = std::unique_ptr<FunctionCall>;
 
 #endif //FISH_FUNCTIONCALL_H

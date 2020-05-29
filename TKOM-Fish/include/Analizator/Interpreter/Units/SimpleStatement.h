@@ -8,14 +8,28 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ExpressionStatement.h"
+#include "AliasStatement.h"
+#include "AssignStatement.h"
+#include "NewStatement.h"
+#include "DeleteStatement.h"
+#include "ImportStatement.h"
+#include "ControlStatement.h"
 
 class SimpleStatement : public Symbol{
-    using SimpleStatementUP = std::unique_ptr<SimpleStatement>;
 protected:
-
+    ExpressionStatementUP expressionStatement;
+    DeleteStatementUP deleteStatement;
+    ImportStatementUP importStatement;
+    NewStatementUP newStatement;
+    AssignStatementUP assignStatement;
+    ControlStatementUP controlStatement;
+    AliasStatementUP aliasStatement;
 public:
+    SimpleStatement();
     void execute() override;
 };
+using SimpleStatementUP = std::unique_ptr<SimpleStatement>;
 
 
 #endif //FISH_SIMPLESTATEMENT_H

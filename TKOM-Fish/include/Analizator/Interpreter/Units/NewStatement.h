@@ -7,13 +7,15 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "NewExpression.h"
 
 class NewStatement : public Symbol{
-    using NewStatementUP = std::unique_ptr<NewStatement>;
 protected:
-
+    NewExpressionUP newExpression;
 public:
+    NewStatement();
     void execute() override;
 };
+using NewStatementUP = std::unique_ptr<NewStatement>;
 
 #endif //FISH_NEWSTATEMENT_H

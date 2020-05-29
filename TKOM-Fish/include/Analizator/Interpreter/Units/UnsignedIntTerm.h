@@ -9,12 +9,15 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class UnsignedIntTerm : public Symbol{
-    using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
 protected:
-
+    TokenUPD intToken;
+    IdentifierUPD identifier;
+    TokenUPD constantToken;
 public:
+    UnsignedIntTerm();
     void execute() override;
 };
+using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
 
 
 #endif //FISH_UNSIGNEDINTTERM_H

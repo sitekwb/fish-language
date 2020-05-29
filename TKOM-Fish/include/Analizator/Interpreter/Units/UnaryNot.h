@@ -9,12 +9,13 @@
 #include <Analizator/Interpreter/Symbol.h>
 
 class UnaryNot : public Symbol{
-    using UnaryNotUP = std::unique_ptr<UnaryNot>;
 protected:
-
+    TokenUPD notToken;
 public:
+    UnaryNot();
     void execute() override;
 };
+using UnaryNotUP = std::unique_ptr<UnaryNot>;
 
 
 #endif //FISH_UNARYNOT_H

@@ -3,3 +3,12 @@
 //
 
 #include "Analizator/Interpreter/Units/ListIdentifier.h"
+
+ListIdentifier::ListIdentifier() {
+    constructed = buildToken(identifier)
+            and buildOptionalSymbol<ArraySubscript>(arraySubscriptOptional);
+}
+
+void ListIdentifier::execute() {
+    //TODO
+}

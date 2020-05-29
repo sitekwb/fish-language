@@ -266,7 +266,11 @@ Token::Token(char c) {
 }
 
 Token::Token(string tokenValue) : value(move(tokenValue)) {
-    if(value.size() == 2 && value.ends_with('=') && isTwoSignTokenSign(value[0])){
+    if(value.size() == 1){
+        type = getOneSignTokenType(value[0]);
+        value = "";
+    }
+    else if(value.size() == 2 && value.ends_with('=') && isTwoSignTokenSign(value[0])){
         type = getTwoSignTokenType(value[0]);
         value = "";
     }

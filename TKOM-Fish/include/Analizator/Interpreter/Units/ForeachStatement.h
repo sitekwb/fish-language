@@ -7,14 +7,23 @@
 
 
 #include <Analizator/Interpreter/Symbol.h>
+#include "ListIdentifier.h"
+#include "BlockInstruction.h"
 
 class ForeachStatement : public Symbol{
-    using ForeachStatementUP = std::unique_ptr<ForeachStatement>;
 protected:
-
+    TokenUPD foreachToken;
+    TokenUPD bracketOpen;
+    IdentifierUPD identifier;
+    TokenUPD inToken;
+    ListIdentifierUP listIdentifier;
+    TokenUPD bracketClose;
+    BlockInstructionUP blockInstruction;
 public:
+    ForeachStatement();
     void execute() override;
 };
+using ForeachStatementUP = std::unique_ptr<ForeachStatement>;
 
 
 #endif //FISH_FOREACHSTATEMENT_H
