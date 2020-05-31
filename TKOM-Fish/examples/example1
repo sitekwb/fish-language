@@ -1,0 +1,17 @@
+not a or (b and !c);
+id = type(a);
+b == 9 or c == 10;
+f(arg1, 5+9*func(1));
+print("Hello world!")
+delete del
+import virtualbox as vb
+import library;
+new a = 5
+break
+continue;
+alias a b
+new mut static Type id;
+alias ax bx;
+a = -5+8*4;
+a += 5
+a[10]

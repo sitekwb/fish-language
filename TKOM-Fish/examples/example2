@@ -1,0 +1,22 @@
+for(new int i=5;i<8;i+=1){
+    print(i);
+}
+
+
+foreach(a in list) a.reset()
+if(a < 5)
+    exit()
+
+def myFunction(int a=1, b=9.5){
+    print(a+b)
+}
+
+myFunction(b,c)
+
+if(a == 1 or b == 9){
+    print("My if's execution")
+}
+else if(a == 8 or b == 10){
+    print("Second \"exec\"");
+}
+else print("ERROR")

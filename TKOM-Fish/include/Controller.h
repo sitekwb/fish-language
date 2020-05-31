@@ -6,21 +6,20 @@
 #define FISH_CONTROLLER_H
 
 #include <memory>
-#include <Analizator/Lexer/Lexer.h>
+#include <Analizator/Lexer.h>
 #include <Context.h>
-#include <Source.h>
-#include <Analizator/Parser/Parser.h>
+#include <Sources/Source.h>
+#include <Analizator/Parser.h>
 
 class Controller {
 
-    static const inline unsigned int MAX_LINE_LENGTH = 1024;
     std::unique_ptr<Parser> parser;
-    Source &source;
-    bool isDebug;
-    bool isFileSource;
+    SourceUP source;
 
+    void resetFile(FileUP &file);
+    void resetFilePart(FilePartUP &filePart);
 public:
-    Controller(Source &source, bool isDebug, bool isFileSource);
+    Controller(SourceUP source);
     void execute();
 };
 

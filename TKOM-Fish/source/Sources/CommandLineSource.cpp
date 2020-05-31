@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <Analizator/Lexer/Token.h>
+#include <Analizator/Tokens/Token.h>
 #include "Sources/CommandLineSource.h"
 
 using namespace std;
@@ -64,4 +64,8 @@ char CommandLineSource::peekStringSign() {
 
 char CommandLineSource::exchangeEOF(char c) {
     return (c == EOF) ? '\n' : c;
+}
+
+bool CommandLineSource::isFileSource() const{
+    return false;
 }

@@ -6,7 +6,7 @@
 #define FISH_COMMANDLINESOURCE_H
 
 
-#include <Source.h>
+#include <Sources/Source.h>
 #include <sstream>
 
 class CommandLineSource : public Source {
@@ -23,6 +23,7 @@ public:
     char get() override;
     char getStringSign() override;
     char peekStringSign() override;
+    bool isFileSource() const override;
     ~CommandLineSource() override = default;
 };
 

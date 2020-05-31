@@ -12,7 +12,7 @@ char FileSource::get() {
     return buf->get();
 }
 
-FileSource::FileSource(std::unique_ptr<std::ifstream> buf_) : buf(std::move(buf_)) {
+FileSource::FileSource(std::unique_ptr<std::istream> buf_) : buf(std::move(buf_)) {
 
 }
 
@@ -22,4 +22,8 @@ char FileSource::getStringSign() {
 
 char FileSource::peekStringSign() {
     return peek();
+}
+
+bool FileSource::isFileSource() const {
+    return true;
 }
