@@ -2,6 +2,7 @@
 // Created by Wojtek on 27/05/2020.
 //
 
+#include <Analizator/SymbolType.h>
 #include "Analizator/Symbols/MultiplyExpression.h"
 
 MultiplyExpression::MultiplyExpression() {
@@ -9,11 +10,12 @@ MultiplyExpression::MultiplyExpression() {
     constructed = buildSymbol<Term>(term);
 }
 
-void MultiplyExpression::execute() {
+void MultiplyExpression::execute(Env &env) {
     if(!constructed){
         return;
     }
-    term->execute();
+    unarySignOptional->execute(env);
+    term->execute(env);
     // TODO interprete
 }
 
@@ -27,6 +29,10 @@ double MultiplyExpression::getDouble() {
 
 int MultiplyExpression::getInt() {
     return intValue;
+}
+
+SymbolType MultiplyExpression::getType() {
+    return SymbolType::MultiplyExpressionType;
 }
 
 

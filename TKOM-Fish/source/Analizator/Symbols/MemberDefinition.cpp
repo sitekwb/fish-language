@@ -21,6 +21,10 @@ MemberDefinition::MemberDefinition() {
     }
 }
 
-void MemberDefinition::execute() {
+void MemberDefinition::execute(Env &env) {
 //TODO
+}
+
+std::string MemberDefinition::getName() {
+    return identifier->getValue();
 }

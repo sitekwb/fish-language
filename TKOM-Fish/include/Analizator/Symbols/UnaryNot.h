@@ -13,7 +13,7 @@ protected:
     TokenUPD notToken;
 public:
     UnaryNot();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using UnaryNotUP = std::unique_ptr<UnaryNot>;
 

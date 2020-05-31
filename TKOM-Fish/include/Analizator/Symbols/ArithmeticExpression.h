@@ -17,16 +17,19 @@ class ArithmeticExpression : public Symbol{
 protected:
     AddExpressionUP addExpression;
     std::list<std::pair<AddOperatorUP, AddExpressionUP>> repeatList;
-    bool isDouble;
+    bool isDoubleValue;
     double doubleValue;
     int intValue;
 
     bool buildRepeat();
 public:
     ArithmeticExpression();
-    void execute() override;
+    void execute(Env &env) override;
     friend class Test;
-
+    bool isDouble();
+    int getInt();
+    double getDouble();
+    Object &getReturnObject();
 };
 using ArithmeticExpressionUP = std::unique_ptr<ArithmeticExpression>;
 

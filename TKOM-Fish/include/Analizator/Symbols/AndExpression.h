@@ -21,7 +21,7 @@ protected:
     bool buildRepeat();
 public:
     AndExpression();
-    void execute() override;
+    void execute(Env &env) override;
     bool getValue();
     friend class Test;
 

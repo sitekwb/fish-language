@@ -9,6 +9,6 @@ UnaryNot::UnaryNot() {
             or buildToken("!", notToken);
 }
 
-void UnaryNot::execute() {
+void UnaryNot::execute(Env &env) {
 //nothing
 }

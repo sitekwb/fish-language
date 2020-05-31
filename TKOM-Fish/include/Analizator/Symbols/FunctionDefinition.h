@@ -20,8 +20,9 @@ class FunctionDefinition : public Symbol {
     TokenUPD  bracketClose;
     BlockInstructionUP blockInstruction;
 public:
+    std::string getName();
     FunctionDefinition();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
 

@@ -2,6 +2,8 @@
 // Created by Wojtek on 27/05/2020.
 //
 
+#include <Analizator/Interpreter/BreakException.h>
+#include <Analizator/Interpreter/ReturnException.h>
 #include "Analizator/Symbols/CompoundStatement.h"
 
 CompoundStatement::CompoundStatement() {
@@ -12,24 +14,26 @@ CompoundStatement::CompoundStatement() {
                   or buildSymbol<ForeachStatement>(foreachStatement);
 }
 
-void CompoundStatement::execute() {
+void CompoundStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
     if(ifStatement){
-        ifStatement->execute();
+        ifStatement->execute(env);
     }
-    else if(whileStatement){
-        whileStatement->execute();
+    try {
+        if (whileStatement) {
+            whileStatement->execute(env);
+        } else if (forStatement) {
+            forStatement->execute(env);
+        } else if (foriStatement) {
+            foriStatement->execute(env);
+        } else if (foreachStatement) {
+            foreachStatement->execute(env);
+        }
     }
-    else if(forStatement){
-        forStatement->execute();
-    }
-    else if(foriStatement){
-        foriStatement->execute();
-    }
-    else if(foreachStatement){
-        foreachStatement->execute();
+    catch(BreakException &e){
+
     }
     // nothing more
 }

@@ -24,10 +24,11 @@ protected:
     bool buildRepeat();
 public:
     AddExpression();
-    void execute() override;
+    void execute(Env &env) override;
     bool isDoubleValue();
     bool getDouble();
     bool getInt();
+    virtual SymbolType getType();
 
     friend class Test;
 };

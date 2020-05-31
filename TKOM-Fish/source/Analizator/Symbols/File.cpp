@@ -20,12 +20,13 @@ File::File() {
     }
 }
 
-void File::execute() {
+void File::execute(Env &env) {
     if (!constructed) {
         return;
     }
+
     for (auto &e: filePartList) {
-        e->execute();
+        e->execute(env);
     }
     //done
 }

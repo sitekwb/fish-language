@@ -23,10 +23,11 @@ protected:
     int intValue;
 public:
     MultiplyExpression();
-    void execute() override;
+    void execute(Env &env) override;
     bool isDoubleValue();
     double getDouble();
     int getInt();
+    virtual SymbolType getType();
     friend class Test;
 };
 using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;

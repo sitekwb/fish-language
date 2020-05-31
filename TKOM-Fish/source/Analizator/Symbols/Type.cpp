@@ -8,6 +8,11 @@ Type::Type() {
     constructed = buildToken(identifier);
 }
 
-void Type::execute() {
-    // nothing
+
+void Type::execute(Env &env) {
+//nothing
+}
+
+std::string Type::getName() {
+    return identifier->getValue();
 }

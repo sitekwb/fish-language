@@ -22,13 +22,13 @@ bool ConditionalExpression::buildRepeat() {
     return constructed;
 }
 
-void ConditionalExpression::execute() {
-    andExpression->execute();
+void ConditionalExpression::execute(Env &env) {
+    andExpression->execute(env);
     bool val1 = andExpression->getValue();
     for(auto &pair: repeatList){
         // SECOND VALUE
         auto &expr = pair.second;
-        expr->execute();
+        expr->execute(env);
         bool val2 = expr->getValue();
         val1 = val1 or val2;
     }

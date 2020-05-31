@@ -53,7 +53,7 @@ MultiplyOperator = "*" | "/" | "%";
 UnarySign = "+" | "-";
 UnaryNot = "not" | "!";
 
-ArraySubscript = "[", [[UnsignedIntTerm], [':', [UnsignedIntTerm]]], "]";
+ArraySubscript = "[", UnsignedIntTerm, "]";
 UnsignedIntTerm = Term;
 
 

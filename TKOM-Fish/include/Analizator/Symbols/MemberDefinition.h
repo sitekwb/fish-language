@@ -21,8 +21,9 @@ protected:
     ArgumentListUP argumentListOptional;
     TokenUPD bracketCloseOptional;
 public:
+    std::string getName();
     MemberDefinition();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using MemberDefinitionUP = std::unique_ptr<MemberDefinition>;
 

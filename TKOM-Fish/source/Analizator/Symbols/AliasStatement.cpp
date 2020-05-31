@@ -10,9 +10,10 @@ AliasStatement::AliasStatement() {
             and buildSymbol<Type>(type);
 }
 
-void AliasStatement::execute() {
+void AliasStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-//TODO interpreter
+
+    env.setSymbol(name->getName(), *type);
 }

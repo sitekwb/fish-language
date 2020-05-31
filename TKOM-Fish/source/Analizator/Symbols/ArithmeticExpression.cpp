@@ -22,11 +22,11 @@ bool ArithmeticExpression::buildRepeat() {
     return false;
 }
 
-void ArithmeticExpression::execute() {
+void ArithmeticExpression::execute(Env &env) {
     if(!constructed){
         return;
     }
-    addExpression->execute();
+    addExpression->execute(env);
     bool isDouble1 = addExpression->isDoubleValue(), isDouble2;
     double double1, double2;
     int int1, int2;
@@ -39,12 +39,12 @@ void ArithmeticExpression::execute() {
 
     for(auto &pair: repeatList){
         // OPERATOR
-        pair.first->execute();
+        pair.first->execute(env);
         auto op = pair.first->getChar();
 
         // SECOND VALUE
         auto &expr = pair.second;
-        expr->execute();
+        expr->execute(env);
 
         isDouble2 = expr->isDoubleValue();
         if(isDouble2){
@@ -88,13 +88,24 @@ void ArithmeticExpression::execute() {
         }
     }
 
-    isDouble = isDouble1;
+    isDoubleValue = isDouble1;
     if(isDouble1){
         doubleValue = double1;
     }
     else{
         intValue = int1;
     }
-    //TODO change into few simplier functions
+}
+
+bool ArithmeticExpression::isDouble() {
+    return isDoubleValue;
+}
+
+int ArithmeticExpression::getInt() {
+    return intValue;
+}
+
+double ArithmeticExpression::getDouble() {
+    return doubleValue;
 }
 

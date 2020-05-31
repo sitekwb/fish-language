@@ -12,7 +12,8 @@ ImportStatement::ImportStatement() {
     }
 }
 
-void ImportStatement::execute() {
-    //TODO interpreter
+void ImportStatement::execute(Env &env) {
+    lib = std::make_unique<Lib>(library->getValue());
+    env.setSymbol((library2)?library2->getValue():library->getValue(), *lib);
 }
 

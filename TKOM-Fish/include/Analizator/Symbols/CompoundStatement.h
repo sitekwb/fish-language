@@ -39,7 +39,7 @@ protected:
     ForeachStatementUP foreachStatement;
 public:
     CompoundStatement();
-    void execute() override;
+    void execute(Env &env) override;
 
 };
 using CompoundStatementUP = std::unique_ptr<CompoundStatement>;

@@ -3,6 +3,7 @@
 //
 
 #include <Analizator/EndOfFileException.h>
+#include <Analizator/SymbolType.h>
 #include "Analizator/Symbol.h"
 #include "Analizator/Tokens/TokenDeleter.h"
 
@@ -95,4 +96,8 @@ void Symbol::reset(TokenUPD &token) {
     TokenDeleter::setTokenSaving(false);
     token.reset();
     TokenDeleter::setTokenSaving(true);
+}
+
+SymbolType Symbol::getType() {
+    return SymbolType::BaseType;
 }

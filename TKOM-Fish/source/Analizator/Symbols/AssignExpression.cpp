@@ -10,9 +10,11 @@ AssignExpression::AssignExpression() {
             and buildSymbol<ConditionalExpression>(conditionalExpression);
 }
 
-void AssignExpression::execute() {
+void AssignExpression::execute(Env &env) {
     if(!constructed){
         return;
     }
-    //TODO interpreter
+    assignOperator->execute(env);
+    conditionalExpression->execute(env);
+    env.setSymbol(identifier->getValue(), conditionalExpression->getReturnObject());
 }

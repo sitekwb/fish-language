@@ -26,13 +26,25 @@ bool ArgumentList::buildRepeat() {
     return constructed;
 }
 
-void ArgumentList::execute() {
+void ArgumentList::execute(Env &env) {
     if(!constructed){
         return;
     }
-    argumentOptional->execute();
+    argumentOptional->execute(env);
+    argumentList.push_back(argumentOptional->getReturnObject());
     for(auto &e:repeatListOptional){
         // we don't execute first, because it's a token
-        e.second->execute();
+        e.second->execute(env);
+        argumentList.push_back(e.second->getReturnObject());
     }
+}
+
+
+ArgumentList::ArgumentList(ArgumentList &list) {
+    argumentList = list.argumentList;
+}
+
+
+ArgumentList::ArgumentList(int) {
+
 }

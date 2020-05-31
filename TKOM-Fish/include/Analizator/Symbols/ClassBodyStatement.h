@@ -16,7 +16,8 @@ protected:
     FunctionDefinitionUP functionDefinition;
 public:
     ClassBodyStatement();
-    void execute() override;
+    std::pair<std::string, Symbol&> getClassBodyStatementSymbol();
+    void execute(Env &env) override;
 
 };
 using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;

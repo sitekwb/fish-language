@@ -20,7 +20,7 @@ class ConditionalExpression : public Symbol {
     bool buildRepeat();
 public:
     ConditionalExpression();
-    void execute() override;
+    void execute(Env &env) override;
     bool getValue();
 
 };

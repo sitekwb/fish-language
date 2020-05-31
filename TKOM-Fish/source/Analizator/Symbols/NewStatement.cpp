@@ -8,9 +8,9 @@ NewStatement::NewStatement() {
     constructed = buildSymbol<NewExpression>(newExpression);
 }
 
-void NewStatement::execute() {
+void NewStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-    newExpression->execute();
+    newExpression->execute(env);
 }

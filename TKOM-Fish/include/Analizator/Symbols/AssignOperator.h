@@ -14,7 +14,7 @@ protected:
     std::string value;
 public:
     AssignOperator();
-    void execute() override;
+    void execute(Env &env) override;
     const std::string &getValue() const;
 };
 using AssignOperatorUP = std::unique_ptr<AssignOperator>;

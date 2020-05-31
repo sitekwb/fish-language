@@ -18,6 +18,6 @@ bool Bool::getValue() {
     return value;
 }
 
-void Bool::execute() {
+void Bool::execute(Env &env) {
     // nothing
 }

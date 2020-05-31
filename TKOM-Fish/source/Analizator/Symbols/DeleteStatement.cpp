@@ -9,6 +9,7 @@ DeleteStatement::DeleteStatement() {
             and buildToken(identifier);
 }
 
-void DeleteStatement::execute() {
-    //TODO interpreter
+void DeleteStatement::execute(Env &env) {
+    env.destroySymbol(identifier->getValue());
+    //done
 }

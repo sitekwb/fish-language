@@ -15,13 +15,12 @@ using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
 class ArraySubscript : public Symbol{
 protected:
     TokenUPD squareOpen;
-    UnsignedIntTermUP unsignedIntTerm1;
-    TokenUPD colon ;
-    UnsignedIntTermUP unsignedIntTerm2;
+    UnsignedIntTermUP unsignedIntTerm;
     TokenUPD squareClose;
 public:
     ArraySubscript();
     void execute() override;
+    int getValue();
 };
 using ArraySubscriptUP = std::unique_ptr<ArraySubscript>;
 

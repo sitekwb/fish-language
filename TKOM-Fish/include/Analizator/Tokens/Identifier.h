@@ -14,6 +14,7 @@ public:
     Identifier();
 
     Identifier(Token &token);
+    Identifier(std::string value);
     friend class Test;
 };
 

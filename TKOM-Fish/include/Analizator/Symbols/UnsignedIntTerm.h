@@ -5,9 +5,8 @@
 #ifndef FISH_UNSIGNEDINTTERM_H
 #define FISH_UNSIGNEDINTTERM_H
 
-
-#include <Analizator/Symbol.h>
 #include <Analizator/Symbols/Term.h>
+#include <Analizator/Symbol.h>
 
 class Term;
 using TermUP = std::unique_ptr<Term>;
@@ -17,7 +16,8 @@ protected:
     TermUP term;
 public:
     UnsignedIntTerm();
-    void execute() override;
+    void execute(Env &env) override;
+    int getValue();
 };
 using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
 

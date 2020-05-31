@@ -27,7 +27,7 @@ protected:
     ExpressionStatementUP expressionStatement;
 public:
     SimpleStatement();
-    void execute() override;
+    void execute(Env &env) override;
     friend class Test;
 };
 using SimpleStatementUP = std::unique_ptr<SimpleStatement>;

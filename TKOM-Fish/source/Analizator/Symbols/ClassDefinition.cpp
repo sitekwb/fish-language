@@ -8,10 +8,17 @@ ClassDefinition::ClassDefinition() {
     constructed = buildToken("class", classToken)
             and buildSymbol<Type>(type)
             and buildToken("{", blockOpen)
-            and buildSymbol<ClassBody>(classBody)
+            and buildRepeatSymbol<ClassBodyStatement>(classBodyStatementList)
             and buildToken("}", blockClose);
 }
 
-void ClassDefinition::execute() {
-//TODO create environment and send to children
+std::string ClassDefinition::getName() {
+    return type->getName();
+}
+
+void ClassDefinition::execute(Env &env) {
+    for(auto &e:classBodyStatementList){
+        auto pair = e->getClassBodyStatementSymbol();
+        symbols.setSymbol(pair.first, pair.second);
+    }
 }

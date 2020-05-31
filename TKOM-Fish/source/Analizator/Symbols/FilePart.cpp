@@ -12,18 +12,19 @@ FilePart::FilePart() {
                   or buildSymbol<Statement>(statement);
 }
 
-void FilePart::execute() {
+void FilePart::execute(Env &env) {
     if(!constructed) {
         return;
     }
     if(functionDefinition) {
-        functionDefinition->execute();
+        env.setSymbol(functionDefinition->getName(), *functionDefinition);
     }
     else if(classDefinition) {
-        classDefinition->execute();
+        classDefinition->execute(env);
+        env.setSymbol(classDefinition->getName(), *classDefinition);
     }
     else if(statement) {
-        statement->execute();
+        statement->execute(env);
     }
     //done
 }

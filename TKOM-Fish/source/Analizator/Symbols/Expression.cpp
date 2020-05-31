@@ -11,15 +11,22 @@ Expression::Expression() {
                   or buildSymbol<ConditionalExpression>(conditionalExpression);
 }
 
-void Expression::execute() {
+void Expression::execute(Env &env) {
     if (!constructed) {
         return;
     }
     if (conditionalExpression) {
-        conditionalExpression->execute();
+        conditionalExpression->execute(env);
     }
     if (newExpression) {
-        newExpression->execute();
+        newExpression->execute(env);
     }
-    // TODO interprete with final values etc.
+}
+
+Object &Expression::getObject() {
+    if(conditionalExpression){
+        return conditionalExpression->getObject();
+    }
+    return newExpression->getObject();
+    //done
 }

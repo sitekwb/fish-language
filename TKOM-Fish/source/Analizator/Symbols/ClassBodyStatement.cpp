@@ -9,15 +9,21 @@ ClassBodyStatement::ClassBodyStatement() {
                   or buildSymbol<FunctionDefinition>(functionDefinition);
 }
 
-void ClassBodyStatement::execute() {
-    // TODO interprete with class environment
+std::pair<std::string, Symbol&> ClassBodyStatement::getClassBodyStatementSymbol() {
+    if(memberDefinition){
+        return {memberDefinition->getName(), *memberDefinition};
+    }
+    return {functionDefinition->getName(), *functionDefinition};
+}
+
+void ClassBodyStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
     if(memberDefinition){
-        memberDefinition->execute();
+        memberDefinition->execute(env);
     }
     else if(functionDefinition){
-        functionDefinition->execute();
+        functionDefinition->execute(env);
     }
 }

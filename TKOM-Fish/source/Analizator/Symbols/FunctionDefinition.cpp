@@ -34,7 +34,11 @@ FunctionDefinition::FunctionDefinition() {
             and buildSymbol<BlockInstruction>(blockInstruction);
 }
 
-void FunctionDefinition::execute() {
-//TODO interprete
+std::string FunctionDefinition::getName() {
+    return identifier->getValue();
+}
+
+void FunctionDefinition::execute(Env &env) {
+
 }
 

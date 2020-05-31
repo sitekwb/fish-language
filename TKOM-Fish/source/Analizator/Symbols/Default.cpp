@@ -8,8 +8,9 @@ Default::Default() {
     constructed = buildSymbol<Term>(term);
 }
 
-void Default::execute() {
-    if(constructed) {
-        term->execute();
+void Default::execute(Env &env) {
+    if (!constructed) {
+        return;
     }
+    term->execute(env);
 }

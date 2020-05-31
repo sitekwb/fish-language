@@ -5,9 +5,9 @@
 #ifndef FISH_ALIASSTATEMENT_H
 #define FISH_ALIASSTATEMENT_H
 
-
-#include <Analizator/Symbol.h>
 #include "Type.h"
+#include <Analizator/Symbol.h>
+
 
 class AliasStatement : public Symbol{
 protected:
@@ -15,7 +15,7 @@ protected:
     TypeUP name, type;
 public:
     AliasStatement();
-    void execute() override;
+    void execute(Env &env) override;
     friend class Test;
 };
 using AliasStatementUP = std::unique_ptr<AliasStatement>;

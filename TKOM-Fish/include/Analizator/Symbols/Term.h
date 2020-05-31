@@ -38,11 +38,27 @@ protected:
     TokenUPD constant;
     std::list<ArraySubscriptUP> arraySubscriptList;
 
-    std::list<std::tuple<TokenUPD, FunctionCallUP, TokenUPD, TokenUPD, std::list<ArraySubscriptUP>>> repeatList;
+    std::list<std::tuple<TokenUPD, FunctionCallUP, IdentifierUPD, TokenUPD, std::list<ArraySubscriptUP>>> repeatList;
+
+    // INTERPRETER
+    std::list<Object &>objects;
 public:
+    enum TermType{
+        TT_INT,
+        TT_DOUBLE,
+        TT_STRING,
+        TT_BOOL,
+        TT_IDENTIFIER,
+        TT_CONSTANT,
+    }termType;
     Term();
-    void execute() override;
+    void execute(Env &env) override;
     friend class Test;
+    int getInt();
+    double getDouble();
+    std::string getString();
+    bool getBool();
+
 };
 
 using TermUP = std::unique_ptr<Term>;

@@ -20,14 +20,15 @@ using ArithmeticExpressionUP = std::unique_ptr<ArithmeticExpression>;
 
 class RelativeExpression : public Symbol {
 protected:
+    bool value;
     TokenUPD bracketOpen;
     ConditionalExpressionUP conditionalExpression;
     TokenUPD bracketClose;
     ArithmeticExpressionUP arithmeticExpression;
 public:
     RelativeExpression();
-    void execute() override;
-    double getValue();
+    void execute(Env &env) override;
+    bool getValue();
 };
 
 using RelativeExpressionUP = std::unique_ptr<RelativeExpression>;

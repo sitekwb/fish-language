@@ -22,7 +22,7 @@ protected:
     BlockInstructionUP blockInstruction;
 public:
     WhileStatement();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using WhileStatementUP = std::unique_ptr<WhileStatement>;
 

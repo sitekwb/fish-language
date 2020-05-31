@@ -27,9 +27,12 @@ protected:
     ConditionalExpressionUP conditionalExpression;
 
     void buildTypeAndId();
+
+    //INTERPRETER
+    FunctionCallUP constructorCall;
 public:
     NewExpression();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using NewExpressionUP = std::unique_ptr<NewExpression>;
 

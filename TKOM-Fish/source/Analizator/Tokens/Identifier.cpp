@@ -13,3 +13,7 @@ Identifier::Identifier(Token &token) : Token(IDENTIFIER, token.getValue(), token
         throw std::exception();
     }
 }
+
+Identifier::Identifier(std::string value) : Token(IDENTIFIER, move(value)){
+
+}

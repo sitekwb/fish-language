@@ -18,12 +18,13 @@ Parameter::Parameter() {
     }
     constructed = true;
     if(buildToken("=", equalTokenOptional)){
-        constructed = buildSymbol<Default>(defaultTokenOptional);
+        constructed = buildSymbol<Default>(defaultSymbolOptional);
     }
 }
 
-void Parameter::execute() {
-//TODO
+void Parameter::execute(Env &env) {
+    typeOptional->execute(env);
+    defaultSymbolOptional->execute(env);
 }
 
 

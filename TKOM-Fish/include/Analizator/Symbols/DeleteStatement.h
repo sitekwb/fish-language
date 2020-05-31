@@ -14,7 +14,7 @@ protected:
     IdentifierUPD identifier;
 public:
     DeleteStatement();
-    void execute() override;
+    void execute(Env &env) override;
 };
 
 using DeleteStatementUP = std::unique_ptr<DeleteStatement>;

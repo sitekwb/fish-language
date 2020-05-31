@@ -26,24 +26,26 @@ bool OrExpression::buildRepeat() {
     return constructed;
 }
 
-void OrExpression::execute() {
-    //TODO in all executes check if it's constructed
-    unaryNotOptional->execute();
-    relativeExpression->execute();
+void OrExpression::execute(Env &env) {
+    if(!constructed){
+        return;
+    }
+    unaryNotOptional->execute(env);
+    relativeExpression->execute(env);
     bool val1 = relativeExpression->getValue();
     if (unaryNotOptional->isConstructed()) {
         val1 = not val1;
     }
     for (auto &tuple: repeatList) {
         // SECOND VALUE
-        auto &operatorObject = *get<0>(tuple);
+        auto &relativeOperator = *get<0>(tuple);
         auto &unaryNot = *get<1>(tuple);
         auto &expr = *get<2>(tuple);
 
-        operatorObject.execute();
-        auto &op = operatorObject.getValue();
-        unaryNot.execute();
-        expr.execute();
+        relativeOperator.execute(env);
+        auto &op = relativeOperator.getValue();
+        unaryNot.execute(env);
+        expr.execute(env);
 
         bool val2 = relativeExpression->getValue();
         if (unaryNot.isConstructed()) {
@@ -67,6 +69,7 @@ void OrExpression::execute() {
         }
     }
     value = val1;
+    //done
 }
 
 bool OrExpression::getValue() {

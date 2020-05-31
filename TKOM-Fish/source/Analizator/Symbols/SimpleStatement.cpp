@@ -14,20 +14,20 @@ SimpleStatement::SimpleStatement() {
                   or buildSymbol<ExpressionStatement>(expressionStatement);
 }
 
-void SimpleStatement::execute() {
+void SimpleStatement::execute(Env &env) {
     if (expressionStatement) {
-        expressionStatement->execute();
+        expressionStatement->execute(env);
     } else if (deleteStatement) {
-        deleteStatement->execute();
+        deleteStatement->execute(env);
     } else if (importStatement) {
-        importStatement->execute();
+        importStatement->execute(env);
     } else if (newStatement) {
-        newStatement->execute();
+        newStatement->execute(env);
     } else if (assignStatement) {
-        assignStatement->execute();
+        assignStatement->execute(env);
     } else if (controlStatement) {
-        controlStatement->execute();
+        controlStatement->execute(env);
     } else if (aliasStatement) {
-        aliasStatement->execute();
+        aliasStatement->execute(env);
     }
 }

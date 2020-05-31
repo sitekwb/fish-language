@@ -8,10 +8,11 @@ AssignStatement::AssignStatement() {
     constructed = buildSymbol<AssignExpression>(assignExpression);
 }
 
-void AssignStatement::execute() {
+void AssignStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-    assignExpression->execute();
+    assignExpression->execute(env);
+    //done
 }
 

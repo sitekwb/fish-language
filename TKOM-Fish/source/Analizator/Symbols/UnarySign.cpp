@@ -8,6 +8,6 @@ UnarySign::UnarySign() {
     constructed = buildToken("+", token) or buildToken("-", token);
 }
 
-void UnarySign::execute() {
-
+void UnarySign::execute(Env &env) {
+//nothing
 }

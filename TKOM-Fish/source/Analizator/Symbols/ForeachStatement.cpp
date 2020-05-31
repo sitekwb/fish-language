@@ -3,6 +3,8 @@
 //
 
 #include <Analizator/Symbols/ForeachStatement.h>
+#include <Analizator/Interpreter/BreakException.h>
+#include <Analizator/Interpreter/ContinueException.h>
 
 ForeachStatement::ForeachStatement() {
     constructed = buildToken("foreach",foreachToken)
@@ -14,7 +16,26 @@ ForeachStatement::ForeachStatement() {
             and buildSymbol<BlockInstruction>(blockInstruction);
 }
 
-void ForeachStatement::execute() {
-    //TODO interpreter
+void ForeachStatement::execute(Env &env) {
+    if(!constructed){
+        return;
+    }
+
+    term->execute(env);
+    Object &listObject = term->getObject();
+    for(int i=0; i<listObject.getSize(); i++) {
+        Env localEnv = Env(env);
+        localEnv.setSymbol(identifier->getValue(), listObject[i]);
+        try {
+            blockInstruction->execute(localEnv);
+        }
+        catch(BreakException &e){
+            break;
+        }
+        catch(ContinueException &e){
+
+        }
+    }
+    //done
 }
 

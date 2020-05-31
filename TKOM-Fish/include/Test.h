@@ -6,6 +6,10 @@
 #define FISH_TEST_H
 
 #include <Analizator/Symbols/FunctionCall.h>
+#include <Analizator/Symbols/Type.h>
+#include <Analizator/Symbols/Expression.h>
+#include <Analizator/Symbols/ArgumentList.h>
+
 
 class Test {
     void checkFunctionCall(FunctionCall &functionCall);
@@ -16,6 +20,5 @@ public:
     void run();
     void runExample1();
 };
-
 
 #endif //FISH_TEST_H

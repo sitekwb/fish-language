@@ -13,7 +13,8 @@ protected:
     IdentifierUPD identifier;
 public:
     Type();
-    void execute() override;
+    std::string getName();
+    void execute(Env &env) override;
     friend class Test;
 };
 using TypeUP = std::unique_ptr<Type>;

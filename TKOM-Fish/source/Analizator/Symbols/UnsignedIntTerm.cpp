@@ -10,10 +10,14 @@ UnsignedIntTerm::UnsignedIntTerm() {
     constructed = buildSymbol<Term>(term);
 }
 
-void UnsignedIntTerm::execute() {
+void UnsignedIntTerm::execute(Env &env) {
     if(!constructed){
         return;
     }
-    //TODO
+    term->execute(env);
+}
+
+int UnsignedIntTerm::getValue() {
+    return term->getInt();
 }
 

@@ -14,7 +14,7 @@ protected:
     char value;
 public:
     AddOperator();
-    void execute() override;
+    void execute(Env &env) override;
     char getChar();
     friend class Test;
 

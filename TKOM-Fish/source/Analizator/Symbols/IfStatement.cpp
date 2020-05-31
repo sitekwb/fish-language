@@ -15,6 +15,14 @@ IfStatement::IfStatement() {
     }
 }
 
-void IfStatement::execute() {
-//TODO interprete
+void IfStatement::execute(Env &env) {
+    if(!constructed){
+        return;
+    }
+    auto localEnv = Env::createLocalScope(env);
+    conditionalExpression->execute(*localEnv);
+    if(conditionalExpression->getValue()){
+        blockInstruction->execute(*localEnv);
+    }
+    Env::destroyLocalScope(move(localEnv));
 }

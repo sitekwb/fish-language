@@ -7,6 +7,7 @@
 
 
 #include <Analizator/Symbol.h>
+#include <Analizator/Interpreter/Lib.h>
 
 class ImportStatement : public Symbol{
 protected:
@@ -14,9 +15,11 @@ protected:
     IdentifierUPD library;
     TokenUPD asTokenOptional;
     IdentifierUPD library2;
+    // INTERPRETER
+    LibUP lib;
 public:
     ImportStatement();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using ImportStatementUP = std::unique_ptr<ImportStatement>;
 

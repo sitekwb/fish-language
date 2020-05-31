@@ -9,8 +9,9 @@
 #include <ostream>
 #include <Analizator/Tokens/TokenType.h>
 #include <Context.h>
+#include <Analizator/Interpreter/Object.h>
 
-class Token {
+class Token : public Object{
     TokenType type;
     std::string value;
     Context context;

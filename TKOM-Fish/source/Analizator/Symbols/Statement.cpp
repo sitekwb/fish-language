@@ -12,15 +12,15 @@ Statement::Statement() {
     }
 }
 
-void Statement::execute() {
+void Statement::execute(Env &env) {
     if(!constructed){
         return;
     }
 
     if(compoundStatement){
-        compoundStatement->execute();
+        compoundStatement->execute(env);
     }
     else if(simpleStatement){
-        simpleStatement->execute();
+        simpleStatement->execute(env);
     }
 }

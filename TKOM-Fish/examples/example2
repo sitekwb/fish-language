@@ -1,5 +1,9 @@
+new a = 3
 for(new int i=5;i<8;i+=1){
-    print(i);
+    if(i < 6){
+        new b = a + i
+        print(b);
+    }
 }
 
 

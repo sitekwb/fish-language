@@ -9,8 +9,11 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    auto source = FileSource(make_unique<ifstream>("../examples/example2"));
-    Symbol::setLexer(make_unique<Lexer>(source));
+    int a = 5;
+    if(bool b = (a == 5)){
+        bool c = b;
+    }
+    bool d = b;
 
     return 0;
 }

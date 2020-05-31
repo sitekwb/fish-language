@@ -16,7 +16,7 @@ class FilePart : public Symbol {
     StatementUP statement;
 public:
     FilePart();
-    void execute() override;
+    void execute(Env &environment) override;
     friend class Test;
 };
 using FilePartUP = std::unique_ptr<FilePart>;

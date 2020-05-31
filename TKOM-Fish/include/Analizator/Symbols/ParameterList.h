@@ -5,17 +5,18 @@
 #ifndef FISH_PARAMETERLIST_H
 #define FISH_PARAMETERLIST_H
 
-
-#include <Analizator/Symbol.h>
 #include "Parameter.h"
+#include <Analizator/Symbol.h>
 
 class ParameterList : public Symbol{
 protected:
     ParameterUP parameter;
     std::list<std::pair<TokenUPD, ParameterUP>> repeatList;
+
+    std::list<Symbol &>parameterList;
 public:
     ParameterList();
-    void execute() override;
+    void execute(Env &env) override;
 };
 
 using ParameterListUP = std::unique_ptr<ParameterList>;

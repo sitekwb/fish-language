@@ -5,9 +5,8 @@
 #ifndef FISH_FORISTATEMENT_H
 #define FISH_FORISTATEMENT_H
 
-
-#include <Analizator/Symbol.h>
 #include "UnsignedIntTerm.h"
+#include <Analizator/Symbol.h>
 #include "BlockInstruction.h"
 
 class ForiStatement : public Symbol{
@@ -19,7 +18,7 @@ protected:
     BlockInstructionUP blockInstruction;
 public:
     ForiStatement();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using ForiStatementUP = std::unique_ptr<ForiStatement>;
 

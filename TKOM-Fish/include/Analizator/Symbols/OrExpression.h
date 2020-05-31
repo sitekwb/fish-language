@@ -27,7 +27,7 @@ protected:
     bool buildRepeat();
 public:
     OrExpression();
-    void execute() override;
+    void execute(Env &env) override;
     bool getValue();
 };
 using OrExpressionUP = std::unique_ptr<OrExpression>;

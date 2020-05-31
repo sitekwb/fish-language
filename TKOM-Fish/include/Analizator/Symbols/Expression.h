@@ -18,8 +18,9 @@ protected:
     AssignExpressionUP assignExpression;
 public:
     Expression();
-    void execute() override;
+    void execute(Env &env) override;
     friend class Test;
+    Object &getObject();
 };
 using ExpressionUP = std::unique_ptr<Expression>;
 

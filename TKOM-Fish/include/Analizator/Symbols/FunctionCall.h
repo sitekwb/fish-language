@@ -12,6 +12,8 @@
 
 class ArgumentList;
 using ArgumentListUP = std::unique_ptr<ArgumentList>;
+const std::string CONSTRUCTOR_CONSTANT = "__c";
+
 
 class FunctionCall: public Symbol{
 protected:
@@ -19,9 +21,13 @@ protected:
     TokenUPD bracketOpen;
     ArgumentListUP argumentList;
     TokenUPD bracketClose;
+    //INTERPRETER
+    Object &returnObject;
 public:
     FunctionCall();
-    void execute() override;
+    // for calling constructors
+    FunctionCall(ArgumentList &argumentList);
+    void execute(Env &env) override;
     friend class Test;
 };
 using FunctionCallUP = std::unique_ptr<FunctionCall>;

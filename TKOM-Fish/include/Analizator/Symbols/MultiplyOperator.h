@@ -15,7 +15,7 @@ protected:
 
 public:
     MultiplyOperator();
-    void execute() override;
+    void execute(Env &env) override;
     char getChar();
 };
 using MultiplyOperatorUP = std::unique_ptr<MultiplyOperator>;

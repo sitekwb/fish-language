@@ -8,9 +8,9 @@ Argument::Argument() {
     constructed = buildSymbol<ConditionalExpression>(conditionalExpression);
 }
 
-void Argument::execute() {
+void Argument::execute(Env &env) {
     if(!constructed){
         return;
     }
-    conditionalExpression->execute();
+    conditionalExpression->execute(env);
 }

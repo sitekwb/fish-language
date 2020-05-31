@@ -15,7 +15,7 @@ class File : public Symbol {
     std::list<FilePartUP> filePartList;
 public:
     File();
-    void execute() override;
+    void execute(Env &env) override;
     friend class Test;
 };
 using FileUP = std::unique_ptr<File>;

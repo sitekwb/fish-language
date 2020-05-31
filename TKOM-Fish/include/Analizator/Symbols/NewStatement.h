@@ -14,7 +14,7 @@ protected:
     NewExpressionUP newExpression;
 public:
     NewStatement();
-    void execute() override;
+    void execute(Env &env) override;
 };
 using NewStatementUP = std::unique_ptr<NewStatement>;
 

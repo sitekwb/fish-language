@@ -8,8 +8,8 @@ ExpressionStatement::ExpressionStatement() {
     constructed = buildSymbol<Expression>(expression);
 }
 
-void ExpressionStatement::execute() {
+void ExpressionStatement::execute(Env &env) {
     if(constructed) {
-        expression->execute();
+        expression->execute(env);
     }
 }

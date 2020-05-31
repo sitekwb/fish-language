@@ -14,7 +14,7 @@ protected:
     bool value;
 public:
     Bool();
-    void execute() override;
+    void execute(Env &env) override;
     bool getValue();
 };
 using BoolUP = std::unique_ptr<Bool>;

@@ -17,6 +17,11 @@ ParameterList::ParameterList() {
     }
 }
 
-void ParameterList::execute() {
-    //TODO
+void ParameterList::execute(Env &env) {
+    parameter->execute(env);
+    parameterList.push_back(*parameter);
+    for(auto &pair: repeatList){
+        pair.second->execute(env);
+        parameterList.push_back(*pair.second);
+    }
 }

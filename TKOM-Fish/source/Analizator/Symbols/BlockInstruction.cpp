@@ -24,6 +24,8 @@ BlockInstruction::BlockInstruction() {
     }
 }
 
-void BlockInstruction::execute() {
-    // TODO interprete with local scope and environment
+void BlockInstruction::execute(Env &env) {
+    for(auto &statement: statementList){
+        statement->execute(env);
+    }
 }

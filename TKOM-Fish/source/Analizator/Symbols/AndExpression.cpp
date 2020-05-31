@@ -22,16 +22,16 @@ bool AndExpression::buildRepeat() {
     return constructed;
 }
 
-void AndExpression::execute() {
+void AndExpression::execute(Env& env) {
     if(!constructed){
         return;
     }
-    orExpression->execute();
+    orExpression->execute(env);
     bool val1 = orExpression->getValue();
     for(auto &pair: repeatList){
         // SECOND VALUE
         auto &expr = pair.second;
-        expr->execute();
+        expr->execute(env);
         bool val2 = expr->getValue();
         val1 = val1 and val2;
     }

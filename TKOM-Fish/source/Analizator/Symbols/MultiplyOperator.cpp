@@ -20,7 +20,7 @@ MultiplyOperator::MultiplyOperator() {
 
 }
 
-void MultiplyOperator::execute() {
+void MultiplyOperator::execute(Env &env) {
 //nothing
 }
 

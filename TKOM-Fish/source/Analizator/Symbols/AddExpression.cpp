@@ -22,11 +22,11 @@ bool AddExpression::buildRepeat() {
     return false;
 }
 
-void AddExpression::execute() {
+void AddExpression::execute(Env &env) {
     if(!constructed){
         return;
     }
-    multiplyExpression->execute();
+    multiplyExpression->execute(env);
     bool isDouble1 = multiplyExpression->isDoubleValue(), isDouble2;
     double double1, double2;
     int int1, int2;

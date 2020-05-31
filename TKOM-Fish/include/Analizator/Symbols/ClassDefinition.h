@@ -16,11 +16,14 @@ protected:
     TypeUP type;
 
     TokenUPD blockOpen;
-    ClassBodyUP classBody;
+    std::list<ClassBodyStatementUP> classBodyStatementList;
     TokenUPD blockClose;
+
+    GlobalEnv symbols;
 public:
+    std::string getName();
     ClassDefinition();
-    void execute() override;
+    void execute(Env &env) override;
 
 };
 using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;

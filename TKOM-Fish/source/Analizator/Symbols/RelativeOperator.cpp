@@ -20,7 +20,7 @@ const std::string &RelativeOperator::getValue() const {
     return value;
 }
 
-void RelativeOperator::execute() {
+void RelativeOperator::execute(Env &env) {
     //nothing
 }
 
