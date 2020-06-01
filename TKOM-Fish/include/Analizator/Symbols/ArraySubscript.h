@@ -19,9 +19,9 @@ protected:
     TokenUPD squareClose;
 public:
     ArraySubscript();
-    void execute() override;
+    void execute(Env &env) override;
     int getInt() const override;
-    Object &getObject() override;
+    Obj &getObject() override;
 };
 using ArraySubscriptUP = std::unique_ptr<ArraySubscript>;
 

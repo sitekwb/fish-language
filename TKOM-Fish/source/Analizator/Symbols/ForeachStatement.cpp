@@ -22,7 +22,7 @@ void ForeachStatement::execute(Env &env) {
     }
 
     term->execute(env);
-    Object &containerObject = term->getObject();
+    Obj &containerObject = term->getObject();
     for(int i=0; i < containerObject.getInt(); i++) {
         Env localEnv = Env(env);
         localEnv.setSymbol(identifier->getValue(), containerObject[i]);

@@ -18,7 +18,7 @@ protected:
     std::list<std::pair<TokenUPD, ArgumentUP>>repeatListOptional;
     bool buildRepeat();
     // INTERPRETER done
-    std::list<Object &>objectList;
+    std::list<std::reference_wrapper<Obj>>objectList;
 public:
     ArgumentList();
     ArgumentList(int);
@@ -28,7 +28,7 @@ public:
     friend class Test;
     friend class ArgumentList;
     ObjectType getObjectType() const override;
-    std::list<Object &> &getList();
+    std::list<std::reference_wrapper<Obj>> &getList();
 };
 using ArgumentListUP = std::unique_ptr<ArgumentList>;
 

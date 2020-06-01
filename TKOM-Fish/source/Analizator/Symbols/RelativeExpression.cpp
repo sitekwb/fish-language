@@ -28,24 +28,24 @@ void RelativeExpression::execute(Env &env) {
     //done
 }
 
-Object &RelativeExpression::getObject() {
+Obj &RelativeExpression::getObject() {
     return object;
 }
 
 double RelativeExpression::getDouble() const {
-    return object.getDouble();
+    return object.get().getDouble();
 }
 
 int RelativeExpression::getInt() const {
-    return object.getInt();
+    return object.get().getInt();
 }
 
 std::string RelativeExpression::getString() const {
-    return object.getString();
+    return object.get().getString();
 }
 
 bool RelativeExpression::getBool() const {
-    return object.getBool();
+    return object.get().getBool();
 }
 
 ObjectType RelativeExpression::getObjectType() const {

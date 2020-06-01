@@ -40,7 +40,7 @@ protected:
     std::list<std::tuple<TokenUPD, FunctionCallUP, IdentifierUPD, TokenUPD, std::list<ArraySubscriptUP>>> repeatList;
 
     // INTERPRETER
-    Object &object;
+    std::reference_wrapper<Obj>object;
 public:
     Term();
     Term(double value);
@@ -49,8 +49,8 @@ public:
     double getDouble();
     std::string getString();
     bool getBool();
-    ObjectType getObjectType() const;
-    Object &getObject();
+    ObjectType getObjectType() const override;
+    Obj &getObject() override;
 
     friend class Test;
 };

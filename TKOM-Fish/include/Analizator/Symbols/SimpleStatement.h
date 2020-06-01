@@ -16,6 +16,16 @@
 #include "ImportStatement.h"
 #include "ControlStatement.h"
 
+class NewExpression;
+using NewExpressionUP = std::unique_ptr<NewExpression>;
+
+class ExpressionStatement;
+using ExpressionStatementUP = std::unique_ptr<ExpressionStatement>;
+
+class NewStatement;
+using NewStatementUP = std::unique_ptr<NewStatement>;
+
+
 class SimpleStatement : public Symbol{
 protected:
     DeleteStatementUP deleteStatement;

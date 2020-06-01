@@ -11,6 +11,9 @@
 #include "ParameterList.h"
 #include "BlockInstruction.h"
 
+class BlockInstruction;
+using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
+
 class FunctionDefinition : public Symbol {
     TokenUPD def;
     TypeUP typeOptional;
@@ -20,14 +23,14 @@ class FunctionDefinition : public Symbol {
     TokenUPD  bracketClose;
     BlockInstructionUP blockInstruction;
     // INTERP
-    std::list<Object &>objectList;
+    std::list<std::reference_wrapper<Obj>>objectList;
 public:
     std::string getName();
     FunctionDefinition();
     void execute(Env &env) override;
     int getInt()const override;
     ObjectType getObjectType() const override;
-    std::list<Object &>&getList();
+    std::list<std::reference_wrapper<Obj>>&getList();
 };
 using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
 

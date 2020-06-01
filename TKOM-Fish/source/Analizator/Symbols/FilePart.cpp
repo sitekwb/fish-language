@@ -2,7 +2,7 @@
 // Created by Wojtek on 26/05/2020.
 //
 
-#include <Analizator/Interpreter/Object.h>
+#include <Analizator/Interpreter/Obj.h>
 
 #include "Analizator/Symbols/FilePart.h"
 

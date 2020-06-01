@@ -5,11 +5,18 @@
 #include "Sources/FileSource.h"
 
 char FileSource::peek() {
+    char c = buf->peek();
+    if(not isEof and c == EOF){
+        isEof = true;
+        return ';';
+    }
     return buf->peek();
 }
 
 char FileSource::get() {
-    return buf->get();
+    char c = peek();
+    buf->get();
+    return c;
 }
 
 FileSource::FileSource(std::unique_ptr<std::istream> buf_) : buf(std::move(buf_)) {

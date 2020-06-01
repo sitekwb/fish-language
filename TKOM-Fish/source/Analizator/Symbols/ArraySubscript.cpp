@@ -10,15 +10,15 @@ ArraySubscript::ArraySubscript() {
             and buildToken("]", squareClose);
 }
 
-void ArraySubscript::execute() {
+void ArraySubscript::execute(Env &env) {
     //nothing
 }
 
 int ArraySubscript::getInt() const{
-    return unsignedIntTerm->getValue();
+    return unsignedIntTerm->getInt();
 }
 
-Object &ArraySubscript::getObject() {
+Obj &ArraySubscript::getObject() {
     return unsignedIntTerm->getObject();
 }
 

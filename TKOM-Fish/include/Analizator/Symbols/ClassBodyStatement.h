@@ -10,17 +10,20 @@
 #include "FunctionDefinition.h"
 #include "MemberDefinition.h"
 
+class FunctionDefinition;
+using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
+
 class ClassBodyStatement : public Symbol{
 protected:
     MemberDefinitionUP memberDefinition;
     FunctionDefinitionUP functionDefinition;
     // INTERP
-    Object &object;
+    std::reference_wrapper<Obj> object;
 public:
     ClassBodyStatement();
     void execute(Env &env) override;
     std::string getName() const override;
-    Object &getObject() override;
+    Obj &getObject() override;
 };
 using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
 

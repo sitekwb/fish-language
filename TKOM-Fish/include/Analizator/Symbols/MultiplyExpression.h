@@ -20,12 +20,12 @@ protected:
 public:
     MultiplyExpression();
     void execute(Env &env) override;
-    int getInt() const;
-    double getDouble() const;
-    std::string getString() const;
-    bool getBool() const;
-    ObjectType getObjectType() const;
-    Object &getObject();
+    int getInt() const override;
+    double getDouble() const override;
+    std::string getString() const override;
+    bool getBool() const override;
+    ObjectType getObjectType() const override;
+    Obj &getObject() override;
     friend class Test;
 };
 using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;

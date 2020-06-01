@@ -20,7 +20,7 @@ void ForiStatement::execute(Env &env) {
     }
 
     unsignedIntTerm->execute(env);
-    for(int i=0; i<unsignedIntTerm->getValue();i++){
+    for(int i=0; i<unsignedIntTerm->getInt();i++){
         Env localEnv = Env(env);
         Token token(INT, std::to_string(i));
         localEnv.setSymbol("i", token);

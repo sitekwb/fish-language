@@ -1,7 +1,6 @@
 //
 // Created by Wojtek on 31/05/2020.
 //
-
 #ifndef FISH_RETURNEXCEPTION_H
 #define FISH_RETURNEXCEPTION_H
 
@@ -15,5 +14,4 @@ public:
     ConditionalExpressionUP &getReturnObject();
 };
 
-
-#endif //FISH_RETURNEXCEPTION_H
+#endif // FISH_RETURNEXCEPTION_H

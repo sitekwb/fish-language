@@ -1,0 +1,26 @@
+def silnia(n){
+    if(n == 1){
+        return 1
+    }
+    return n * silnia(n-1)
+}
+
+def silnia2(n){
+    new value = 1
+    for(new i=2; i<=n; i+=1){
+        value *= i
+    }
+    return value
+}
+
+if(silnia(8) == silnia2(8)){
+    print("UDALO SIE!")
+}
+
+new a = 1;
+
+new i = 6
+fori(10){
+    if(i < 6) new i = a + i;
+}
+new a = 3;

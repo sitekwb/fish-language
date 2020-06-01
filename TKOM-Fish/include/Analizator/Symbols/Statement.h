@@ -13,6 +13,10 @@
 class CompoundStatement;
 using CompoundStatementUP = std::unique_ptr<CompoundStatement>;
 
+class SimpleStatement;
+using SimpleStatementUP = std::unique_ptr<SimpleStatement>;
+
+
 class Statement : public Symbol {
 protected:
     CompoundStatementUP compoundStatement;

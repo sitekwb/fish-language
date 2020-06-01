@@ -11,6 +11,9 @@
 #include "ConditionalExpression.h"
 #include "BlockInstruction.h"
 
+class Expression;
+using ExpressionUP = std::unique_ptr<Expression>;
+
 class ForStatement : public Symbol{
 protected:
     TokenUPD forToken;

@@ -13,6 +13,7 @@ class FileSource : public Source {
     std::unique_ptr<std::istream> buf;
 public:
     explicit FileSource(std::unique_ptr<std::istream> buf);
+    bool isEof = false;
     char peek() override;
     char get() override;
     char getStringSign() override;

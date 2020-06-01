@@ -23,35 +23,35 @@ bool ConditionalExpression::buildRepeat() {
 }
 
 void ConditionalExpression::execute(Env &env) {
+    if (!constructed) {
+        return;
+    }
     andExpression->execute(env);
-    bool val1 = andExpression->getValue();
-    for(auto &pair: repeatList){
-        // SECOND VALUE
+    objectList.push_back(*andExpression);
+    for (auto &pair: repeatList) {
         auto &expr = pair.second;
         expr->execute(env);
-        bool val2 = expr->getValue();
-        val1 = val1 or val2;
+        objectList.push_back(*expr);
     }
-    value = val1;
 }
 
 double ConditionalExpression::getDouble() const {
-    return objectList.front().getDouble();
+    return objectList.front().get().getDouble();
 }
 
 int ConditionalExpression::getInt() const {
-    return objectList.front().getInt();
+    return objectList.front().get().getInt();
 }
 
 std::string ConditionalExpression::getString() const {
-    return objectList.front().getString();
+    return objectList.front().get().getString();
 }
 
 bool ConditionalExpression::getBool() const {
     auto it = objectList.begin();
-    bool value = (it++)->getBool();
+    bool value = (it++)->get().getBool();
     while (it != objectList.end()) {
-        bool v2 = (it++)->getBool();
+        bool v2 = (it++)->get().getBool();
         value = value or v2;
     }
     return value;
@@ -61,7 +61,7 @@ ObjectType ConditionalExpression::getObjectType() const {
     return ObjectType::OT_ConditionalExpression;
 }
 
-Object &ConditionalExpression::getObject() {
-    return objectList.front();
+Obj &ConditionalExpression::getObject() {
+    return objectList.front().get();
 }
 

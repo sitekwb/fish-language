@@ -30,6 +30,6 @@ int ParameterList::getInt() const {
     return objectList.size();
 }
 
-std::list<Object &> &ParameterList::getList() {
+std::list<std::reference_wrapper<Obj>> &ParameterList::getList() {
     return objectList;
 }

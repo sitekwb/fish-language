@@ -21,14 +21,14 @@ protected:
     ArgumentListUP argumentList;
     TokenUPD bracketClose;
     //INTERPRETER
-    Object &object;
+    std::reference_wrapper<Obj> object;
 public:
     FunctionCall();
     // for calling constructors
-    FunctionCall(std::string name, ArgumentList &argumentList);
+    FunctionCall(std::string name, ArgumentList &otherList);
     void execute(Env &env) override;
     ObjectType getObjectType() const override;
-    Object &getObject();
+    Obj &getObject() override;
     friend class Test;
 };
 using FunctionCallUP = std::unique_ptr<FunctionCall>;

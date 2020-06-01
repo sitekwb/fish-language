@@ -54,28 +54,28 @@ void OrExpression::execute(Env &env) {
 }
 
 double OrExpression::getDouble() const {
-    return objectList.front().getDouble();
+    return objectList.front().get().getDouble();
 }
 
 int OrExpression::getInt() const {
-    return objectList.front().getInt();
+    return objectList.front().get().getInt();
 }
 
 std::string OrExpression::getString() const {
-    return objectList.front().getString();
+    return objectList.front().get().getString();
 }
 
 bool OrExpression::getBool() const {
     auto it = objectList.begin();
-    bool unaryNot = (it++)->getBool();
-    bool value = (it++)->getBool();
+    bool unaryNot = (it++)->get().getBool();
+    bool value = (it++)->get().getBool();
     if (unaryNot) {
         value = not value;
     }
     while (it != objectList.end()) {
-        int op = (it++)->getInt();
-        unaryNot = (it++)->getBool();
-        bool v2 = (it++)->getBool();
+        int op = (it++)->get().getInt();
+        unaryNot = (it++)->get().getBool();
+        bool v2 = (it++)->get().getBool();
         switch (op) {
             case EQ_EQ:
                 value = value == v2;
@@ -108,6 +108,6 @@ ObjectType OrExpression::getObjectType() const {
     return ObjectType::OT_OrExpression;
 }
 
-Object &OrExpression::getObject() {
+Obj &OrExpression::getObject() {
     return objectList.front();
 }

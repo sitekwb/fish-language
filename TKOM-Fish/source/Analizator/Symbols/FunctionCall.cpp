@@ -3,9 +3,10 @@
 //
 
 #include "Analizator/Symbols/FunctionCall.h"
+#include <Analizator/Symbols/Argument.h>
+#include <Analizator/Symbols/Default.h>
 #include <Analizator/Symbols/ConditionalExpression.h>
 #include <Analizator/Interpreter/ObjectType.h>
-#include <Analizator/Symbols/Default.h>
 #include <Analizator/Interpreter/ReturnException.h>
 #include <Analizator/Symbols/FunctionDefinition.h>
 
@@ -23,18 +24,17 @@ void FunctionCall::execute(Env &env) {
     auto &argList = argumentList->getList();
     auto aIt = argList.begin();
     for (auto pIt = parameterList.begin(); pIt != parameterList.end(); ++pIt, ++aIt) {
-        ArgumentUP &argument = *aIt;
-        Identifier &parameter = pIt->first;
-        DefaultUP &defaultP = pIt->second;
-        if (argument) {
-            // TODO maybe check types
-            argumentEnv.setSymbol(parameter.getValue(), *argument);
-        } else if (defaultP) {
-            argumentEnv.setSymbol(parameter.getValue(), *defaultP);
-        } else {
-            throw std::runtime_error("Wrong function arguments");
+        Obj &parameter = pIt->get();
+        if(aIt == argList.end()){
+            if(parameter.getBool()) {
+                Default &defaultP = static_cast<Default &>(parameter.getObject());
+                argumentEnv.setSymbol(parameter.getString(), defaultP);
+            }
         }
+        Argument &argument = static_cast<Argument &>(aIt->get());
+        argumentEnv.setSymbol(parameter.getString(), argument);
     }
+
     Env funcEnv(argumentEnv);
     try {
         function.execute(funcEnv);
@@ -45,12 +45,12 @@ void FunctionCall::execute(Env &env) {
 }
 
 
-FunctionCall::FunctionCall(std::string name, ArgumentList &argumentList) : object(*this) {
+FunctionCall::FunctionCall(std::string name, ArgumentList &otherList) : object(*this) {
     identifier = IdentifierUPD(new Identifier(name), TokenDeleter());
-    argumentList = std::make_unique<ArgumentList>(argumentList);
+    argumentList = std::make_unique<ArgumentList>(otherList);
 }
 
-Object &FunctionCall::getObject() {
+Obj &FunctionCall::getObject() {
     return object;
 }
 

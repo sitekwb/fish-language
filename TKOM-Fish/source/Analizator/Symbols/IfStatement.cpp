@@ -19,12 +19,11 @@ void IfStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-    auto localEnv = Env::createLocalScope(env);
-    conditionalExpression->execute(*localEnv);
-    if(conditionalExpression->getValue()){
-        blockInstruction->execute(*localEnv);
+    Env localEnv(env);
+    conditionalExpression->execute(localEnv);
+    if(conditionalExpression->getBool()){
+        blockInstruction->execute(localEnv);
     }
-    Env::destroyLocalScope(move(localEnv));
 }
 
 ObjectType IfStatement::getObjectType() const {

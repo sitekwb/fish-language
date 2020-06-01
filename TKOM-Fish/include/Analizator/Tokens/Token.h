@@ -8,9 +8,10 @@
 
 #include <Analizator/Tokens/TokenType.h>
 #include <Context.h>
-#include <Analizator/Interpreter/Object.h>
+#include <Analizator/Interpreter/Obj.h>
+#include <unordered_set>
 
-class Token : public Object{
+class Token : public Obj{
     TokenType type;
     std::string value;
     Context context;

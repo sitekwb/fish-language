@@ -96,7 +96,7 @@ void Symbol::reset(TokenUPD &token) {
 }
 
 
-Object &Symbol::getObject() {
+Obj &Symbol::getObject() {
     throw NotImplementedException();
 }
 

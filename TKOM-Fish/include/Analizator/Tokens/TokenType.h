@@ -5,7 +5,6 @@
 #ifndef FISH_TOKENTYPE_H
 #define FISH_TOKENTYPE_H
 
-#include <unordered_set>
 
 enum TokenType{
     STR,

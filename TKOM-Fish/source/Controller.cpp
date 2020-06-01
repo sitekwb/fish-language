@@ -19,16 +19,18 @@ Controller::Controller(SourceUP source_) :source(move(source_)){
 
 void Controller::execute() {
     try {
+        GlobalEnv globalEnv;
+        Env env(globalEnv);
         if (source->isFileSource()) {
             FileUP file;
             file = parser->parseFile();
-            file->execute();
+            file->execute(env);
             resetFile(file);
         } else {
             do {
                 FilePartUP filePart;
                 filePart = parser->parseFilePart();
-                filePart->execute();
+                filePart->execute(env);
                 resetFilePart(filePart);
             } while (true);
         }

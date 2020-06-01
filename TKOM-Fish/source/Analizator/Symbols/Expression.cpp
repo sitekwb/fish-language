@@ -23,7 +23,7 @@ void Expression::execute(Env &env) {
     }
 }
 
-Object &Expression::getObject() {
+Obj &Expression::getObject() {
     if(conditionalExpression){
         return conditionalExpression->getObject();
     }

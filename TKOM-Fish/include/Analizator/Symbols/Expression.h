@@ -11,6 +11,9 @@
 #include "NewExpression.h"
 #include "AssignExpression.h"
 
+class NewExpression;
+using NewExpressionUP = std::unique_ptr<NewExpression>;
+
 class Expression : public Symbol{
 protected:
     ConditionalExpressionUP conditionalExpression;
@@ -22,7 +25,7 @@ public:
     void execute(Env &env) override;
     ObjectType getObjectType() const override;
     friend class Test;
-    Object &getObject();
+    Obj &getObject() override;
 };
 using ExpressionUP = std::unique_ptr<Expression>;
 

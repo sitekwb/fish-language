@@ -37,22 +37,22 @@ void AndExpression::execute(Env& env) {
 }
 
 double AndExpression::getDouble() const {
-    return objectList.front().getDouble();
+    return objectList.front().get().getDouble();
 }
 
 int AndExpression::getInt() const {
-    return objectList.front().getInt();
+    return objectList.front().get().getInt();
 }
 
 std::string AndExpression::getString() const {
-    return objectList.front().getString();
+    return objectList.front().get().getString();
 }
 
 bool AndExpression::getBool() const {
     auto it = objectList.begin();
-    bool value = (it++)->getBool();
+    bool value = (it++)->get().getBool();
     while (it != objectList.end()) {
-        bool v2 = (it++)->getBool();
+        bool v2 = (it++)->get().getBool();
         value = value and v2;
     }
     return value;
@@ -62,7 +62,7 @@ ObjectType AndExpression::getObjectType() const {
     return ObjectType::OT_AndExpression;
 }
 
-Object &AndExpression::getObject() {
+Obj &AndExpression::getObject() {
     return objectList.front();
 }
 

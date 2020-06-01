@@ -64,6 +64,7 @@ enum class ObjectType {
     OT_UnsignedIntTerm,
     OT_WhileStatement,
     OT_Symbol,
+    OT_Lib,
 };
 
 #endif //FISH_OBJECTTYPE_H

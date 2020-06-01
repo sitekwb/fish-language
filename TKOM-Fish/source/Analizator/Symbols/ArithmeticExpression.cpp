@@ -43,10 +43,10 @@ void ArithmeticExpression::execute(Env &env) {
 
 double ArithmeticExpression::getDouble() const{
     auto it = list.begin();
-    double value = (it++)->getDouble();
+    double value = (it++)->get().getDouble();
     while (it != list.end()) {
-        bool op = (it++)->getBool();
-        double v2 = (it++)->getDouble();
+        bool op = (it++)->get().getBool();
+        double v2 = (it++)->get().getDouble();
         if (op){
             value = value + v2;
         } else {
@@ -57,10 +57,10 @@ double ArithmeticExpression::getDouble() const{
 }
 int ArithmeticExpression::getInt() const{
     auto it = list.begin();
-    int value = (it++)->getInt();
+    int value = (it++)->get().getInt();
     while (it != list.end()) {
-        bool op = (it++)->getBool();
-        int v2 = (it++)->getInt();
+        bool op = (it++)->get().getBool();
+        int v2 = (it++)->get().getInt();
         if (op){
             value = value + v2;
         } else {
@@ -71,10 +71,10 @@ int ArithmeticExpression::getInt() const{
 }
 std::string ArithmeticExpression::getString() const{
     auto it = list.begin();
-    std::string value = (it++)->getString();
+    std::string value = (it++)->get().getString();
     while (it != list.end()) {
-        bool op = (it++)->getBool();
-        std::string v2 = (it++)->getString();
+        bool op = (it++)->get().getBool();
+        std::string v2 = (it++)->get().getString();
         if (op){
             value = value + v2;
         }
@@ -84,10 +84,10 @@ std::string ArithmeticExpression::getString() const{
 }
 bool ArithmeticExpression::getBool() const{
     auto it = list.begin();
-    bool value = (it++)->getBool();
+    bool value = (it++)->get().getBool();
     while (it != list.end()) {
-        bool op = (it++)->getBool();
-        bool v2 = (it++)->getBool();
+        bool op = (it++)->get().getBool();
+        bool v2 = (it++)->get().getBool();
         if (op){
             value = value or v2;
         } else {
@@ -99,7 +99,7 @@ bool ArithmeticExpression::getBool() const{
 ObjectType ArithmeticExpression::getObjectType() const{
     return ObjectType::OT_ArithmeticExpression;
 }
-Object &ArithmeticExpression::getObject(){
+Obj &ArithmeticExpression::getObject(){
     return list.front();
 }
 

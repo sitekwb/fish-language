@@ -9,6 +9,9 @@
 #include <Analizator/Symbol.h>
 #include "NewExpression.h"
 
+class NewExpression;
+using NewExpressionUP = std::unique_ptr<NewExpression>;
+
 class NewStatement : public Symbol{
 protected:
     NewExpressionUP newExpression;

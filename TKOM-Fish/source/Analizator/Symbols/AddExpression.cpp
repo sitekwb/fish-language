@@ -48,10 +48,10 @@ ObjectType AddExpression::getObjectType() const {
 
 double AddExpression::getDouble() const {
     auto it = list.begin();
-    double value = (it++)->getDouble();
+    double value = (it++)->get().getDouble();
     while (it != list.end()) {
-        int op = (it++)->getInt();
-        double v2 = (it++)->getDouble();
+        int op = (it++)->get().getInt();
+        double v2 = (it++)->get().getDouble();
         if (op == MULTIPLY) {
             value = value * v2;
         } else if (op == DIVIDE and v2 != 0) { // TODO maybe floating point exception
@@ -65,10 +65,10 @@ double AddExpression::getDouble() const {
 
 int AddExpression::getInt() const {
     auto it = list.begin();
-    int value = (it++)->getInt();
+    int value = (it++)->get().getInt();
     while (it != list.end()) {
-        int op = (it++)->getInt();
-        int v2 = (it++)->getInt();
+        int op = (it++)->get().getInt();
+        int v2 = (it++)->get().getInt();
         if (op == -1) {
             value = value * v2;
         } else if (op == 0 and v2 != 0) { // TODO maybe floating point exception
@@ -83,15 +83,15 @@ int AddExpression::getInt() const {
 std::string AddExpression::getString() const {
     // there aren't */% operators in strings
     // TODO maybe if list.size() > 1 => cout warning
-    return list.front().getString();
+    return list.front().get().getString();
 }
 
 bool AddExpression::getBool() const {
     auto it = list.cbegin();
-    bool value = (it++)->getBool();
+    bool value = (it++)->get().getBool();
     while (it != list.end()) {
-        int op = (it++)->getInt();
-        bool v2 = (it++)->getBool();
+        int op = (it++)->get().getInt();
+        bool v2 = (it++)->get().getBool();
         if (op == -1) {
             value = value and v2;
         } else if (op == 0) {
@@ -103,8 +103,8 @@ bool AddExpression::getBool() const {
     return value;
 }
 
-Object &AddExpression::getObject() {
-    return list.front()->getObject();
+Obj &AddExpression::getObject() {
+    return list.front().get().getObject();
 }
 
 

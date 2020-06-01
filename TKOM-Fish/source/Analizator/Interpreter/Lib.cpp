@@ -7,3 +7,7 @@
 Lib::Lib(std::string name) {
     // TODO import library from own lib source code
 }
+
+ObjectType Lib::getObjectType() const {
+    return ObjectType::OT_Lib;
+}

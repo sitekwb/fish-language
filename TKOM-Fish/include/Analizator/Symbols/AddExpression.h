@@ -20,16 +20,16 @@ protected:
 
     bool buildRepeat();
     //INTERPRETER done
-    std::list<Object &>list;
+    std::list<std::reference_wrapper<Obj>>list;
 public:
     AddExpression();
     void execute(Env &env) override;
-    double getDouble() const;
-    int getInt() const;
-    std::string getString() const;
-    bool getBool() const;
-    ObjectType getObjectType() const;
-    Object &getObject();
+    double getDouble() const override;
+    int getInt() const override;
+    std::string getString() const override;
+    bool getBool() const override;
+    ObjectType getObjectType() const override;
+    Obj &getObject() override;
 
     friend class Test;
 };

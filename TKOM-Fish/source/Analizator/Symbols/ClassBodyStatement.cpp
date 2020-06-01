@@ -20,13 +20,13 @@ void ClassBodyStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-    object.execute(env);
+    object.get().execute(env);
 }
 
-Object &ClassBodyStatement::getObject() {
+Obj &ClassBodyStatement::getObject() {
     return object;
 }
 
 std::string ClassBodyStatement::getName() const {
-    return object.getName();
+    return object.get().getName();
 }

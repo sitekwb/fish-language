@@ -41,7 +41,7 @@ std::string FunctionDefinition::getName() {
 void FunctionDefinition::execute(Env &env) {
     parameterList->execute(env);
     for(auto &e:parameterList->getList()){
-        objectList.push_back(*e);
+        objectList.push_back(e.get());
     }
 }
 
@@ -53,7 +53,7 @@ ObjectType FunctionDefinition::getObjectType() const {
     return ObjectType::OT_FunctionDefinition;
 }
 
-std::list<Object &> &FunctionDefinition::getList() {
+std::list<std::reference_wrapper<Obj>> &FunctionDefinition::getList() {
     return objectList;
 }
 

@@ -65,7 +65,7 @@ void Term::execute(Env &env) {
 
     if (not arraySubscriptList.empty()) {
         for (auto &arraySubscript: arraySubscriptList) {
-            object = object[arraySubscript->getInt()];
+            object = object.get()[arraySubscript->getInt()];
         }
     }
     for (auto &e:repeatList) {
@@ -82,28 +82,28 @@ void Term::execute(Env &env) {
         }
     }
     // at the end get object from variable name
-    if (object.getObjectType() == ObjectType::OT_IDENTIFIER or object.getObjectType() == ObjectType::OT_CONSTANT) {
-        object = env[object.getName()];
+    if (object.get().getObjectType() == ObjectType::OT_IDENTIFIER or object.get().getObjectType() == ObjectType::OT_CONSTANT) {
+        object = env[object.get().getName()];
     }
 }
 
 int Term::getInt() {
-    return object.getInt();
+    return object.get().getInt();
 }
 
 double Term::getDouble() {
-    return object.getDouble();
+    return object.get().getDouble();
 }
 
 std::string Term::getString() {
-    return object.getString();
+    return object.get().getString();
 }
 
 bool Term::getBool() {
-    return object.getBool();
+    return object.get().getBool();
 }
 
-Object &Term::getObject() {
+Obj &Term::getObject() {
     return object;
 }
 

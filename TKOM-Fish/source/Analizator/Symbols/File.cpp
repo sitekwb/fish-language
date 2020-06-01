@@ -9,6 +9,7 @@ using namespace std;
 
 File::File() {
     try {
+        constructed = true;
         FilePartUP filePart;
         while (buildSymbol<FilePart>(filePart)) {
             filePartList.push_back(move(filePart));

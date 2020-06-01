@@ -42,7 +42,7 @@ bool MultiplyExpression::getBool() const{
     return term->getBool();
 }
 
-Object &MultiplyExpression::getObject() {
+Obj &MultiplyExpression::getObject() {
     return term->getObject();
 }
 

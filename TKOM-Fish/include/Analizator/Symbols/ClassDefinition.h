@@ -8,7 +8,10 @@
 
 #include <Analizator/Symbol.h>
 #include "Type.h"
-#include "ClassBody.h"
+#include "ClassBodyStatement.h"
+
+class ClassBodyStatement;
+using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
 
 class ClassDefinition : public Symbol{
 protected:

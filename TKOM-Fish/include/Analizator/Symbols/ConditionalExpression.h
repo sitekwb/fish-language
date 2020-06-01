@@ -17,19 +17,20 @@ class ConditionalExpression : public Symbol {
     AndExpressionUP andExpression;
     std::list<std::pair<TokenUPD, AndExpressionUP>> repeatList;
 
+    bool buildRepeat();
     //INTERPRETER
-    std::list<Object &> objectList;
+    std::list<std::reference_wrapper<Obj>> objectList;
 public:
     ConditionalExpression();
 
     void execute(Env &env) override;
 
-    double getDouble() const;
-    int getInt() const;
-    std::string getString() const;
-    bool getBool() const;
-    ObjectType getObjectType() const;
-    Object &getObject();
+    double getDouble() const override;
+    int getInt() const override;
+    std::string getString() const override;
+    bool getBool() const override;
+    ObjectType getObjectType() const override;
+    Obj &getObject() override;
 };
 
 using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;

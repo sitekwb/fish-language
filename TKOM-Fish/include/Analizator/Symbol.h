@@ -13,7 +13,7 @@
 #include <Analizator/Tokens/Identifier.h>
 #include "Analizator/Tokens/TokenDeleter.h"
 
-class Symbol : public Object{
+class Symbol : public Obj{
 public:
     using SymbolUP = std::unique_ptr<Symbol>;
 protected:
@@ -70,7 +70,7 @@ public:
     static void setLexer(LexerUP lexer);
     static void addToTokenList(TokenUP tokenUP);
     static void reset(TokenUPD &token);
-    virtual Object &getObject();
+    virtual Obj &getObject();
     virtual ObjectType getObjectType() const;
     friend class Test;
 };

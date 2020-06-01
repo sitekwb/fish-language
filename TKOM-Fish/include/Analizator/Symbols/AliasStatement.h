@@ -17,7 +17,7 @@ protected:
 public:
     AliasStatement();
     void execute(Env &env) override;
-    ObjectType getObjectType() const;
+    ObjectType getObjectType() const override;
 
     friend class Test;
 };

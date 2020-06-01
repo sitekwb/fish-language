@@ -36,8 +36,9 @@ void ClassDefinition::executeConstructor(Env &env, ArgumentListUP &argumentList)
             std::string name = "__" + std::to_string(i) + getName();
             auto &constructor = static_cast<FunctionDefinition &>(symbols[name]);
             if(constructor.getInt() == constructorSize){
-                FunctionCall constructorCall = std::make_unique<FunctionCall>(name, *argumentList);
-                constructorCall.execute(env);
+                FunctionCall constructorCall(name, *argumentList);
+                Env constrEnv(symbols);
+                constructorCall.execute(constrEnv);
                 break;
             }
         }
@@ -45,13 +46,6 @@ void ClassDefinition::executeConstructor(Env &env, ArgumentListUP &argumentList)
             found = false;
         }
     }
-
-    FunctionDefinition &constructor = classDefinition.getConstructor(constructorSize);
-
-    constructorCall = std::make_unique<FunctionCall>(*argumentListOptional);
-    Env fcEnv(env);
-    fcEnv.setSymbol(CONSTRUCTOR_CONSTANT, *constructorCall);
-    constructorCall->execute(fcEnv);
 }
 
 ClassDefinition::ClassDefinition(ClassDefinition &cd) {

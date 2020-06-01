@@ -14,14 +14,16 @@ GlobalEnv &GlobalEnv::operator=(GlobalEnv &other) {
     return *this;
 }
 
-void GlobalEnv::setSymbol(std::string name, Object &object) {
-// TODO warning if existing
-    hashMap[name] = object;
+void GlobalEnv::setSymbol(std::string name, std::reference_wrapper<Obj> object) {
+    if(hashMap.find(name) != hashMap.end()){
+        //TODO if existing
+    }
+    hashMap.insert({move(name), object});
 }
 
-Object & GlobalEnv::operator[](std::string name) {
+Obj & GlobalEnv::operator[](std::string name) {
     if(hashMap.count(name)){
-        return hashMap[name];
+        return hashMap.at(std::move(name));
     }
     throw SymbolNotFoundException(name);
 }

@@ -6,22 +6,24 @@
 #define FISH_ENV_H
 
 
-#include <map>
 #include <string>
-#include "Object.h"
 #include "GlobalEnv.h"
+#include "Obj.h"
 
 class Env;
 using EnvUP = std::unique_ptr<Env>;
+
+class GlobalEnv;
+using GlobalEnvUP = std::unique_ptr<GlobalEnv>;
 
 class Env : public GlobalEnv{
     GlobalEnv &parentEnv;
     bool isGlobalEnv() const override;
 public:
     Env(GlobalEnv &parentEnv);
-    void setGlobalSymbol(std::string name, Object &object);
+    void setGlobalSymbol(std::string name, std::reference_wrapper<Obj> object);
     void destroySymbol(std::string name);
-    Object &operator[](std::string name) override;
+    Obj &operator[](std::string name) override;
 };
 
 

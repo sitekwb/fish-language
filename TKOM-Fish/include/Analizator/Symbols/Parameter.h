@@ -15,10 +15,15 @@ protected:
     TypeUP typeOptional;
     IdentifierUPD identifier;
     TokenUPD equalTokenOptional;
-    DefaultUP defaultSymbolOptional;
+    DefaultUP defaultOptional;
+    //INTERP
+    std::reference_wrapper<Obj>defaultObject;
 public:
     Parameter();
     void execute(Env &env) override;
+    bool getBool()const override;//returns if has default parameter
+    Obj &getObject()override;
+    std::string getString()const override;
 };
 using ParameterUP = std::unique_ptr<Parameter>;
 
