@@ -19,10 +19,15 @@ class FunctionDefinition : public Symbol {
     ParameterListUP parameterList;
     TokenUPD  bracketClose;
     BlockInstructionUP blockInstruction;
+    // INTERP
+    std::list<Object &>objectList;
 public:
     std::string getName();
     FunctionDefinition();
     void execute(Env &env) override;
+    int getInt()const override;
+    ObjectType getObjectType() const override;
+    std::list<Object &>&getList();
 };
 using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
 

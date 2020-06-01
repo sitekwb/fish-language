@@ -23,21 +23,46 @@ bool AndExpression::buildRepeat() {
 }
 
 void AndExpression::execute(Env& env) {
-    if(!constructed){
+    if (!constructed) {
         return;
     }
     orExpression->execute(env);
-    bool val1 = orExpression->getValue();
-    for(auto &pair: repeatList){
-        // SECOND VALUE
+    objectList.push_back(*orExpression);
+    for (auto &pair: repeatList) {
         auto &expr = pair.second;
+
         expr->execute(env);
-        bool val2 = expr->getValue();
-        val1 = val1 and val2;
+        objectList.push_back(*expr);
     }
-    value = val1;
 }
 
-bool AndExpression::getValue() {
+double AndExpression::getDouble() const {
+    return objectList.front().getDouble();
+}
+
+int AndExpression::getInt() const {
+    return objectList.front().getInt();
+}
+
+std::string AndExpression::getString() const {
+    return objectList.front().getString();
+}
+
+bool AndExpression::getBool() const {
+    auto it = objectList.begin();
+    bool value = (it++)->getBool();
+    while (it != objectList.end()) {
+        bool v2 = (it++)->getBool();
+        value = value and v2;
+    }
     return value;
 }
+
+ObjectType AndExpression::getObjectType() const {
+    return ObjectType::OT_AndExpression;
+}
+
+Object &AndExpression::getObject() {
+    return objectList.front();
+}
+

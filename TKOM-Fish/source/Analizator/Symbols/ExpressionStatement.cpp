@@ -13,3 +13,7 @@ void ExpressionStatement::execute(Env &env) {
         expression->execute(env);
     }
 }
+
+ObjectType ExpressionStatement::getObjectType() const {
+    return ObjectType::OT_ExpressionStatement;
+}

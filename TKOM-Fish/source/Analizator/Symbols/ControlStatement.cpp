@@ -28,3 +28,7 @@ void ControlStatement::execute(Env &env) {
     }
     throw ReturnException(conditionalExpressionOptional);
 }
+
+ObjectType ControlStatement::getObjectType() const {
+    return ObjectType::OT_ControlStatement;
+}

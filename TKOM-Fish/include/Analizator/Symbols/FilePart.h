@@ -17,6 +17,7 @@ class FilePart : public Symbol {
 public:
     FilePart();
     void execute(Env &environment) override;
+    ObjectType getObjectType() const override;
     friend class Test;
 };
 using FilePartUP = std::unique_ptr<FilePart>;

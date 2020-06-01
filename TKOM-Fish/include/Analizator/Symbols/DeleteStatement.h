@@ -12,9 +12,11 @@ class DeleteStatement: public Symbol{
 protected:
     TokenUPD deleteToken;
     IdentifierUPD identifier;
+    //INTERP done
 public:
     DeleteStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 
 using DeleteStatementUP = std::unique_ptr<DeleteStatement>;

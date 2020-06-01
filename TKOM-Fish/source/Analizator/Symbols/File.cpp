@@ -31,3 +31,7 @@ void File::execute(Env &env) {
     //done
 }
 
+ObjectType File::getObjectType() const {
+    return ObjectType::OT_File;
+}
+

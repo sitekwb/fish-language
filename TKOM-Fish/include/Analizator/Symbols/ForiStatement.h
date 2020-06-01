@@ -19,6 +19,7 @@ protected:
 public:
     ForiStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using ForiStatementUP = std::unique_ptr<ForiStatement>;
 

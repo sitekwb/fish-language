@@ -23,7 +23,10 @@ protected:
 public:
     std::string getName();
     ClassDefinition();
+    ClassDefinition(ClassDefinition &cd);
+    void executeConstructor(Env &env, ArgumentListUP &argumentList);
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 
 };
 using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;

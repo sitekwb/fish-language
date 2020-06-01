@@ -12,11 +12,6 @@ bool Token::operator!=(const Token &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const Token &token) {
-    os << setw(15) << token.value << "\t\t" << setw(10) << token.getTypeString() << std::endl;
-    return os;
-}
-
 bool Token::operator==(const Token &token) const {
     if (type == KEYWORD) {
         return type == token.type && value == token.value;
@@ -277,6 +272,25 @@ const std::string Token::getTypeString() const {
 
 Context Token::getContext() const {
     return context;
+}
+
+ObjectType Token::getObjectType() const {
+    switch(type){
+        case STR:
+            return ObjectType::OT_STRING;
+        case INT:
+            return ObjectType::OT_INT;
+        case DBL:
+            return ObjectType::OT_DOUBLE;
+        case IDENTIFIER:
+            return ObjectType::OT_IDENTIFIER;
+        case CONSTANT:
+            return ObjectType::OT_CONSTANT;
+        case KEYWORD:
+            return ObjectType::OT_KEYWORD;
+        default:
+            return ObjectType::OT_TOKEN;
+    }
 }
 
 

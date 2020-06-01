@@ -17,7 +17,7 @@ protected:
 public:
     UnsignedIntTerm();
     void execute(Env &env) override;
-    int getValue();
+    int getInt() const override;
 };
 using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
 

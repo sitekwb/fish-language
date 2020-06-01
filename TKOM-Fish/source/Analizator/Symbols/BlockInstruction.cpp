@@ -29,3 +29,7 @@ void BlockInstruction::execute(Env &env) {
         statement->execute(env);
     }
 }
+
+ObjectType BlockInstruction::getObjectType() const {
+    return ObjectType::OT_BlockInstruction;
+}

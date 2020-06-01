@@ -25,6 +25,7 @@ protected:
 public:
     IfStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using IfStatementUP = std::unique_ptr<IfStatement>;
 

@@ -10,20 +10,28 @@
 #include "AndExpression.h"
 
 class AndExpression;
+
 using AndExpressionUP = std::unique_ptr<AndExpression>;
 
 class ConditionalExpression : public Symbol {
-    bool value;
     AndExpressionUP andExpression;
-    std::list<std::pair<TokenUPD,AndExpressionUP>> repeatList;
+    std::list<std::pair<TokenUPD, AndExpressionUP>> repeatList;
 
-    bool buildRepeat();
+    //INTERPRETER
+    std::list<Object &> objectList;
 public:
     ConditionalExpression();
-    void execute(Env &env) override;
-    bool getValue();
 
+    void execute(Env &env) override;
+
+    double getDouble() const;
+    int getInt() const;
+    std::string getString() const;
+    bool getBool() const;
+    ObjectType getObjectType() const;
+    Object &getObject();
 };
+
 using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
 
 #endif //FISH_CONDITIONALEXPRESSION_H

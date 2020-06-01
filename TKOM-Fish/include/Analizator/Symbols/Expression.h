@@ -16,9 +16,11 @@ protected:
     ConditionalExpressionUP conditionalExpression;
     NewExpressionUP newExpression;
     AssignExpressionUP assignExpression;
+    //d
 public:
     Expression();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
     friend class Test;
     Object &getObject();
 };

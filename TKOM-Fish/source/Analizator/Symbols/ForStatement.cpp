@@ -30,7 +30,7 @@ void ForStatement::execute(Env &env) {
         expression1Optional->execute(serviceEnv);
     }
     conditionalExpression->execute(serviceEnv);
-    while(conditionalExpression->getValue()){
+    while(conditionalExpression->getBool()){
         Env localEnv(serviceEnv);
         try {
             blockInstruction->execute(localEnv);
@@ -45,4 +45,8 @@ void ForStatement::execute(Env &env) {
         conditionalExpression->execute(serviceEnv);
     }
     //done
+}
+
+ObjectType ForStatement::getObjectType() const {
+    return ObjectType::OT_ForStatement;
 }

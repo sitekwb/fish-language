@@ -35,3 +35,7 @@ void ForiStatement::execute(Env &env) {
         }
     }
 }
+
+ObjectType ForiStatement::getObjectType() const {
+    return ObjectType::OT_ForiStatement;
+}

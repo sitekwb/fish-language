@@ -20,6 +20,7 @@ protected:
 public:
     ImportStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using ImportStatementUP = std::unique_ptr<ImportStatement>;
 

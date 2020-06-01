@@ -13,9 +13,12 @@ class AliasStatement : public Symbol{
 protected:
     TokenUPD aliasKeyword;
     TypeUP name, type;
+    // INTERP done
 public:
     AliasStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const;
+
     friend class Test;
 };
 using AliasStatementUP = std::unique_ptr<AliasStatement>;

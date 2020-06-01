@@ -20,7 +20,8 @@ protected:
 public:
     ArraySubscript();
     void execute() override;
-    int getValue();
+    int getInt() const override;
+    Object &getObject() override;
 };
 using ArraySubscriptUP = std::unique_ptr<ArraySubscript>;
 

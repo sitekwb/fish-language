@@ -28,10 +28,10 @@ void NewExpression::execute(Env &env) {
     if(conditionalExpression){
         conditionalExpression->execute(env);
         if(staticTokenOptional){
-            env.setGlobalSymbol(id.getValue(), *conditionalExpression);
+            env.setGlobalSymbol(id.getString(), *conditionalExpression);
         }
         else{
-            env.setSymbol(id.getValue(), *conditionalExpression);
+            env.setSymbol(id.getString(), *conditionalExpression);
         }
     }
     else{
@@ -45,22 +45,15 @@ void NewExpression::execute(Env &env) {
             typeName[0] = toupper(typeName[0]);
             // TODO optionally serve optional errors in typing
         }
-        ClassDefinition &cd = dynamic_cast<ClassDefinition &>(env[typeName]);
-        if(not argumentListOptional){
-            argumentListOptional = std::make_unique<ArgumentList>(0);
-        }
-        int constructorSize = argumentListOptional.getSize();
-        FunctionDefinition &constructor = cd.getConstructor(constructorSize);
-
-        constructorCall = std::make_unique<FunctionCall>(*argumentListOptional);
-        Env fcEnv(env);
-        fcEnv.setSymbol(CONSTRUCTOR_CONSTANT, *constructorCall);
-        constructorCall->execute(fcEnv);
+        auto &classDefinition = static_cast<ClassDefinition &>(env[typeName]);
+        classDefinitionObject = std::make_unique<ClassDefinition>(classDefinition);
+        argumentListOptional->execute(env);
+        classDefinitionObject->executeConstructor(env, argumentListOptional);
         if(staticTokenOptional){
-            env.setGlobalSymbol(id.getValue(), *constructorCall);
+            env.setGlobalSymbol(id.getValue(), *classDefinitionObject);
         }
         else{
-            env.setSymbol(id.getValue(), *constructorCall);
+            env.setSymbol(id.getValue(), *classDefinitionObject);
         }
     }
 }

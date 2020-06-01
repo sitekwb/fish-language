@@ -12,9 +12,11 @@
 class ExpressionStatement : public Symbol{
 protected:
     ExpressionUP expression;
+    //d
 public:
     ExpressionStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
     friend class Test;
 };
 using ExpressionStatementUP = std::unique_ptr<ExpressionStatement>;

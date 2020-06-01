@@ -17,18 +17,19 @@ class AddExpression : public Symbol{
 protected:
     MultiplyExpressionUP multiplyExpression;
     std::list<std::pair<MultiplyOperatorUP, MultiplyExpressionUP>> repeatList;
-    bool isDouble;
-    double doubleValue;
-    int intValue;
 
     bool buildRepeat();
+    //INTERPRETER done
+    std::list<Object &>list;
 public:
     AddExpression();
     void execute(Env &env) override;
-    bool isDoubleValue();
-    bool getDouble();
-    bool getInt();
-    virtual SymbolType getType();
+    double getDouble() const;
+    int getInt() const;
+    std::string getString() const;
+    bool getBool() const;
+    ObjectType getObjectType() const;
+    Object &getObject();
 
     friend class Test;
 };

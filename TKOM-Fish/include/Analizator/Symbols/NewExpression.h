@@ -5,12 +5,15 @@
 #ifndef FISH_NEWEXPRESSION_H
 #define FISH_NEWEXPRESSION_H
 
-
-#include <Analizator/Symbol.h>
 #include "Type.h"
 #include "ArgumentList.h"
 #include "AssignOperator.h"
 #include "ConditionalExpression.h"
+#include "ClassDefinition.h"
+#include <Analizator/Symbol.h>
+
+class ClassDefinition;
+using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;
 
 class NewExpression : public Symbol{
 protected:
@@ -29,7 +32,7 @@ protected:
     void buildTypeAndId();
 
     //INTERPRETER
-    FunctionCallUP constructorCall;
+    ClassDefinitionUP classDefinitionObject;
 public:
     NewExpression();
     void execute(Env &env) override;

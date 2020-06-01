@@ -5,25 +5,17 @@
 #include "Analizator/Symbols/MultiplyOperator.h"
 
 MultiplyOperator::MultiplyOperator() {
-    if(buildToken("*", operatorToken)){
-        value = '*';
-        constructed = true;
-    }
-    else if(buildToken("/", operatorToken)){
-        value = '/';
-        constructed = true;
-    }
-    else if(buildToken("%", operatorToken)){
-        value = '%';
-        constructed = true;
-    }
-
+    constructed = buildToken("*", operatorToken)
+            or buildToken("/", operatorToken)
+            or buildToken("%", operatorToken);
 }
 
 void MultiplyOperator::execute(Env &env) {
 //nothing
 }
 
-char MultiplyOperator::getChar() {
-    return value;
+int MultiplyOperator::getInt() const {
+    return operatorToken->getType();
 }
+
+

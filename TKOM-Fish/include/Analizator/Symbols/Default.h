@@ -12,9 +12,11 @@
 class Default : public Symbol{
 protected:
     TermUP term;
+    //d
 public:
     Default();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using DefaultUP = std::unique_ptr<Default>;
 

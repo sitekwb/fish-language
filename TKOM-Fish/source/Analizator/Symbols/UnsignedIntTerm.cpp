@@ -17,7 +17,7 @@ void UnsignedIntTerm::execute(Env &env) {
     term->execute(env);
 }
 
-int UnsignedIntTerm::getValue() {
+int UnsignedIntTerm::getInt() const{
     return term->getInt();
 }
 

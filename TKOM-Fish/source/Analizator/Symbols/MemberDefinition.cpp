@@ -21,8 +21,8 @@ MemberDefinition::MemberDefinition() {
     }
 }
 
-void MemberDefinition::execute(Env &env) {
-//TODO
+void MemberDefinition::execute(Env &classSymbols) {
+    // TODO mut, static etc
 }
 
 std::string MemberDefinition::getName() {

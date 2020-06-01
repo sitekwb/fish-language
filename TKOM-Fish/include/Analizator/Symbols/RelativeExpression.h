@@ -6,9 +6,9 @@
 #define FISH_RELATIVEEXPRESSION_H
 
 
-#include <Analizator/Symbol.h>
 #include "ConditionalExpression.h"
 #include "ArithmeticExpression.h"
+#include <Analizator/Symbol.h>
 
 
 class ConditionalExpression;
@@ -20,15 +20,21 @@ using ArithmeticExpressionUP = std::unique_ptr<ArithmeticExpression>;
 
 class RelativeExpression : public Symbol {
 protected:
-    bool value;
     TokenUPD bracketOpen;
     ConditionalExpressionUP conditionalExpression;
     TokenUPD bracketClose;
     ArithmeticExpressionUP arithmeticExpression;
+    //INTERPRETER
+    Object &object;
 public:
     RelativeExpression();
     void execute(Env &env) override;
-    bool getValue();
+    double getDouble() const;
+    int getInt() const;
+    std::string getString() const;
+    bool getBool() const;
+    ObjectType getObjectType() const;
+    Object &getObject();
 };
 
 using RelativeExpressionUP = std::unique_ptr<RelativeExpression>;

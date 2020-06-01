@@ -14,3 +14,7 @@ void Argument::execute(Env &env) {
     }
     conditionalExpression->execute(env);
 }
+
+ObjectType Argument::getObjectType() const {
+    return ObjectType::OT_Argument;
+}

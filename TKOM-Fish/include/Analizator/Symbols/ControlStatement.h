@@ -13,9 +13,11 @@ class ControlStatement : public Symbol{
 protected:
     TokenUPD controlToken;
     ConditionalExpressionUP conditionalExpressionOptional;
+    //INTERP done
 public:
     ControlStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
     friend class Test;
 };
 using ControlStatementUP = std::unique_ptr<ControlStatement>;

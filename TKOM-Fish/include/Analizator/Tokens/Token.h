@@ -6,7 +6,6 @@
 #define FISH_TOKEN_H
 
 
-#include <ostream>
 #include <Analizator/Tokens/TokenType.h>
 #include <Context.h>
 #include <Analizator/Interpreter/Object.h>
@@ -34,10 +33,6 @@ public:
     bool operator!=(const Token &rhs) const;
     bool operator!=(const TokenType &rhs) const;
 
-
-
-    friend std::ostream &operator<<(std::ostream &os, const Token &token);
-
     static std::unique_ptr<Token> buildKeyword(const std::string& buf, Context &context);
     static bool isTwoSignTokenSign(char c);
     static bool isSignToken(char c);
@@ -53,6 +48,8 @@ public:
     static const inline std::unordered_set<char> oneSigns = {'+', '-', '*', '/', '%', '.', ',',
                                                              '{', '}', '(', ')', '[', ']', '=',
                                                              '<', '>', ';', '!', EOF};
+
+    ObjectType getObjectType() const override;
     friend class Test;
 };
 

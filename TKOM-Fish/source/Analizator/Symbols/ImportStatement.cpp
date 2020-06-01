@@ -17,3 +17,7 @@ void ImportStatement::execute(Env &env) {
     env.setSymbol((library2)?library2->getValue():library->getValue(), *lib);
 }
 
+ObjectType ImportStatement::getObjectType() const {
+    return ObjectType::OT_ImportStatement;
+}
+

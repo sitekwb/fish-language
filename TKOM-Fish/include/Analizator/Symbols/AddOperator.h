@@ -11,11 +11,11 @@
 class AddOperator : public Symbol{
 protected:
     TokenUPD operatorToken;
-    char value;
+    //INTERPRETER done
 public:
     AddOperator();
     void execute(Env &env) override;
-    char getChar();
+    bool getBool();
     friend class Test;
 
 };

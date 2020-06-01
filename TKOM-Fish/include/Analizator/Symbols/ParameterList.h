@@ -13,10 +13,12 @@ protected:
     ParameterUP parameter;
     std::list<std::pair<TokenUPD, ParameterUP>> repeatList;
 
-    std::list<Symbol &>parameterList;
+    std::list<Object &>objectList;
 public:
     ParameterList();
     void execute(Env &env) override;
+    int getInt()const override;
+    std::list<Object &> &getList();
 };
 
 using ParameterListUP = std::unique_ptr<ParameterList>;

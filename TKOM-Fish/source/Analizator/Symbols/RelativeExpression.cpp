@@ -4,7 +4,7 @@
 
 #include <Analizator/Symbols/RelativeExpression.h>
 
-RelativeExpression::RelativeExpression() {
+RelativeExpression::RelativeExpression() : object(*this){
     constructed = buildToken("(", bracketOpen)
             and buildSymbol<ConditionalExpression>(conditionalExpression)
             and buildToken(")", bracketClose);
@@ -19,21 +19,36 @@ void RelativeExpression::execute(Env &env) {
     }
     if(conditionalExpression){
         conditionalExpression->execute(env);
-        value = conditionalExpression->getValue();
+        object = *conditionalExpression;
     }
     else if(arithmeticExpression){
         arithmeticExpression->execute(env);
-        if(arithmeticExpression->isDouble()){
-            value = arithmeticExpression->getDouble() != 0;
-        }
-        else {
-            value = arithmeticExpression->getInt() != 0;
-        }
+        object = *arithmeticExpression;
     }
     //done
 }
 
-bool RelativeExpression::getValue() {
-    return value;
+Object &RelativeExpression::getObject() {
+    return object;
+}
+
+double RelativeExpression::getDouble() const {
+    return object.getDouble();
+}
+
+int RelativeExpression::getInt() const {
+    return object.getInt();
+}
+
+std::string RelativeExpression::getString() const {
+    return object.getString();
+}
+
+bool RelativeExpression::getBool() const {
+    return object.getBool();
+}
+
+ObjectType RelativeExpression::getObjectType() const {
+    return ObjectType::OT_RelativeExpression;
 }
 

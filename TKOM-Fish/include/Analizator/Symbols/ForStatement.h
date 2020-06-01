@@ -25,6 +25,7 @@ protected:
 public:
     ForStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using ForStatementUP = std::unique_ptr<ForStatement>;
 

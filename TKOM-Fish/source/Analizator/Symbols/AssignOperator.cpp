@@ -15,10 +15,18 @@ AssignOperator::AssignOperator() {
                   or buildToken("%=", assignOperator);
 }
 
-const std::string &AssignOperator::getValue() const {
-    return value;
-}
+
 
 void AssignOperator::execute(Env &env) {
     // nothing
 }
+
+int AssignOperator::getInt() const {
+    return assignOperator->getValue()[0];
+}
+
+ObjectType AssignOperator::getObjectType() const {
+    return ObjectType::OT_AssignOperator;
+}
+
+

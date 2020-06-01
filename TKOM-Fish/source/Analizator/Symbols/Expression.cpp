@@ -30,3 +30,7 @@ Object &Expression::getObject() {
     return newExpression->getObject();
     //done
 }
+
+ObjectType Expression::getObjectType() const {
+    return ObjectType::OT_Expression;
+}

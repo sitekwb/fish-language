@@ -27,51 +27,87 @@ bool OrExpression::buildRepeat() {
 }
 
 void OrExpression::execute(Env &env) {
-    if(!constructed){
+    if (!constructed) {
         return;
     }
-    unaryNotOptional->execute(env);
+    if(unaryNotOptional) {
+        unaryNotOptional->execute(env);
+        objectList.push_back(*unaryNotOptional);
+    }
     relativeExpression->execute(env);
-    bool val1 = relativeExpression->getValue();
-    if (unaryNotOptional->isConstructed()) {
-        val1 = not val1;
-    }
+    objectList.push_back(*relativeExpression);
     for (auto &tuple: repeatList) {
-        // SECOND VALUE
-        auto &relativeOperator = *get<0>(tuple);
-        auto &unaryNot = *get<1>(tuple);
-        auto &expr = *get<2>(tuple);
+        auto &op = std::get<0>(tuple);
+        auto &unaryNot = std::get<1>(tuple);
+        auto &expr = std::get<2>(tuple);
 
-        relativeOperator.execute(env);
-        auto &op = relativeOperator.getValue();
-        unaryNot.execute(env);
-        expr.execute(env);
-
-        bool val2 = relativeExpression->getValue();
-        if (unaryNot.isConstructed()) {
-            val2 = not val2;
+        op->execute(env);
+        if(unaryNot) {
+            unaryNot->execute(env);
         }
+        expr->execute(env);
 
-        if (op == "==") {
-            val1 = val1 == val2;
-        } else if (op == "!=") {
-            val1 = val1 != val2;
-        } else if (op == "<") {
-            val1 = val1 < val2;
-        } else if (op == ">") {
-            val1 = val1 > val2;
-        } else if (op == "<=") {
-            val1 = val1 <= val2;
-        } else if (op == ">=") {
-            val1 = val1 >= val2;
-        } else {
-            throw runtime_error("Or Expression invalid value");
-        }
+        objectList.push_back(*op);
+        objectList.push_back(*unaryNot);
+        objectList.push_back(*expr);
     }
-    value = val1;
-    //done
 }
 
-bool OrExpression::getValue() {
+double OrExpression::getDouble() const {
+    return objectList.front().getDouble();
+}
+
+int OrExpression::getInt() const {
+    return objectList.front().getInt();
+}
+
+std::string OrExpression::getString() const {
+    return objectList.front().getString();
+}
+
+bool OrExpression::getBool() const {
+    auto it = objectList.begin();
+    bool unaryNot = (it++)->getBool();
+    bool value = (it++)->getBool();
+    if (unaryNot) {
+        value = not value;
+    }
+    while (it != objectList.end()) {
+        int op = (it++)->getInt();
+        unaryNot = (it++)->getBool();
+        bool v2 = (it++)->getBool();
+        switch (op) {
+            case EQ_EQ:
+                value = value == v2;
+                break;
+            case NOT_EQ:
+                value = value != v2;
+                break;
+            case LESS:
+                value = value < v2;
+                break;
+            case MORE:
+                value = value > v2;
+                break;
+            case LESS_EQ:
+                value = value <= v2;
+                break;
+            case MORE_EQ:
+            default:
+                value = value >= v2;
+                break;
+        }
+        if (unaryNot) {
+            value = not value;
+        }
+    }
     return value;
+}
+
+ObjectType OrExpression::getObjectType() const {
+    return ObjectType::OT_OrExpression;
+}
+
+Object &OrExpression::getObject() {
+    return objectList.front();
 }

@@ -20,7 +20,7 @@ protected:
 public:
     BlockInstruction();
     void execute(Env &env) override;
-
+    ObjectType getObjectType() const override;
 };
 using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
 

@@ -5,10 +5,10 @@
 #ifndef FISH_GLOBALENV_H
 #define FISH_GLOBALENV_H
 
+#include "Object.h"
 #include <string>
-#include <Analizator/Symbol.h>
 
-class Symbol;
+class Object;
 
 using EnvironmentHashMap = std::map<std::string, Object&>;
 
@@ -18,7 +18,8 @@ protected:
     EnvironmentHashMap hashMap;
     virtual bool isGlobalEnv() const;
 public:
-    virtual void setSymbol(std::string name, Object &symbol);
+    GlobalEnv &operator=(GlobalEnv &other);
+    virtual void setSymbol(std::string name, Object &object);
     virtual Object & operator[](std::string name);
     friend class Env;
 };

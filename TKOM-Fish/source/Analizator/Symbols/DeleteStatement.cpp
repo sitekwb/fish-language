@@ -11,5 +11,8 @@ DeleteStatement::DeleteStatement() {
 
 void DeleteStatement::execute(Env &env) {
     env.destroySymbol(identifier->getValue());
-    //done
+}
+
+ObjectType DeleteStatement::getObjectType() const {
+    return ObjectType::OT_DeleteStatement;
 }

@@ -23,12 +23,18 @@ protected:
     RelativeExpressionUP relativeExpression;
     std::list<std::tuple<RelativeOperatorUP, UnaryNotUP, RelativeExpressionUP>> repeatList;
 
-    bool value;
     bool buildRepeat();
+    //INTERPRETER
+    std::list<Object &>objectList;
 public:
     OrExpression();
     void execute(Env &env) override;
-    bool getValue();
+    double getDouble() const;
+    int getInt() const;
+    std::string getString() const;
+    bool getBool() const;
+    ObjectType getObjectType() const;
+    Object &getObject();
 };
 using OrExpressionUP = std::unique_ptr<OrExpression>;
 

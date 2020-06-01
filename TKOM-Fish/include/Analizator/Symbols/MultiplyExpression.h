@@ -17,17 +17,15 @@ class MultiplyExpression : public Symbol{
 protected:
     UnarySignUP unarySignOptional;
     TermUP term;
-
-    bool isDouble;
-    double doubleValue;
-    int intValue;
 public:
     MultiplyExpression();
     void execute(Env &env) override;
-    bool isDoubleValue();
-    double getDouble();
-    int getInt();
-    virtual SymbolType getType();
+    int getInt() const;
+    double getDouble() const;
+    std::string getString() const;
+    bool getBool() const;
+    ObjectType getObjectType() const;
+    Object &getObject();
     friend class Test;
 };
 using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;

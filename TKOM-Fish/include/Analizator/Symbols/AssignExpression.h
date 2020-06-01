@@ -16,9 +16,13 @@ protected:
     IdentifierUPD identifier;
     AssignOperatorUP assignOperator;
     ConditionalExpressionUP conditionalExpression;
+
+    //INTERPRETER done
+    TermUP newObject;
 public:
     AssignExpression();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using AssignExpressionUP = std::unique_ptr<AssignExpression>;
 

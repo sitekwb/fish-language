@@ -13,6 +13,9 @@ void AssignStatement::execute(Env &env) {
         return;
     }
     assignExpression->execute(env);
-    //done
+}
+
+ObjectType AssignStatement::getObjectType() const {
+    return ObjectType::OT_AssignStatement;
 }
 

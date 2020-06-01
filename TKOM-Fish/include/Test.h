@@ -9,6 +9,7 @@
 #include <Analizator/Symbols/Type.h>
 #include <Analizator/Symbols/Expression.h>
 #include <Analizator/Symbols/ArgumentList.h>
+#include <Analizator/Symbols/AddOperator.h>
 
 
 class Test {

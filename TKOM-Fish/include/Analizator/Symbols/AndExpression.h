@@ -14,15 +14,23 @@ using OrExpressionUP = std::unique_ptr<OrExpression>;
 
 class AndExpression : public Symbol{
 protected:
-    bool value;
     OrExpressionUP orExpression;
     std::list<std::pair<TokenUPD,OrExpressionUP>> repeatList;
 
     bool buildRepeat();
+
+    //INTERPRETER done
+    std::list<Object &>objectList;
 public:
     AndExpression();
     void execute(Env &env) override;
-    bool getValue();
+    double getDouble() const;
+    int getInt() const;
+    std::string getString() const;
+    bool getBool() const;
+    ObjectType getObjectType() const;
+    Object &getObject();
+
     friend class Test;
 
 };

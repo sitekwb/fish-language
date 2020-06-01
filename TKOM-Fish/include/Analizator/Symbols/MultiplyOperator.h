@@ -11,12 +11,11 @@
 class MultiplyOperator: public Symbol{
 protected:
     TokenUPD operatorToken;
-    char value;
 
 public:
     MultiplyOperator();
     void execute(Env &env) override;
-    char getChar();
+    int getInt() const override;
 };
 using MultiplyOperatorUP = std::unique_ptr<MultiplyOperator>;
 

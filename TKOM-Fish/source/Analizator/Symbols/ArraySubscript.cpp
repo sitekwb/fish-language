@@ -14,8 +14,12 @@ void ArraySubscript::execute() {
     //nothing
 }
 
-int ArraySubscript::getValue() {
+int ArraySubscript::getInt() const{
     return unsignedIntTerm->getValue();
+}
+
+Object &ArraySubscript::getObject() {
+    return unsignedIntTerm->getObject();
 }
 
 

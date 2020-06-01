@@ -19,9 +19,17 @@ ParameterList::ParameterList() {
 
 void ParameterList::execute(Env &env) {
     parameter->execute(env);
-    parameterList.push_back(*parameter);
+    objectList.push_back(*parameter);
     for(auto &pair: repeatList){
         pair.second->execute(env);
-        parameterList.push_back(*pair.second);
+        objectList.push_back(*pair.second);
     }
+}
+
+int ParameterList::getInt() const {
+    return objectList.size();
+}
+
+std::list<Object &> &ParameterList::getList() {
+    return objectList;
 }

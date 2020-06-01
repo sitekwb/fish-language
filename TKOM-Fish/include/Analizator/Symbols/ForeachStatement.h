@@ -24,6 +24,7 @@ protected:
 public:
     ForeachStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using ForeachStatementUP = std::unique_ptr<ForeachStatement>;
 

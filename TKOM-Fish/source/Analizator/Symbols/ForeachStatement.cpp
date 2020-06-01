@@ -22,10 +22,10 @@ void ForeachStatement::execute(Env &env) {
     }
 
     term->execute(env);
-    Object &listObject = term->getObject();
-    for(int i=0; i<listObject.getSize(); i++) {
+    Object &containerObject = term->getObject();
+    for(int i=0; i < containerObject.getInt(); i++) {
         Env localEnv = Env(env);
-        localEnv.setSymbol(identifier->getValue(), listObject[i]);
+        localEnv.setSymbol(identifier->getValue(), containerObject[i]);
         try {
             blockInstruction->execute(localEnv);
         }
@@ -37,5 +37,9 @@ void ForeachStatement::execute(Env &env) {
         }
     }
     //done
+}
+
+ObjectType ForeachStatement::getObjectType() const {
+    return ObjectType::OT_ForeachStatement;
 }
 

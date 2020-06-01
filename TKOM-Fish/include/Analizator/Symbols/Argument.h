@@ -15,11 +15,12 @@ using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
 class Argument: public Symbol{
 protected:
     ConditionalExpressionUP conditionalExpression;
+    //INTERP done
 public:
     Argument();
     void execute(Env &env) override;
     friend class Test;
-
+    ObjectType getObjectType() const override;
 };
 using ArgumentUP = std::unique_ptr<Argument>;
 

@@ -2,6 +2,8 @@
 // Created by Wojtek on 26/05/2020.
 //
 
+#include <Analizator/Interpreter/Object.h>
+
 #include "Analizator/Symbols/FilePart.h"
 
 using namespace std;
@@ -27,5 +29,9 @@ void FilePart::execute(Env &env) {
         statement->execute(env);
     }
     //done
+}
+
+ObjectType FilePart::getObjectType() const {
+    return ObjectType::OT_FilePart;
 }
 

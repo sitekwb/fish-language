@@ -6,13 +6,12 @@
 #define FISH_FUNCTIONCALL_H
 
 
-#include "ArgumentList.h"
 #include <Analizator/Symbol.h>
+#include "ArgumentList.h"
 
 
 class ArgumentList;
 using ArgumentListUP = std::unique_ptr<ArgumentList>;
-const std::string CONSTRUCTOR_CONSTANT = "__c";
 
 
 class FunctionCall: public Symbol{
@@ -22,12 +21,14 @@ protected:
     ArgumentListUP argumentList;
     TokenUPD bracketClose;
     //INTERPRETER
-    Object &returnObject;
+    Object &object;
 public:
     FunctionCall();
     // for calling constructors
-    FunctionCall(ArgumentList &argumentList);
+    FunctionCall(std::string name, ArgumentList &argumentList);
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
+    Object &getObject();
     friend class Test;
 };
 using FunctionCallUP = std::unique_ptr<FunctionCall>;

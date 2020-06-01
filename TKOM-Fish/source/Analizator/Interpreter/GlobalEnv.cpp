@@ -9,12 +9,17 @@ bool GlobalEnv::isGlobalEnv() const{
     return true;
 }
 
-void GlobalEnv::setLocalSymbol(std::string name, const Symbol &symbol) {
-    // TODO logic what with existing
-    hashMap[name] = symbol;
+GlobalEnv &GlobalEnv::operator=(GlobalEnv &other) {
+    hashMap = other.hashMap;
+    return *this;
 }
 
-Object & GlobalEnv::operator (std::string name) {
+void GlobalEnv::setSymbol(std::string name, Object &object) {
+// TODO warning if existing
+    hashMap[name] = object;
+}
+
+Object & GlobalEnv::operator[](std::string name) {
     if(hashMap.count(name)){
         return hashMap[name];
     }

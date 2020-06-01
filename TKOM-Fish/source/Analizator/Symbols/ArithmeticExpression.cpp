@@ -23,89 +23,83 @@ bool ArithmeticExpression::buildRepeat() {
 }
 
 void ArithmeticExpression::execute(Env &env) {
-    if(!constructed){
+    if (!constructed) {
         return;
     }
     addExpression->execute(env);
-    bool isDouble1 = addExpression->isDoubleValue(), isDouble2;
-    double double1, double2;
-    int int1, int2;
-    if(isDouble1) {
-        double1 = addExpression->getDouble();
-    }
-    else{
-        int1 = addExpression->getInt();
-    }
-
-    for(auto &pair: repeatList){
+    list.push_back(*addExpression);
+    for (auto &pair: repeatList) {
         // OPERATOR
-        pair.first->execute(env);
-        auto op = pair.first->getChar();
-
+        auto &op = pair.first;
+        op->execute(env);
         // SECOND VALUE
         auto &expr = pair.second;
         expr->execute(env);
 
-        isDouble2 = expr->isDoubleValue();
-        if(isDouble2){
-            double2 = expr->getDouble();
-        }
-        else{
-            int2 = expr->getInt();
-        }
-
-        switch(op){
-            case '+':
-                if(isDouble1){
-                    double1 = double1 + ((isDouble2)?double2:int2);
-                    //isDouble1 = true;
-                }
-                else if(isDouble2){
-                    double1 = int1 + double2;
-                    isDouble1 = true;
-                }
-                else{
-                    int1 = int1 + int2;
-                    isDouble1 = false;
-                }
-                break;
-            case '-':
-                if(isDouble1){
-                    double1 = double1 - ((isDouble2)?double2:int2);
-                    isDouble1 = true;
-                }
-                else if(isDouble2){
-                    double1 = int1 - double2;
-                    isDouble1 = true;
-                }
-                else{
-                    int1 = int1 - int2;
-                    isDouble1 = false;
-                }
-                break;
-            default:
-                throw runtime_error("Add expression parsing error");
-        }
-    }
-
-    isDoubleValue = isDouble1;
-    if(isDouble1){
-        doubleValue = double1;
-    }
-    else{
-        intValue = int1;
+        list.push_back(*op);
+        list.push_back(*expr);
     }
 }
 
-bool ArithmeticExpression::isDouble() {
-    return isDoubleValue;
+double ArithmeticExpression::getDouble() const{
+    auto it = list.begin();
+    double value = (it++)->getDouble();
+    while (it != list.end()) {
+        bool op = (it++)->getBool();
+        double v2 = (it++)->getDouble();
+        if (op){
+            value = value + v2;
+        } else {
+            value = value - v2;
+        }
+    }
+    return value;
 }
-
-int ArithmeticExpression::getInt() {
-    return intValue;
+int ArithmeticExpression::getInt() const{
+    auto it = list.begin();
+    int value = (it++)->getInt();
+    while (it != list.end()) {
+        bool op = (it++)->getBool();
+        int v2 = (it++)->getInt();
+        if (op){
+            value = value + v2;
+        } else {
+            value = value - v2;
+        }
+    }
+    return value;
 }
-
-double ArithmeticExpression::getDouble() {
-    return doubleValue;
+std::string ArithmeticExpression::getString() const{
+    auto it = list.begin();
+    std::string value = (it++)->getString();
+    while (it != list.end()) {
+        bool op = (it++)->getBool();
+        std::string v2 = (it++)->getString();
+        if (op){
+            value = value + v2;
+        }
+        // TODO maybe warning about - in strings concatenation
+    }
+    return value;
+}
+bool ArithmeticExpression::getBool() const{
+    auto it = list.begin();
+    bool value = (it++)->getBool();
+    while (it != list.end()) {
+        bool op = (it++)->getBool();
+        bool v2 = (it++)->getBool();
+        if (op){
+            value = value or v2;
+        } else {
+            value = value and not v2;
+        }
+    }
+    return value;
+}
+ObjectType ArithmeticExpression::getObjectType() const{
+    return ObjectType::OT_ArithmeticExpression;
+}
+Object &ArithmeticExpression::getObject(){
+    return list.front();
 }
 

@@ -37,3 +37,7 @@ void CompoundStatement::execute(Env &env) {
     }
     // nothing more
 }
+
+ObjectType CompoundStatement::getObjectType() const {
+    return ObjectType::OT_CompoundStatement;
+}

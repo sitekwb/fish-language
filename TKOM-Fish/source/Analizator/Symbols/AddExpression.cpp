@@ -9,13 +9,13 @@ using namespace std;
 
 AddExpression::AddExpression() {
     constructed = buildSymbol<MultiplyExpression>(multiplyExpression);
-    while(buildRepeat());
+    while (buildRepeat());
 }
 
 bool AddExpression::buildRepeat() {
     MultiplyOperatorUP multiplyOperatorUP;
     MultiplyExpressionUP multiplyExpressionUP;
-    if(buildSymbol<MultiplyOperator>(multiplyOperatorUP) and buildSymbol<MultiplyExpression>(multiplyExpressionUP)){
+    if (buildSymbol<MultiplyOperator>(multiplyOperatorUP) and buildSymbol<MultiplyExpression>(multiplyExpressionUP)) {
         repeatList.push_back({move(multiplyOperatorUP), move(multiplyExpressionUP)});
         return true;
     }
@@ -23,95 +23,90 @@ bool AddExpression::buildRepeat() {
 }
 
 void AddExpression::execute(Env &env) {
-    if(!constructed){
+    if (!constructed) {
         return;
     }
     multiplyExpression->execute(env);
-    bool isDouble1 = multiplyExpression->isDoubleValue(), isDouble2;
-    double double1, double2;
-    int int1, int2;
-    if(isDouble1) {
-       double1 = multiplyExpression->getDouble();
-    }
-    else{
-        int1 = multiplyExpression->getInt();
-    }
-
-    for(auto &pair: repeatList){
+    list.push_back(*multiplyExpression);
+    for (auto &pair: repeatList) {
         // OPERATOR
-        pair.first->execute();
-        auto op = pair.first->getChar();
-
+        auto &op = pair.first;
+        op->execute(env);
         // SECOND VALUE
         auto &expr = pair.second;
-        expr->execute();
+        expr->execute(env);
 
-        isDouble2 = expr->isDoubleValue();
-        if(isDouble2){
-            double2 = expr->getDouble();
-        }
-        else{
-            int2 = expr->getInt();
-        }
+        list.push_back(*op);
+        list.push_back(*expr);
+    }
+}
 
-        switch(op){
-            case '*':
-                if(isDouble1){
-                    double1 = double1 * ((isDouble2)?double2:int2);
-                    //isDouble1 = true;
-                }
-                else if(isDouble2){
-                    double1 = int1 * double2;
-                    isDouble1 = true;
-                }
-                else{
-                    int1 = int1 * int2;
-                    isDouble1 = false;
-                }
-                break;
-            case '/':
-                if(isDouble1){
-                    double1 = double1 / ((isDouble2)?double2:int2);
-                    isDouble1 = true;
-                }
-                else if(isDouble2){
-                    double1 = int1 / double2;
-                    isDouble1 = true;
-                }
-                else{
-                    int1 = int1 / int2;
-                    isDouble1 = false;
-                }
-                break;
-            case '%':
-                int1 = (int)((isDouble1)?double1:int1) % (int)((isDouble2)?double2:int2);
-                isDouble1 = false;
-                break;
-            default:
-                throw runtime_error("Add expression parsing error");
+ObjectType AddExpression::getObjectType() const {
+    return ObjectType::OT_AddExpression;
+}
+
+
+double AddExpression::getDouble() const {
+    auto it = list.begin();
+    double value = (it++)->getDouble();
+    while (it != list.end()) {
+        int op = (it++)->getInt();
+        double v2 = (it++)->getDouble();
+        if (op == MULTIPLY) {
+            value = value * v2;
+        } else if (op == DIVIDE and v2 != 0) { // TODO maybe floating point exception
+            value = value / v2;
+        } else if (op == PERCENT) {
+            // TODO maybe warning "no % for doubles"
         }
     }
+    return value;
+}
 
-    isDouble = isDouble1;
-    if(isDouble1){
-        doubleValue = double1;
+int AddExpression::getInt() const {
+    auto it = list.begin();
+    int value = (it++)->getInt();
+    while (it != list.end()) {
+        int op = (it++)->getInt();
+        int v2 = (it++)->getInt();
+        if (op == -1) {
+            value = value * v2;
+        } else if (op == 0 and v2 != 0) { // TODO maybe floating point exception
+            value = value / v2;
+        } else if (op == 1) {
+            value = value % v2;
+        }
     }
-    else{
-        intValue = int1;
+    return value;
+}
+
+std::string AddExpression::getString() const {
+    // there aren't */% operators in strings
+    // TODO maybe if list.size() > 1 => cout warning
+    return list.front().getString();
+}
+
+bool AddExpression::getBool() const {
+    auto it = list.cbegin();
+    bool value = (it++)->getBool();
+    while (it != list.end()) {
+        int op = (it++)->getInt();
+        bool v2 = (it++)->getBool();
+        if (op == -1) {
+            value = value and v2;
+        } else if (op == 0) {
+            value = value or v2;
+        } else if (op == 1) {
+            value = value xor v2;
+        }
     }
-    //TODO change into few simplier functions
+    return value;
 }
 
-bool AddExpression::isDoubleValue() {
-    return isDouble;
+Object &AddExpression::getObject() {
+    return list.front()->getObject();
 }
 
-bool AddExpression::getDouble() {
-    return doubleValue;
-}
 
-bool AddExpression::getInt() {
-    return intValue;
-}
 
 

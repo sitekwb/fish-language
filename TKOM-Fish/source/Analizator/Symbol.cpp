@@ -3,7 +3,8 @@
 //
 
 #include <Analizator/EndOfFileException.h>
-#include <Analizator/SymbolType.h>
+#include <Analizator/Interpreter/ObjectType.h>
+#include <Analizator/Interpreter/NotImplementedException.h>
 #include "Analizator/Symbol.h"
 #include "Analizator/Tokens/TokenDeleter.h"
 
@@ -88,16 +89,17 @@ void Symbol::setLexer(LexerUP lexer_) {
     lexer = move(lexer_);
 }
 
-LexerUP Symbol::recoverLexer() {
-    return move(lexer);
-}
-
 void Symbol::reset(TokenUPD &token) {
     TokenDeleter::setTokenSaving(false);
     token.reset();
     TokenDeleter::setTokenSaving(true);
 }
 
-SymbolType Symbol::getType() {
-    return SymbolType::BaseType;
+
+Object &Symbol::getObject() {
+    throw NotImplementedException();
+}
+
+ObjectType Symbol::getObjectType() const {
+    return ObjectType::OT_Symbol;
 }

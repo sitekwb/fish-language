@@ -12,3 +12,7 @@ UnaryNot::UnaryNot() {
 void UnaryNot::execute(Env &env) {
 //nothing
 }
+
+bool UnaryNot::getBool() const {
+    return notToken.operator bool();
+}

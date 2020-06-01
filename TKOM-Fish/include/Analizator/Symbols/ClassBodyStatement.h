@@ -14,11 +14,13 @@ class ClassBodyStatement : public Symbol{
 protected:
     MemberDefinitionUP memberDefinition;
     FunctionDefinitionUP functionDefinition;
+    // INTERP
+    Object &object;
 public:
     ClassBodyStatement();
-    std::pair<std::string, Symbol&> getClassBodyStatementSymbol();
     void execute(Env &env) override;
-
+    std::string getName() const override;
+    Object &getObject() override;
 };
 using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
 

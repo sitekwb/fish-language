@@ -14,3 +14,7 @@ void Default::execute(Env &env) {
     }
     term->execute(env);
 }
+
+ObjectType Default::getObjectType() const {
+    return ObjectType::OT_Default;
+}

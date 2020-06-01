@@ -35,6 +35,33 @@ void ConditionalExpression::execute(Env &env) {
     value = val1;
 }
 
-bool ConditionalExpression::getValue() {
+double ConditionalExpression::getDouble() const {
+    return objectList.front().getDouble();
+}
+
+int ConditionalExpression::getInt() const {
+    return objectList.front().getInt();
+}
+
+std::string ConditionalExpression::getString() const {
+    return objectList.front().getString();
+}
+
+bool ConditionalExpression::getBool() const {
+    auto it = objectList.begin();
+    bool value = (it++)->getBool();
+    while (it != objectList.end()) {
+        bool v2 = (it++)->getBool();
+        value = value or v2;
+    }
     return value;
 }
+
+ObjectType ConditionalExpression::getObjectType() const {
+    return ObjectType::OT_ConditionalExpression;
+}
+
+Object &ConditionalExpression::getObject() {
+    return objectList.front();
+}
+

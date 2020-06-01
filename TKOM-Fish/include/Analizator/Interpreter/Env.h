@@ -8,10 +8,8 @@
 
 #include <map>
 #include <string>
-#include <Analizator/Symbol.h>
+#include "Object.h"
 #include "GlobalEnv.h"
-
-class Symbol;
 
 class Env;
 using EnvUP = std::unique_ptr<Env>;
@@ -21,7 +19,7 @@ class Env : public GlobalEnv{
     bool isGlobalEnv() const override;
 public:
     Env(GlobalEnv &parentEnv);
-    void setGlobalSymbol(std::string name, Object &symbol);
+    void setGlobalSymbol(std::string name, Object &object);
     void destroySymbol(std::string name);
     Object &operator[](std::string name) override;
 };

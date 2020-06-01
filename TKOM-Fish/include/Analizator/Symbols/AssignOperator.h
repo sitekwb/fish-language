@@ -11,11 +11,12 @@
 class AssignOperator: public Symbol{
 protected:
     TokenUPD assignOperator;
-    std::string value;
+    //INTERP done
 public:
     AssignOperator();
     void execute(Env &env) override;
-    const std::string &getValue() const;
+    int getInt() const override;
+    ObjectType getObjectType() const override;
 };
 using AssignOperatorUP = std::unique_ptr<AssignOperator>;
 

@@ -12,9 +12,11 @@
 class AssignStatement : public Symbol{
 protected:
     AssignExpressionUP assignExpression;
+    //INTERP done
 public:
     AssignStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using AssignStatementUP = std::unique_ptr<AssignStatement>;
 

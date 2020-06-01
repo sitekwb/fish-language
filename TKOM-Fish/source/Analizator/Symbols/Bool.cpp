@@ -14,7 +14,7 @@ Bool::Bool() {
     }
 }
 
-bool Bool::getValue() {
+bool Bool::getBool() const{
     return value;
 }
 

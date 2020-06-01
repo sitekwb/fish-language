@@ -14,6 +14,7 @@ protected:
 public:
     UnaryNot();
     void execute(Env &env) override;
+    bool getBool()const override;
 };
 using UnaryNotUP = std::unique_ptr<UnaryNot>;
 

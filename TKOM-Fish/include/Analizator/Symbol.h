@@ -65,14 +65,13 @@ public:
     Symbol() = default;
 
     virtual void execute(Env &env) = 0;
-    virtual SymbolType getType();
 
     bool isConstructed();
-    static LexerUP recoverLexer();
     static void setLexer(LexerUP lexer);
     static void addToTokenList(TokenUP tokenUP);
     static void reset(TokenUPD &token);
-
+    virtual Object &getObject();
+    virtual ObjectType getObjectType() const;
     friend class Test;
 };
 

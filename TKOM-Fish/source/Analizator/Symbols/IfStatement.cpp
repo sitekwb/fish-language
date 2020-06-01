@@ -26,3 +26,7 @@ void IfStatement::execute(Env &env) {
     }
     Env::destroyLocalScope(move(localEnv));
 }
+
+ObjectType IfStatement::getObjectType() const {
+    return ObjectType::OT_IfStatement;
+}

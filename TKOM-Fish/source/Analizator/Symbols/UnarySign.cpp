@@ -11,3 +11,7 @@ UnarySign::UnarySign() {
 void UnarySign::execute(Env &env) {
 //nothing
 }
+
+bool UnarySign::getBool() const {
+    return token->getType() == PLUS;
+}

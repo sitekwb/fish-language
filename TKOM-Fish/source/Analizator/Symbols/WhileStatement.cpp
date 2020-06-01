@@ -20,7 +20,7 @@ void WhileStatement::execute(Env &env) {
     }
     Env serviceEnv(env);
     conditionalExpression->execute(serviceEnv);
-    while(conditionalExpression->getValue()){
+    while(conditionalExpression->getBool()){
         Env localEnv(serviceEnv);
         try {
             blockInstruction->execute(localEnv);

@@ -16,5 +16,37 @@ void AssignExpression::execute(Env &env) {
     }
     assignOperator->execute(env);
     conditionalExpression->execute(env);
-    env.setSymbol(identifier->getValue(), conditionalExpression->getReturnObject());
+    auto name = move(identifier->getString());
+    auto &obj = env[name];
+    double objDouble = obj.getDouble();
+    double secondDouble = conditionalExpression->getDouble();
+    double newValue;
+    switch(assignOperator->getInt()){
+        case '+':
+            newValue = objDouble+secondDouble;
+            break;
+        case '-':
+            newValue = objDouble - secondDouble;
+            break;
+        case '*':
+            newValue = objDouble * secondDouble;
+            break;
+        case '/':
+            newValue = objDouble / secondDouble;
+            break;
+        case '%':
+            newValue = obj.getInt() % conditionalExpression->getInt();
+            break;
+        default:
+            env.setSymbol(name, conditionalExpression->getObject());
+    }
+
+    if(assignOperator->getInt() != '=') {
+        newObject = std::make_unique<Term>(newValue);
+        env.setSymbol(name, *newObject);
+    }
+}
+
+ObjectType AssignExpression::getObjectType() const {
+    return ObjectType::OT_AssignExpression;
 }

@@ -40,6 +40,7 @@ protected:
 public:
     CompoundStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType()const override;
 
 };
 using CompoundStatementUP = std::unique_ptr<CompoundStatement>;

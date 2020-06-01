@@ -31,20 +31,32 @@ void ArgumentList::execute(Env &env) {
         return;
     }
     argumentOptional->execute(env);
-    argumentList.push_back(argumentOptional->getReturnObject());
+    objectList.push_back(argumentOptional->getReturnObject());
     for(auto &e:repeatListOptional){
         // we don't execute first, because it's a token
         e.second->execute(env);
-        argumentList.push_back(e.second->getReturnObject());
+        objectList.push_back(e.second->getReturnObject());
     }
 }
 
 
 ArgumentList::ArgumentList(ArgumentList &list) {
-    argumentList = list.argumentList;
+    objectList = list.objectList;
 }
 
 
 ArgumentList::ArgumentList(int) {
 
+}
+
+ObjectType ArgumentList::getObjectType() const {
+    return ObjectType::OT_ArgumentList;
+}
+
+int ArgumentList::getInt() const{
+    return objectList.size();
+}
+
+std::list<Object &> &ArgumentList::getList() {
+    return objectList;
 }

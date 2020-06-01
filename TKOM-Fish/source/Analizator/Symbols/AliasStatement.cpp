@@ -14,6 +14,9 @@ void AliasStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-
     env.setSymbol(name->getName(), *type);
+}
+
+ObjectType AliasStatement::getObjectType() const {
+    return ObjectType::OT_AliasStatement;
 }

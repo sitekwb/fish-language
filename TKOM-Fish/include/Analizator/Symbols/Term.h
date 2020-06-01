@@ -5,7 +5,6 @@
 #ifndef FISH_TERM_H
 #define FISH_TERM_H
 
-
 #include <Analizator/Symbol.h>
 #include "Bool.h"
 #include "FunctionCall.h"
@@ -41,24 +40,19 @@ protected:
     std::list<std::tuple<TokenUPD, FunctionCallUP, IdentifierUPD, TokenUPD, std::list<ArraySubscriptUP>>> repeatList;
 
     // INTERPRETER
-    std::list<Object &>objects;
+    Object &object;
 public:
-    enum TermType{
-        TT_INT,
-        TT_DOUBLE,
-        TT_STRING,
-        TT_BOOL,
-        TT_IDENTIFIER,
-        TT_CONSTANT,
-    }termType;
     Term();
+    Term(double value);
     void execute(Env &env) override;
-    friend class Test;
     int getInt();
     double getDouble();
     std::string getString();
     bool getBool();
+    ObjectType getObjectType() const;
+    Object &getObject();
 
+    friend class Test;
 };
 
 using TermUP = std::unique_ptr<Term>;
