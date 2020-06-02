@@ -26,6 +26,10 @@ void ControlStatement::execute(Env &env) {
     if (controlToken->getValue() == "continue") {
         throw ContinueException();
     }
+    if(conditionalExpressionOptional){
+        conditionalExpressionOptional->execute(env);
+
+    }
     throw ReturnException(conditionalExpressionOptional);
 }
 

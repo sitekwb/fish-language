@@ -8,17 +8,19 @@
 #include "Parameter.h"
 #include <Analizator/Symbol.h>
 
+class Parameter;
+using ParameterUP = std::unique_ptr<Parameter>;
+
 class ParameterList : public Symbol{
 protected:
     ParameterUP parameter;
     std::list<std::pair<TokenUPD, ParameterUP>> repeatList;
 
-    std::list<std::reference_wrapper<Obj>>objectList;
 public:
     ParameterList();
     void execute(Env &env) override;
     int getInt()const override;
-    std::list<std::reference_wrapper<Obj>> &getList();
+    ObjectType getObjectType() const override;
 };
 
 using ParameterListUP = std::unique_ptr<ParameterList>;

@@ -23,11 +23,12 @@ bool AddExpression::buildRepeat() {
 }
 
 void AddExpression::execute(Env &env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
     multiplyExpression->execute(env);
-    list.push_back(*multiplyExpression);
+    objectList.push_back(*multiplyExpression);
     for (auto &pair: repeatList) {
         // OPERATOR
         auto &op = pair.first;
@@ -36,9 +37,19 @@ void AddExpression::execute(Env &env) {
         auto &expr = pair.second;
         expr->execute(env);
 
-        list.push_back(*op);
-        list.push_back(*expr);
+        objectList.push_back(*op);
+        objectList.push_back(*expr);
+        evaluateList();
+        if(static_cast<Token &>((++objectList.begin())->get()) != PERCENT){
+            tokenObject = make_unique<Token>(DBL, to_string(getDoubleValue()));
+        }
+        else{
+            tokenObject = make_unique<Token>(INT, to_string(getIntValue()));
+        }
+        objectList.clear();
+        objectList.push_back(*tokenObject);
     }
+    evaluateList();
 }
 
 ObjectType AddExpression::getObjectType() const {
@@ -46,11 +57,11 @@ ObjectType AddExpression::getObjectType() const {
 }
 
 
-double AddExpression::getDouble() const {
-    auto it = list.begin();
+double AddExpression::getDoubleValue() const {
+    auto it = objectList.begin();
     double value = (it++)->get().getDouble();
-    while (it != list.end()) {
-        int op = (it++)->get().getInt();
+    while (it != objectList.end()) {
+        Token &op = static_cast<Token &>((it++)->get());
         double v2 = (it++)->get().getDouble();
         if (op == MULTIPLY) {
             value = value * v2;
@@ -63,17 +74,17 @@ double AddExpression::getDouble() const {
     return value;
 }
 
-int AddExpression::getInt() const {
-    auto it = list.begin();
+int AddExpression::getIntValue() const {
+    auto it = objectList.begin();
     int value = (it++)->get().getInt();
-    while (it != list.end()) {
-        int op = (it++)->get().getInt();
+    while (it != objectList.end()) {
+        Token &op = static_cast<Token &>((it++)->get());
         int v2 = (it++)->get().getInt();
-        if (op == -1) {
+        if (op == MULTIPLY) {
             value = value * v2;
-        } else if (op == 0 and v2 != 0) { // TODO maybe floating point exception
+        } else if (op == DIVIDE and v2 != 0) { // TODO maybe floating point exception
             value = value / v2;
-        } else if (op == 1) {
+        } else if (op == PERCENT) {
             value = value % v2;
         }
     }
@@ -83,29 +94,13 @@ int AddExpression::getInt() const {
 std::string AddExpression::getString() const {
     // there aren't */% operators in strings
     // TODO maybe if list.size() > 1 => cout warning
-    return list.front().get().getString();
+    return objectList.front().get().getString();
 }
 
 bool AddExpression::getBool() const {
-    auto it = list.cbegin();
-    bool value = (it++)->get().getBool();
-    while (it != list.end()) {
-        int op = (it++)->get().getInt();
-        bool v2 = (it++)->get().getBool();
-        if (op == -1) {
-            value = value and v2;
-        } else if (op == 0) {
-            value = value or v2;
-        } else if (op == 1) {
-            value = value xor v2;
-        }
-    }
-    return value;
+    return objectList.front().get().getBool();
 }
 
-Obj &AddExpression::getObject() {
-    return list.front().get().getObject();
-}
 
 
 

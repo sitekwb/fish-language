@@ -6,12 +6,12 @@
 
 AssignExpression::AssignExpression() {
     constructed = buildToken(identifier)
-            and buildSymbol<AssignOperator>(assignOperator)
-            and buildSymbol<ConditionalExpression>(conditionalExpression);
+                  and buildSymbol<AssignOperator>(assignOperator)
+                  and buildSymbol<ConditionalExpression>(conditionalExpression);
 }
 
 void AssignExpression::execute(Env &env) {
-    if(!constructed){
+    if (!constructed) {
         return;
     }
     assignOperator->execute(env);
@@ -21,29 +21,24 @@ void AssignExpression::execute(Env &env) {
     double objDouble = obj.getDouble();
     double secondDouble = conditionalExpression->getDouble();
     double newValue;
-    switch(assignOperator->getInt()){
-        case '+':
-            newValue = objDouble+secondDouble;
-            break;
-        case '-':
-            newValue = objDouble - secondDouble;
-            break;
-        case '*':
-            newValue = objDouble * secondDouble;
-            break;
-        case '/':
-            newValue = objDouble / secondDouble;
-            break;
-        case '%':
-            newValue = obj.getInt() % conditionalExpression->getInt();
-            break;
-        default:
-            env.setSymbol(name, conditionalExpression->getObject());
+    Token &op = static_cast<Token &>(assignOperator->evaluateObject());
+    if (op == PLUS_EQ) {
+        newValue = objDouble + secondDouble;
+    } else if (op == MINUS_EQ) {
+        newValue = objDouble - secondDouble;
+    } else if (op == MULTIPLY_EQ) {
+        newValue = objDouble * secondDouble;
+    } else if (op == DIVIDE_EQ) {
+        newValue = objDouble / secondDouble;
+    } else if (op == PERCENT_EQ) {
+        newValue = obj.getInt() % conditionalExpression->getInt();
     }
 
-    if(assignOperator->getInt() != '=') {
-        newObject = std::make_unique<Term>(newValue);
-        env.setSymbol(name, *newObject);
+    if (op == EQUAL) {
+        env.setSymbol(name, conditionalExpression->getObject());
+    } else {
+        doubleObject = std::make_unique<Token>(DBL, std::to_string(newValue));
+        env.setSymbol(name, *doubleObject);
     }
 }
 

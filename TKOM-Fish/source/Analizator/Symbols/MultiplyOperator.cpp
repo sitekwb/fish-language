@@ -12,10 +12,13 @@ MultiplyOperator::MultiplyOperator() {
 
 void MultiplyOperator::execute(Env &env) {
 //nothing
+    objectList.push_back(*operatorToken);
+    evaluateObject();
 }
 
-int MultiplyOperator::getInt() const {
-    return operatorToken->getType();
+ObjectType MultiplyOperator::getObjectType() const {
+    return ObjectType::OT_MultiplyOperator;
 }
+
 
 

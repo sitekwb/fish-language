@@ -36,6 +36,7 @@ protected:
 public:
     NewExpression();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using NewExpressionUP = std::unique_ptr<NewExpression>;
 

@@ -11,20 +11,26 @@ MultiplyExpression::MultiplyExpression() {
 }
 
 void MultiplyExpression::execute(Env &env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
-    unarySignOptional->execute(env);
+    if(unarySignOptional) {
+        unarySignOptional->execute(env);
+        objectList.push_back(*unarySignOptional);
+    }
     term->execute(env);
+    objectList.push_back(*term);
+    evaluateList();
 }
 
 
 double MultiplyExpression::getDouble() const {
-    return ((unarySignOptional) ? unarySignOptional->getDouble() : 1.0) * term->getDouble();
+    return ((static_cast<Token &>(unarySignOptional->evaluateObject()) == PLUS) ? 1.0 : -1.0) * term->getDouble();
 }
 
 int MultiplyExpression::getInt() const {
-    return ((unarySignOptional) ? unarySignOptional->getInt() : 1) * term->getInt();
+    return ((static_cast<Token &>(unarySignOptional->evaluateObject()) == PLUS) ? 1 : -1) * term->getInt();
 }
 
 ObjectType MultiplyExpression::getObjectType() const {
@@ -32,19 +38,16 @@ ObjectType MultiplyExpression::getObjectType() const {
 }
 
 std::string MultiplyExpression::getString() const {
-    return term->getString();
+    return term->getObject().getString();
 }
 
 bool MultiplyExpression::getBool() const{
-    if(unarySignOptional and not unarySignOptional->getBool()){
+    if(unarySignOptional and not unarySignOptional->getObject().getBool()){
         return not term->getBool();
     }
-    return term->getBool();
+    return term->getObject().getBool();
 }
 
-Obj &MultiplyExpression::getObject() {
-    return term->getObject();
-}
 
 
 

@@ -26,7 +26,6 @@ enum class ObjectType {
     OT_AssignStatement,
     OT_BlockInstruction,
     OT_Bool,
-    OT_ClassBody,
     OT_ClassBodyStatement,
     OT_ClassDefinition,
     OT_CompoundStatement,

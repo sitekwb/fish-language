@@ -14,18 +14,19 @@
 class NewExpression;
 using NewExpressionUP = std::unique_ptr<NewExpression>;
 
+class AssignExpression;
+using AssignExpressionUP = std::unique_ptr<AssignExpression>;
+
 class Expression : public Symbol{
 protected:
     ConditionalExpressionUP conditionalExpression;
     NewExpressionUP newExpression;
     AssignExpressionUP assignExpression;
-    //d
 public:
     Expression();
     void execute(Env &env) override;
     ObjectType getObjectType() const override;
     friend class Test;
-    Obj &getObject() override;
 };
 using ExpressionUP = std::unique_ptr<Expression>;
 

@@ -7,6 +7,8 @@
 #include <Analizator/EndOfFileException.h>
 #include <Analizator/Symbols/File.h>
 #include <Controller.h>
+#include <Analizator/Interpreter/NotImplementedException.h>
+#include <Analizator/Interpreter/SymbolNotFoundException.h>
 
 
 using namespace std;
@@ -19,8 +21,7 @@ Controller::Controller(SourceUP source_) :source(move(source_)){
 
 void Controller::execute() {
     try {
-        GlobalEnv globalEnv;
-        Env env(globalEnv);
+        Env env;
         if (source->isFileSource()) {
             FileUP file;
             file = parser->parseFile();
@@ -40,6 +41,12 @@ void Controller::execute() {
     }
     catch (Token &token) {
         cout << token.getErrorMessage();
+    }
+    catch(NotImplementedException &e){
+        std::cout << "Not implemented exception";
+    }
+    catch(SymbolNotFoundException &e){
+        std::cout << "SymbolNotFoundException";
     }
 }
 

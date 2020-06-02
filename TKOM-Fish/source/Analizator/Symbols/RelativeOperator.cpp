@@ -16,11 +16,12 @@ RelativeOperator::RelativeOperator() {
             or buildToken(">=", operatorToken);
 }
 
-const std::string &RelativeOperator::getValue() const {
-    return value;
+void RelativeOperator::execute(Env &env) {
+    objectList.push_back(*operatorToken);
+    evaluateList();
 }
 
-void RelativeOperator::execute(Env &env) {
-    //nothing
+ObjectType RelativeOperator::getObjectType() const {
+    return ObjectType::OT_RelativeOperator;
 }
 

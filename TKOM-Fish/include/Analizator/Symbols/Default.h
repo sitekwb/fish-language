@@ -9,10 +9,12 @@
 #include <Analizator/Symbol.h>
 #include "Term.h"
 
+class Term;
+using TermUP = std::unique_ptr<Term>;
+
 class Default : public Symbol{
 protected:
     TermUP term;
-    //d
 public:
     Default();
     void execute(Env &env) override;

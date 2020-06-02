@@ -19,6 +19,7 @@ protected:
     LibUP lib;
 public:
     ImportStatement();
+    void initialize(Env &env);
     void execute(Env &env) override;
     ObjectType getObjectType() const override;
 };

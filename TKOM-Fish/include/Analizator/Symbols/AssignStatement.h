@@ -12,7 +12,6 @@
 class AssignStatement : public Symbol{
 protected:
     AssignExpressionUP assignExpression;
-    //INTERP done
 public:
     AssignStatement();
     void execute(Env &env) override;

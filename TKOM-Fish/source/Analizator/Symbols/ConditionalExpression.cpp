@@ -12,6 +12,7 @@ ConditionalExpression::ConditionalExpression() {
 }
 
 bool ConditionalExpression::buildRepeat() {
+    objectList.clear();
     TokenUPD orToken;
     AndExpressionUP andExpressionTmp;
     bool constructed = buildToken("or", orToken)
@@ -23,6 +24,7 @@ bool ConditionalExpression::buildRepeat() {
 }
 
 void ConditionalExpression::execute(Env &env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
@@ -33,19 +35,9 @@ void ConditionalExpression::execute(Env &env) {
         expr->execute(env);
         objectList.push_back(*expr);
     }
+    evaluateList();
 }
 
-double ConditionalExpression::getDouble() const {
-    return objectList.front().get().getDouble();
-}
-
-int ConditionalExpression::getInt() const {
-    return objectList.front().get().getInt();
-}
-
-std::string ConditionalExpression::getString() const {
-    return objectList.front().get().getString();
-}
 
 bool ConditionalExpression::getBool() const {
     auto it = objectList.begin();
@@ -59,9 +51,5 @@ bool ConditionalExpression::getBool() const {
 
 ObjectType ConditionalExpression::getObjectType() const {
     return ObjectType::OT_ConditionalExpression;
-}
-
-Obj &ConditionalExpression::getObject() {
-    return objectList.front().get();
 }
 

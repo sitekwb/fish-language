@@ -293,4 +293,29 @@ ObjectType Token::getObjectType() const {
     }
 }
 
+int Token::getInt() const {
+    if(type == INT){
+        return stoi(value);
+    }
+    else if(type == DBL){
+        return (int)stod(value);
+    }
+    return 0;//TODO maybe warning
+}
+
+double Token::getDouble() const {
+    if(type == INT or type == DBL){
+        return stod(value);
+    }
+    return 0;//TODO maybe warning
+}
+
+std::string Token::getName() const {
+    return value;
+}
+
+bool Token::isFinal() const {
+    return true;
+}
+
 

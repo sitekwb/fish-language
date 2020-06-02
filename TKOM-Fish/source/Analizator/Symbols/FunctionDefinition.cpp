@@ -6,32 +6,31 @@
 
 using namespace std;
 
-FunctionDefinition::FunctionDefinition() {
+FunctionDefinition::FunctionDefinition() :blockInstructionCopy(blockInstruction) {
     // "def"
-    if(not buildToken("def", def)){
+    if (not buildToken("def", def)) {
         return;
     }
 
     // [Type], identifier
     IdentifierUPD id;
-    if(not buildToken(id)){
+    if (not buildToken(id)) {
         return;
     }
 
-    if(buildToken(identifier)){
+    if (buildToken(identifier)) {
         id.reset();
         buildSymbol<Type>(typeOptional);
-    }
-    else{
+    } else {
         id.reset();
         buildToken(identifier);
     }
 
     // '(', ParameterList, ')', BlockInstruction
     constructed = buildToken("(", bracketOpen)
-            and buildSymbol<ParameterList>(parameterList)
-            and buildToken(")", bracketClose)
-            and buildSymbol<BlockInstruction>(blockInstruction);
+                  and buildSymbol<ParameterList>(parameterList)
+                  and buildToken(")", bracketClose)
+                  and buildSymbol<BlockInstruction>(blockInstruction);
 }
 
 std::string FunctionDefinition::getName() {
@@ -39,10 +38,7 @@ std::string FunctionDefinition::getName() {
 }
 
 void FunctionDefinition::execute(Env &env) {
-    parameterList->execute(env);
-    for(auto &e:parameterList->getList()){
-        objectList.push_back(e.get());
-    }
+    blockInstructionCopy->execute(env);
 }
 
 int FunctionDefinition::getInt() const {
@@ -53,7 +49,14 @@ ObjectType FunctionDefinition::getObjectType() const {
     return ObjectType::OT_FunctionDefinition;
 }
 
-std::list<std::reference_wrapper<Obj>> &FunctionDefinition::getList() {
-    return objectList;
+void FunctionDefinition::initialize(Env &env) {
+    parameterList->execute(env);
+    objectList.push_back(*parameterList);
+    evaluateList();
+}
+
+FunctionDefinition::FunctionDefinition(FunctionDefinition &f)
+        : blockInstructionCopy(f.blockInstruction){
+
 }
 

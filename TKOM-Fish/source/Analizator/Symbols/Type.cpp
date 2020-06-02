@@ -10,9 +10,14 @@ Type::Type() {
 
 
 void Type::execute(Env &env) {
-//nothing
+    objectList.push_back(*identifier);
+    evaluateObject();
 }
 
 std::string Type::getName() {
     return identifier->getValue();
+}
+
+ObjectType Type::getObjectType() const {
+    return ObjectType::OT_Type;
 }

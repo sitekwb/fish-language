@@ -4,13 +4,13 @@
 
 #include "Analizator/Symbols/ClassBodyStatement.h"
 
-ClassBodyStatement::ClassBodyStatement() : object(*this) {
+ClassBodyStatement::ClassBodyStatement()  {
     if(buildSymbol<MemberDefinition>(memberDefinition)){
-        object = *memberDefinition;
+        objectList.push_back(*memberDefinition);
         constructed = true;
     }
     else if(buildSymbol<FunctionDefinition>(functionDefinition)){
-        object = *functionDefinition;
+        objectList.push_back(*functionDefinition);
         constructed = true;
     }
 }
@@ -20,13 +20,21 @@ void ClassBodyStatement::execute(Env &env) {
     if(!constructed){
         return;
     }
-    object.get().execute(env);
-}
-
-Obj &ClassBodyStatement::getObject() {
-    return object;
+    if(memberDefinition){
+        memberDefinition->execute(env);
+    }
+    else if(functionDefinition){
+        functionDefinition->execute(env);
+    }
 }
 
 std::string ClassBodyStatement::getName() const {
-    return object.get().getName();
+    if(functionDefinition){
+        return functionDefinition->getName();
+    }
+    return memberDefinition->getName();
+}
+
+ObjectType ClassBodyStatement::getObjectType() const {
+    return ObjectType::OT_ClassBodyStatement;
 }

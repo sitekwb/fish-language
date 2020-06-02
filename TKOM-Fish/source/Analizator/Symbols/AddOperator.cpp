@@ -10,10 +10,10 @@ AddOperator::AddOperator() {
 }
 
 void AddOperator::execute(Env &env) {
-//nothing
+    objectList.push_back(*operatorToken);
+    evaluateList();
 }
 
-
-bool AddOperator::getBool() {
-    return operatorToken->getType() == PLUS;
+ObjectType AddOperator::getObjectType() const {
+    return ObjectType::OT_AddOperator;
 }

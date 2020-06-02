@@ -70,8 +70,7 @@ public:
     static void setLexer(LexerUP lexer);
     static void addToTokenList(TokenUP tokenUP);
     static void reset(TokenUPD &token);
-    virtual Obj &getObject();
-    virtual ObjectType getObjectType() const;
+//    virtual ObjectType getObjectType() const;
     friend class Test;
 };
 

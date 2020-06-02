@@ -7,23 +7,36 @@
 
 
 #include <string>
-#include "GlobalEnv.h"
+#include <map>
 #include "Obj.h"
 
 class Env;
+
 using EnvUP = std::unique_ptr<Env>;
 
-class GlobalEnv;
-using GlobalEnvUP = std::unique_ptr<GlobalEnv>;
+class Obj;
 
-class Env : public GlobalEnv{
-    GlobalEnv &parentEnv;
-    bool isGlobalEnv() const override;
+using EnvironmentHashMap = std::map<std::string, std::reference_wrapper<Obj>>;
+
+class Env {
+    EnvironmentHashMap hashMap;
+    Env &parent;
+    bool isGlobal = false;
 public:
-    Env(GlobalEnv &parentEnv);
+    Env(Env &parentEnv);
+
+    Env();
+
+    Env &operator=(Env &other);
+
+    void setSymbol(std::string name, std::reference_wrapper<Obj> object);
+
+    Obj &operator[](std::string name);
+
     void setGlobalSymbol(std::string name, std::reference_wrapper<Obj> object);
+
     void destroySymbol(std::string name);
-    Obj &operator[](std::string name) override;
+
 };
 
 

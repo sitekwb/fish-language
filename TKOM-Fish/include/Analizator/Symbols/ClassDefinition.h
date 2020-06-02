@@ -9,9 +9,13 @@
 #include <Analizator/Symbol.h>
 #include "Type.h"
 #include "ClassBodyStatement.h"
+#include "ArgumentList.h"
 
 class ClassBodyStatement;
 using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
+
+class ArgumentList;
+using ArgumentListUP = std::unique_ptr<ArgumentList>;
 
 class ClassDefinition : public Symbol{
 protected:
@@ -22,15 +26,15 @@ protected:
     std::list<ClassBodyStatementUP> classBodyStatementList;
     TokenUPD blockClose;
 
-    GlobalEnv symbols;
+    //INTERPRETER
+    Env symbols;
 public:
-    std::string getName();
     ClassDefinition();
     ClassDefinition(ClassDefinition &cd);
     void executeConstructor(Env &env, ArgumentListUP &argumentList);
     void execute(Env &env) override;
     ObjectType getObjectType() const override;
-
+    std::string getName() const;
 };
 using ClassDefinitionUP = std::unique_ptr<ClassDefinition>;
 

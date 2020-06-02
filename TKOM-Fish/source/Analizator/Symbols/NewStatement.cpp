@@ -14,3 +14,7 @@ void NewStatement::execute(Env &env) {
     }
     newExpression->execute(env);
 }
+
+ObjectType NewStatement::getObjectType() const {
+    return ObjectType::OT_NewStatement;
+}

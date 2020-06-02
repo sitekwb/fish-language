@@ -13,6 +13,8 @@ void Argument::execute(Env &env) {
         return;
     }
     conditionalExpression->execute(env);
+    objectList.push_back(*conditionalExpression);
+    evaluateList();
 }
 
 ObjectType Argument::getObjectType() const {

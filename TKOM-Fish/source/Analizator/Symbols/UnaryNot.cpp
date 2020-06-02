@@ -10,9 +10,14 @@ UnaryNot::UnaryNot() {
 }
 
 void UnaryNot::execute(Env &env) {
-//nothing
+    objectList.push_back(*notToken);
+    evaluateList();
 }
 
 bool UnaryNot::getBool() const {
     return notToken.operator bool();
+}
+
+ObjectType UnaryNot::getObjectType() const {
+    return ObjectType::OT_UnaryNot;
 }

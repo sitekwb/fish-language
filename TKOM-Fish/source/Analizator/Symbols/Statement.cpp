@@ -24,3 +24,7 @@ void Statement::execute(Env &env) {
         simpleStatement->execute(env);
     }
 }
+
+ObjectType Statement::getObjectType() const {
+    return ObjectType::OT_Statement;
+}

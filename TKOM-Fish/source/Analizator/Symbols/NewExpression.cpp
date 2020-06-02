@@ -27,11 +27,13 @@ void NewExpression::execute(Env &env) {
     Token &id = (identifier) ? *identifier : *constant;
     if(conditionalExpression){
         conditionalExpression->execute(env);
+        objectList.push_back(*conditionalExpression);
+        evaluateObject();
         if(staticTokenOptional){
-            env.setGlobalSymbol(id.getString(), *conditionalExpression);
+            env.setGlobalSymbol(id.getString(), conditionalExpression->evaluateObject());
         }
         else{
-            env.setSymbol(id.getString(), *conditionalExpression);
+            env.setSymbol(id.getString(), conditionalExpression->evaluateObject());
         }
     }
     else{
@@ -49,11 +51,13 @@ void NewExpression::execute(Env &env) {
         classDefinitionObject = std::make_unique<ClassDefinition>(classDefinition);
         argumentListOptional->execute(env);
         classDefinitionObject->executeConstructor(env, argumentListOptional);
+        objectList.push_back(*classDefinitionObject);
+        evaluateObject();
         if(staticTokenOptional){
-            env.setGlobalSymbol(id.getValue(), *classDefinitionObject);
+            env.setGlobalSymbol(id.getValue(), classDefinitionObject->evaluateObject());
         }
         else{
-            env.setSymbol(id.getValue(), *classDefinitionObject);
+            env.setSymbol(id.getValue(), classDefinitionObject->evaluateObject());
         }
     }
 }
@@ -74,4 +78,8 @@ void NewExpression::buildTypeAndId() {
     else {
         constructed = buildToken(CONSTANT, constant);
     }
+}
+
+ObjectType NewExpression::getObjectType() const {
+    return ObjectType::OT_NewExpression;
 }

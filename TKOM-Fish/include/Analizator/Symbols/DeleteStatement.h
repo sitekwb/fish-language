@@ -12,7 +12,6 @@ class DeleteStatement: public Symbol{
 protected:
     TokenUPD deleteToken;
     IdentifierUPD identifier;
-    //INTERP done
 public:
     DeleteStatement();
     void execute(Env &env) override;

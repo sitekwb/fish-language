@@ -13,6 +13,9 @@
 class BlockInstruction;
 using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
 
+class ConditionalExpression;
+using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
+
 class IfStatement : public Symbol{
 protected:
     TokenUPD ifToken;

@@ -35,3 +35,7 @@ void WhileStatement::execute(Env &env) {
     }
     //done
 }
+
+ObjectType WhileStatement::getObjectType() const {
+    return ObjectType::OT_WhileStatement;
+}

@@ -28,3 +28,11 @@ void MemberDefinition::execute(Env &classSymbols) {
 std::string MemberDefinition::getName() {
     return identifier->getValue();
 }
+
+ObjectType MemberDefinition::getObjectType() const {
+    return ObjectType::OT_MemberDefinition;
+}
+
+std::string MemberDefinition::getName() const {
+    return identifier->getValue();
+}

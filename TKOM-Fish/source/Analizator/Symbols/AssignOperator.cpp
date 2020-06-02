@@ -19,10 +19,8 @@ AssignOperator::AssignOperator() {
 
 void AssignOperator::execute(Env &env) {
     // nothing
-}
-
-int AssignOperator::getInt() const {
-    return assignOperator->getValue()[0];
+    objectList.push_back(*assignOperator);
+    evaluateObject();
 }
 
 ObjectType AssignOperator::getObjectType() const {

@@ -13,7 +13,7 @@ ClassDefinition::ClassDefinition() {
             and buildToken("}", blockClose);
 }
 
-std::string ClassDefinition::getName() {
+std::string ClassDefinition::getName() const {
     return type->getName();
 }
 
@@ -25,6 +25,7 @@ void ClassDefinition::execute(Env &env) {
 }
 
 void ClassDefinition::executeConstructor(Env &env, ArgumentListUP &argumentList){
+    //TODO check
     if(not argumentList){
         argumentList = std::make_unique<ArgumentList>(0);
     }
@@ -55,3 +56,4 @@ ClassDefinition::ClassDefinition(ClassDefinition &cd) {
 ObjectType ClassDefinition::getObjectType() const {
     return ObjectType::OT_ClassDefinition;
 }
+

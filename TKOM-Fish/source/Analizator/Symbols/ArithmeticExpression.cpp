@@ -23,11 +23,12 @@ bool ArithmeticExpression::buildRepeat() {
 }
 
 void ArithmeticExpression::execute(Env &env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
     addExpression->execute(env);
-    list.push_back(*addExpression);
+    objectList.push_back(*addExpression);
     for (auto &pair: repeatList) {
         // OPERATOR
         auto &op = pair.first;
@@ -36,18 +37,19 @@ void ArithmeticExpression::execute(Env &env) {
         auto &expr = pair.second;
         expr->execute(env);
 
-        list.push_back(*op);
-        list.push_back(*expr);
+        objectList.push_back(*op);
+        objectList.push_back(*expr);
     }
+    evaluateList();
 }
 
 double ArithmeticExpression::getDouble() const{
-    auto it = list.begin();
+    auto it = objectList.begin();
     double value = (it++)->get().getDouble();
-    while (it != list.end()) {
-        bool op = (it++)->get().getBool();
+    while (it != objectList.end()) {
+        Token &op = static_cast<Token &>((it++)->get());
         double v2 = (it++)->get().getDouble();
-        if (op){
+        if (op == PLUS){
             value = value + v2;
         } else {
             value = value - v2;
@@ -56,12 +58,12 @@ double ArithmeticExpression::getDouble() const{
     return value;
 }
 int ArithmeticExpression::getInt() const{
-    auto it = list.begin();
+    auto it = objectList.begin();
     int value = (it++)->get().getInt();
-    while (it != list.end()) {
-        bool op = (it++)->get().getBool();
+    while (it != objectList.end()) {
+        Token &op = static_cast<Token &>((it++)->get());
         int v2 = (it++)->get().getInt();
-        if (op){
+        if (op == PLUS){
             value = value + v2;
         } else {
             value = value - v2;
@@ -70,12 +72,12 @@ int ArithmeticExpression::getInt() const{
     return value;
 }
 std::string ArithmeticExpression::getString() const{
-    auto it = list.begin();
+    auto it = objectList.begin();
     std::string value = (it++)->get().getString();
-    while (it != list.end()) {
-        bool op = (it++)->get().getBool();
+    while (it != objectList.end()) {
+        Token &op = static_cast<Token &>((it++)->get());
         std::string v2 = (it++)->get().getString();
-        if (op){
+        if (op == PLUS){
             value = value + v2;
         }
         // TODO maybe warning about - in strings concatenation
@@ -83,23 +85,9 @@ std::string ArithmeticExpression::getString() const{
     return value;
 }
 bool ArithmeticExpression::getBool() const{
-    auto it = list.begin();
-    bool value = (it++)->get().getBool();
-    while (it != list.end()) {
-        bool op = (it++)->get().getBool();
-        bool v2 = (it++)->get().getBool();
-        if (op){
-            value = value or v2;
-        } else {
-            value = value and not v2;
-        }
-    }
-    return value;
+    return objectList.front().get().getBool();
 }
 ObjectType ArithmeticExpression::getObjectType() const{
     return ObjectType::OT_ArithmeticExpression;
-}
-Obj &ArithmeticExpression::getObject(){
-    return list.front();
 }
 

@@ -20,4 +20,10 @@ bool Bool::getBool() const{
 
 void Bool::execute(Env &env) {
     // nothing
+    objectList.push_back(*boolToken);
+    evaluateObject();
+}
+
+ObjectType Bool::getObjectType() const {
+    return ObjectType::OT_Bool;
 }

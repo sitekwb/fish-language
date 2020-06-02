@@ -21,7 +21,7 @@ public:
     ArraySubscript();
     void execute(Env &env) override;
     int getInt() const override;
-    Obj &getObject() override;
+    ObjectType getObjectType() const override;
 };
 using ArraySubscriptUP = std::unique_ptr<ArraySubscript>;
 

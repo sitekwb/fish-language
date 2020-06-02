@@ -10,20 +10,21 @@
 #include "Type.h"
 #include "Default.h"
 
+class Default;
+using DefaultUP = std::unique_ptr<Default>;
+
 class Parameter : public Symbol{
 protected:
     TypeUP typeOptional;
     IdentifierUPD identifier;
     TokenUPD equalTokenOptional;
     DefaultUP defaultOptional;
-    //INTERP
-    std::reference_wrapper<Obj>defaultObject;
 public:
     Parameter();
     void execute(Env &env) override;
     bool getBool()const override;//returns if has default parameter
-    Obj &getObject()override;
     std::string getString()const override;
+    ObjectType getObjectType() const override;
 };
 using ParameterUP = std::unique_ptr<Parameter>;
 

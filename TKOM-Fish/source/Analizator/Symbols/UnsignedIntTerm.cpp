@@ -15,9 +15,11 @@ void UnsignedIntTerm::execute(Env &env) {
         return;
     }
     term->execute(env);
+    objectList.push_back(*term);
+    evaluateList();
 }
 
-int UnsignedIntTerm::getInt() const{
-    return term->getInt();
+ObjectType UnsignedIntTerm::getObjectType() const {
+    return ObjectType::OT_UnsignedIntTerm;
 }
 

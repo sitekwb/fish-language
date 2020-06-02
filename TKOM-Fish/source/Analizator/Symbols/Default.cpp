@@ -13,6 +13,8 @@ void Default::execute(Env &env) {
         return;
     }
     term->execute(env);
+    objectList.push_back(*term);
+    evaluateList();
 }
 
 ObjectType Default::getObjectType() const {

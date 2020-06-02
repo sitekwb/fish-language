@@ -12,14 +12,16 @@ ArraySubscript::ArraySubscript() {
 
 void ArraySubscript::execute(Env &env) {
     //nothing
+    objectList.push_back(*unsignedIntTerm);
+    evaluateList();
 }
 
 int ArraySubscript::getInt() const{
-    return unsignedIntTerm->getInt();
+    return objectList.front().get().getInt();
 }
 
-Obj &ArraySubscript::getObject() {
-    return unsignedIntTerm->getObject();
+ObjectType ArraySubscript::getObjectType() const {
+    return ObjectType::OT_ArraySubscript;
 }
 
 

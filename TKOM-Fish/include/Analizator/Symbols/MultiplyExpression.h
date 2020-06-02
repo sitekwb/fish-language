@@ -25,7 +25,6 @@ public:
     std::string getString() const override;
     bool getBool() const override;
     ObjectType getObjectType() const override;
-    Obj &getObject() override;
     friend class Test;
 };
 using MultiplyExpressionUP = std::unique_ptr<MultiplyExpression>;

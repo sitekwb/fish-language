@@ -18,9 +18,6 @@ protected:
     std::list<std::pair<TokenUPD,OrExpressionUP>> repeatList;
 
     bool buildRepeat();
-
-    //INTERPRETER done
-    std::list<std::reference_wrapper<Obj>>objectList;
 public:
     AndExpression();
     void execute(Env &env) override;
@@ -29,7 +26,6 @@ public:
     std::string getString() const override;
     bool getBool() const override;
     ObjectType getObjectType() const override;
-    Obj &getObject() override;
 
     friend class Test;
 

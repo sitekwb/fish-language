@@ -19,18 +19,16 @@ protected:
     std::list<std::pair<MultiplyOperatorUP, MultiplyExpressionUP>> repeatList;
 
     bool buildRepeat();
-    //INTERPRETER done
-    std::list<std::reference_wrapper<Obj>>list;
+    //INTERPRETER
+    TokenUP tokenObject;
 public:
     AddExpression();
     void execute(Env &env) override;
-    double getDouble() const override;
-    int getInt() const override;
+    double getDoubleValue() const;
+    int getIntValue() const;
     std::string getString() const override;
     bool getBool() const override;
     ObjectType getObjectType() const override;
-    Obj &getObject() override;
-
     friend class Test;
 };
 using AddExpressionUP = std::unique_ptr<AddExpression>;

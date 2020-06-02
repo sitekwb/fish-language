@@ -20,7 +20,7 @@ void SimpleStatement::execute(Env &env) {
     } else if (deleteStatement) {
         deleteStatement->execute(env);
     } else if (importStatement) {
-        importStatement->execute(env);
+        importStatement->initialize(env);
     } else if (newStatement) {
         newStatement->execute(env);
     } else if (assignStatement) {
@@ -30,4 +30,8 @@ void SimpleStatement::execute(Env &env) {
     } else if (aliasStatement) {
         aliasStatement->execute(env);
     }
+}
+
+ObjectType SimpleStatement::getObjectType() const {
+    return ObjectType::OT_SimpleStatement;
 }

@@ -15,7 +15,7 @@ protected:
 public:
     MultiplyOperator();
     void execute(Env &env) override;
-    int getInt() const override;
+    ObjectType getObjectType() const override;
 };
 using MultiplyOperatorUP = std::unique_ptr<MultiplyOperator>;
 

@@ -24,12 +24,13 @@ void ParameterList::execute(Env &env) {
         pair.second->execute(env);
         objectList.push_back(*pair.second);
     }
+    evaluateList();
 }
 
 int ParameterList::getInt() const {
     return objectList.size();
 }
 
-std::list<std::reference_wrapper<Obj>> &ParameterList::getList() {
-    return objectList;
+ObjectType ParameterList::getObjectType() const {
+    return ObjectType::OT_ParameterList;
 }

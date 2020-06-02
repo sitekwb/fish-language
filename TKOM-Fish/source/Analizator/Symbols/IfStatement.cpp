@@ -11,7 +11,7 @@ IfStatement::IfStatement() {
             and buildToken(")", bracketClose)
             and buildSymbol<BlockInstruction>(blockInstruction);
     if(constructed and buildToken("else", elseOptional)) {
-        constructed = constructed and buildSymbol<BlockInstruction>(blockInstruction);
+        constructed = constructed and buildSymbol<BlockInstruction>(elseBlockInstruction);
     }
 }
 
@@ -23,6 +23,10 @@ void IfStatement::execute(Env &env) {
     conditionalExpression->execute(localEnv);
     if(conditionalExpression->getBool()){
         blockInstruction->execute(localEnv);
+    }
+    else if(elseOptional){
+        Env elseEnv(env);
+        elseBlockInstruction->execute(elseEnv);
     }
 }
 

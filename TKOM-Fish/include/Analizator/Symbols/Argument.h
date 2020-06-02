@@ -15,7 +15,6 @@ using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;
 class Argument: public Symbol{
 protected:
     ConditionalExpressionUP conditionalExpression;
-    //INTERP done
 public:
     Argument();
     void execute(Env &env) override;

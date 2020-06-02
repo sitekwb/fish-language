@@ -10,6 +10,8 @@
 #include <Analizator/Symbols/Expression.h>
 #include <Analizator/Symbols/ArgumentList.h>
 #include <Analizator/Symbols/AddOperator.h>
+#include <Analizator/Symbols/SimpleStatement.h>
+#include <Analizator/Tokens/Identifier.h>
 
 
 class Test {
@@ -21,5 +23,6 @@ public:
     void run();
     void runExample1();
 };
+
 
 #endif //FISH_TEST_H

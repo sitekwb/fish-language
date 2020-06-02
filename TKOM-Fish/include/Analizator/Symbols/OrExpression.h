@@ -25,16 +25,39 @@ protected:
 
     bool buildRepeat();
     //INTERPRETER
-    std::list<std::reference_wrapper<Obj>>objectList;
+    TokenUP boolToken;
 public:
     OrExpression();
     void execute(Env &env) override;
-    double getDouble() const override;
-    int getInt() const override;
-    std::string getString() const override;
     bool getBool() const override;
     ObjectType getObjectType() const override;
-    Obj &getObject() override;
+private:
+    template <typename T>
+    bool getValue(T value, T v2, TokenType tokenType) const{
+        bool ret;
+        switch (tokenType) {
+            case EQ_EQ:
+                ret = value == v2;
+                break;
+            case NOT_EQ:
+                ret = value != v2;
+                break;
+            case LESS:
+                ret = value < v2;
+                break;
+            case MORE:
+                ret = value > v2;
+                break;
+            case LESS_EQ:
+                ret = value <= v2;
+                break;
+            case MORE_EQ:
+            default:
+                ret = value >= v2;
+                break;
+        }
+        return ret;
+    }
 };
 using OrExpressionUP = std::unique_ptr<OrExpression>;
 

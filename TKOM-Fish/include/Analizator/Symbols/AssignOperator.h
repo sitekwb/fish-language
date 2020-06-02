@@ -15,7 +15,6 @@ protected:
 public:
     AssignOperator();
     void execute(Env &env) override;
-    int getInt() const override;
     ObjectType getObjectType() const override;
 };
 using AssignOperatorUP = std::unique_ptr<AssignOperator>;

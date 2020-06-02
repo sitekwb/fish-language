@@ -16,6 +16,7 @@ public:
     Bool();
     void execute(Env &env) override;
     bool getBool() const override;
+    ObjectType getObjectType() const override;
 };
 using BoolUP = std::unique_ptr<Bool>;
 

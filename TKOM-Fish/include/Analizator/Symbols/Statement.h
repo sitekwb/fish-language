@@ -24,8 +24,8 @@ protected:
     TokenUPD semicolonOptional;
 public:
     Statement();
-
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
     friend class Test;
 };
 

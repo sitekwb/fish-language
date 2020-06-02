@@ -20,3 +20,7 @@ void AliasStatement::execute(Env &env) {
 ObjectType AliasStatement::getObjectType() const {
     return ObjectType::OT_AliasStatement;
 }
+
+bool AliasStatement::isFinal() const {
+    return true;
+}

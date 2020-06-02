@@ -30,18 +30,22 @@ void ArgumentList::execute(Env &env) {
     if(!constructed){
         return;
     }
-    argumentOptional->execute(env);
-    objectList.push_back(argumentOptional->getObject());
+    if(argumentOptional) {
+        argumentOptional->execute(env);
+        objectList.push_back(argumentOptional->getObject());
+    }
     for(auto &e:repeatListOptional){
         // we don't execute first, because it's a token
         e.second->execute(env);
         objectList.push_back(e.second->getObject());
     }
+    evaluateList();
 }
 
 
 ArgumentList::ArgumentList(ArgumentList &list) {
     objectList = list.objectList;
+    evaluateList();
 }
 
 
@@ -53,10 +57,6 @@ ObjectType ArgumentList::getObjectType() const {
     return ObjectType::OT_ArgumentList;
 }
 
-int ArgumentList::getInt() const{
+int ArgumentList::getSize() const {
     return objectList.size();
-}
-
-std::list<std::reference_wrapper<Obj>> &ArgumentList::getList() {
-    return objectList;
 }

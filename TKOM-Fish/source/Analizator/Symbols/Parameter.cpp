@@ -4,7 +4,7 @@
 
 #include "Analizator/Symbols/Parameter.h"
 
-Parameter::Parameter():defaultObject(*this) {
+Parameter::Parameter() {
     IdentifierUPD id;
     if(not buildToken(id)){
         return;
@@ -23,23 +23,29 @@ Parameter::Parameter():defaultObject(*this) {
 }
 
 void Parameter::execute(Env &env) {
-    typeOptional->execute(env);
-    defaultOptional->execute(env);
-    if(defaultOptional) {
-        defaultObject = *defaultOptional;
+    if(not constructed){
+        return;
     }
+    if(typeOptional) {
+        typeOptional->execute(env);
+    }
+    if(defaultOptional) {
+        defaultOptional->execute(env);
+        objectList.push_back(*defaultOptional);
+    }
+    evaluateList();
 }
 
 bool Parameter::getBool() const {
     return defaultOptional.operator bool();
 }
 
-Obj &Parameter::getObject() {
-    return defaultObject;
-}
-
 std::string Parameter::getString() const {
     return identifier->getValue();
+}
+
+ObjectType Parameter::getObjectType() const {
+    return ObjectType::OT_Parameter;
 }
 
 

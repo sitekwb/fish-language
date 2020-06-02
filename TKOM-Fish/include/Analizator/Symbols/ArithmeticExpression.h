@@ -19,8 +19,6 @@ protected:
     std::list<std::pair<AddOperatorUP, AddExpressionUP>> repeatList;
 
     bool buildRepeat();
-    //INTERPRETER done
-    std::list<std::reference_wrapper<Obj>>list;
 public:
     ArithmeticExpression();
     void execute(Env &env) override;
@@ -30,7 +28,6 @@ public:
     std::string getString() const override;
     bool getBool() const override;
     ObjectType getObjectType() const override;
-    Obj &getObject() override;
 };
 using ArithmeticExpressionUP = std::unique_ptr<ArithmeticExpression>;
 

@@ -10,7 +10,7 @@
 #include <Analizator/Interpreter/ReturnException.h>
 #include <Analizator/Symbols/FunctionDefinition.h>
 
-FunctionCall::FunctionCall() : object(*this) {
+FunctionCall::FunctionCall() {
     constructed = buildToken(identifier)
                   and buildToken("(", bracketOpen)
                   and buildSymbol<ArgumentList>(argumentList)
@@ -18,10 +18,21 @@ FunctionCall::FunctionCall() : object(*this) {
 }
 
 void FunctionCall::execute(Env &env) {
-    auto &function = static_cast<FunctionDefinition &>(env[identifier->getValue()]);
-    GlobalEnv argumentEnv;
-    auto &parameterList = function.getList();
-    auto &argList = argumentList->getList();
+    Obj &obj = env[identifier->getValue()];
+    argumentList->execute(env);
+    auto &argList = argumentList->evaluateList();
+    if(obj.getObjectType() == ObjectType::OT_Lib){
+        Env localEnv(env);
+        int i = 0;
+        for(auto &e:argList){
+            localEnv.setSymbol("__"+std::to_string(i)+"__", e);
+        }
+        static_cast<Lib &>(obj).execute(localEnv);
+        return;
+    }
+    auto &function = static_cast<FunctionDefinition &>(obj);
+    Env argumentEnv;
+    auto &parameterList = function.evaluateList();
     auto aIt = argList.begin();
     for (auto pIt = parameterList.begin(); pIt != parameterList.end(); ++pIt, ++aIt) {
         Obj &parameter = pIt->get();
@@ -31,30 +42,33 @@ void FunctionCall::execute(Env &env) {
                 argumentEnv.setSymbol(parameter.getString(), defaultP);
             }
         }
-        Argument &argument = static_cast<Argument &>(aIt->get());
-        argumentEnv.setSymbol(parameter.getString(), argument);
+        Argument &argument = static_cast<Argument &>(aIt->get());//TODO maybe later type checking here
+        argumentEnv.setSymbol(parameter.getString(), argument.getObject());
     }
 
     Env funcEnv(argumentEnv);
+    funcCopy = std::make_unique<FunctionDefinition>(function);
     try {
-        function.execute(funcEnv);
+        funcCopy->execute(funcEnv);
     }
     catch (ReturnException &e) {
-        object = *e.getReturnObject();
+        auto &condExprUP = e.getReturnObject();
+        if(condExprUP) {
+            objectList.clear();
+            objectList.push_back(*condExprUP);
+            evaluateObject();
+        }
     }
 }
 
 
-FunctionCall::FunctionCall(std::string name, ArgumentList &otherList) : object(*this) {
+FunctionCall::FunctionCall(std::string name, ArgumentList &otherList) {
     identifier = IdentifierUPD(new Identifier(name), TokenDeleter());
     argumentList = std::make_unique<ArgumentList>(otherList);
-}
-
-Obj &FunctionCall::getObject() {
-    return object;
 }
 
 ObjectType FunctionCall::getObjectType() const {
     return ObjectType::OT_FunctionCall;
 }
+
 

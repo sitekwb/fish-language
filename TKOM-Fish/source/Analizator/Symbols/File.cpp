@@ -29,7 +29,6 @@ void File::execute(Env &env) {
     for (auto &e: filePartList) {
         e->execute(env);
     }
-    //done
 }
 
 ObjectType File::getObjectType() const {

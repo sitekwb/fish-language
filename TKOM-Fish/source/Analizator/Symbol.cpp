@@ -94,12 +94,7 @@ void Symbol::reset(TokenUPD &token) {
     token.reset();
     TokenDeleter::setTokenSaving(true);
 }
-
-
-Obj &Symbol::getObject() {
-    throw NotImplementedException();
-}
-
-ObjectType Symbol::getObjectType() const {
-    return ObjectType::OT_Symbol;
-}
+//
+//ObjectType Symbol::getObjectType() const {
+//    return ObjectType::OT_Symbol;
+//}

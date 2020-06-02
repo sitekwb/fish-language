@@ -17,3 +17,12 @@ Identifier::Identifier(Token &token) : Token(IDENTIFIER, token.getValue(), token
 Identifier::Identifier(std::string value) : Token(IDENTIFIER, move(value)){
 
 }
+
+
+ObjectType Identifier::getObjectType() const {
+    return ObjectType::OT_IDENTIFIER;
+}
+
+bool Identifier::isFinal() const {
+    return true;
+}

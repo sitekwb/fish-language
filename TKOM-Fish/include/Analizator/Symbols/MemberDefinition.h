@@ -10,6 +10,9 @@
 #include "Type.h"
 #include "ArgumentList.h"
 
+class ArgumentList;
+using ArgumentListUP = std::unique_ptr<ArgumentList>;
+
 class MemberDefinition : public Symbol{
 protected:
     TokenUPD publicToken;
@@ -24,6 +27,8 @@ public:
     std::string getName();
     MemberDefinition();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
+    std::string getName() const;
 };
 using MemberDefinitionUP = std::unique_ptr<MemberDefinition>;
 

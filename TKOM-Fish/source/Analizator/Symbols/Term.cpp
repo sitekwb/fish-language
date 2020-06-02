@@ -8,7 +8,7 @@
 
 using namespace std;
 
-Term::Term() : object(*this) {
+Term::Term() {
     constructed = buildToken(INT, intToken)
                   or buildToken(DBL, doubleToken)
                   or buildToken(STR, stringToken)
@@ -39,33 +39,35 @@ Term::Term() : object(*this) {
 }
 
 void Term::execute(Env &env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
     if (intToken) {
-        object = *intToken;
+        objectList.push_back(*intToken);
     } else if (doubleToken) {
-        object = *doubleToken;
+        objectList.push_back(*doubleToken);
     } else if (stringToken) {
-        object = *stringToken;
+        objectList.push_back(*stringToken);
     } else if (boolSymbol) {
         boolSymbol->execute(env);
-        object = *boolSymbol;
+        objectList.push_back(*boolSymbol);
     } else if (arithmeticExpression) {
         arithmeticExpression->execute(env);
-        object = arithmeticExpression->getObject();
+        objectList.push_back(arithmeticExpression->getObject());
     } else if (functionCall) {
         functionCall->execute(env);
-        object = functionCall->getObject();
+        objectList.push_back(functionCall->getObject());
     } else if (identifier) {
-        object = *identifier;
+        objectList.push_back(*identifier);
     } else if (constant) {
-        object = *constant;
+        objectList.push_back(*constant);
     }
 
     if (not arraySubscriptList.empty()) {
         for (auto &arraySubscript: arraySubscriptList) {
-            object = object.get()[arraySubscript->getInt()];
+            objectList.clear();
+            objectList.push_back(evaluateObject()[arraySubscript->getInt()]);
         }
     }
     for (auto &e:repeatList) {
@@ -74,44 +76,33 @@ void Term::execute(Env &env) {
         auto &cn = std::get<3>(e);
         if (fc) {
             fc->execute(env);
-            object = fc->getObject();
+            objectList.clear();
+            objectList.push_back(fc->getObject());
         } else if (id) {
-            object = *id;
+            objectList.clear();
+            objectList.push_back(*id);
         } else if (cn) {
-            object = *cn;
+            objectList.clear();
+            objectList.push_back(*cn);
         }
     }
+    evaluateList();
     // at the end get object from variable name
-    if (object.get().getObjectType() == ObjectType::OT_IDENTIFIER or object.get().getObjectType() == ObjectType::OT_CONSTANT) {
-        object = env[object.get().getName()];
+    auto ot = getObject().getObjectType();
+    if (ot == ObjectType::OT_IDENTIFIER or
+        ot == ObjectType::OT_CONSTANT) {
+        Obj &obj = env[static_cast<Token &>(getObject()).getValue()];
+        objectList.clear();
+        objectList.push_back(obj);
     }
-}
-
-int Term::getInt() {
-    return object.get().getInt();
-}
-
-double Term::getDouble() {
-    return object.get().getDouble();
-}
-
-std::string Term::getString() {
-    return object.get().getString();
-}
-
-bool Term::getBool() {
-    return object.get().getBool();
-}
-
-Obj &Term::getObject() {
-    return object;
 }
 
 ObjectType Term::getObjectType() const {
     return ObjectType::OT_Term;
 }
 
-Term::Term(double value) : object(*this) {
+Term::Term(double value) {
     doubleToken = TokenUPD(new Token(DBL, to_string(value)), TokenDeleter());
     constructed = true;
 }
+

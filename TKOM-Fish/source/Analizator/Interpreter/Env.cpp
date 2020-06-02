@@ -8,19 +8,16 @@
 using namespace std;
 
 
-Env::Env(GlobalEnv &parentEnv_) : parentEnv(parentEnv_){
+Env::Env(Env &parentEnv_) : parent(parentEnv_){
 
 }
 
 void Env::setGlobalSymbol(std::string name, std::reference_wrapper<Obj> object) {
-    auto &globalEnv = parentEnv;
-    while(not globalEnv.isGlobalEnv()){
-        globalEnv = static_cast<Env &>(globalEnv).parentEnv;
+    auto &prec = parent;
+    while(not prec.isGlobal){
+        prec = prec.parent;
     }
-    if(globalEnv.hashMap.count(name)){
-        //TODO if existing
-    }
-    globalEnv.hashMap.insert({move(name), object});
+    prec.setSymbol(move(name), move(object));
 }
 
 Obj &Env::operator[](std::string name) {
@@ -28,17 +25,35 @@ Obj &Env::operator[](std::string name) {
     if(it != hashMap.end()){
         return it->second;
     }
-    it = parentEnv.hashMap.find(name);
-    if(parentEnv.isGlobalEnv() and it == parentEnv.hashMap.end()){
+    it = parent.hashMap.find(name);
+    if(parent.isGlobal and it == parent.hashMap.end()){
         throw SymbolNotFoundException(name);
     }
-    return static_cast<Env &>(parentEnv)[name];
-}
-
-bool Env::isGlobalEnv() const{
-    return false;
+    return parent[name];
 }
 
 void Env::destroySymbol(std::string name) {
-    hashMap.erase(move(name));
+    if(hashMap.find(name) != hashMap.end()) {
+        hashMap.erase(move(name));
+    }
+    if(isGlobal){
+        return;
+    }
+    parent.destroySymbol(move(name));
+}
+
+Env::Env() : isGlobal(true), parent(*this){
+
+}
+
+Env &Env::operator=(Env &other) {
+    hashMap = other.hashMap;
+    return *this;
+}
+
+void Env::setSymbol(std::string name, std::reference_wrapper<Obj> object) {
+    if(hashMap.find(name) != hashMap.end()){
+        //TODO if existing
+    }
+    hashMap.insert({move(name), object});
 }

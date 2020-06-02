@@ -3,7 +3,7 @@
 //
 
 #include "Analizator/Symbols/OrExpression.h"
-
+#include <Analizator/Interpreter/Obj.h>
 
 using namespace std;
 
@@ -27,6 +27,7 @@ bool OrExpression::buildRepeat() {
 }
 
 void OrExpression::execute(Env &env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
@@ -44,61 +45,64 @@ void OrExpression::execute(Env &env) {
         op->execute(env);
         if(unaryNot) {
             unaryNot->execute(env);
+            objectList.push_back(*unaryNot);
         }
         expr->execute(env);
 
         objectList.push_back(*op);
-        objectList.push_back(*unaryNot);
         objectList.push_back(*expr);
+
+    }
+    evaluateList();
+    if(objectList.size() > 1) {
+        boolToken = make_unique<Token>((getBool()) ? "true" : "false");
+        objectList.clear();
+        objectList.push_back(*boolToken);
+        evaluateList();
     }
 }
 
-double OrExpression::getDouble() const {
-    return objectList.front().get().getDouble();
-}
-
-int OrExpression::getInt() const {
-    return objectList.front().get().getInt();
-}
-
-std::string OrExpression::getString() const {
-    return objectList.front().get().getString();
-}
 
 bool OrExpression::getBool() const {
     auto it = objectList.begin();
-    bool unaryNot = (it++)->get().getBool();
-    bool value = (it++)->get().getBool();
+    std::reference_wrapper<Obj> first = (it++)->get();
+    auto &notToken = static_cast<Token &>(first.get());
+    bool unaryNot = notToken == Token(KEYWORD, "not") or notToken == NOT;
+    Obj &valueObject = first;
+    bool value;
+    bool isBool = false;
+    if(unaryNot) {
+        valueObject = (it++)->get();
+    }
     if (unaryNot) {
-        value = not value;
+        value = not valueObject.getBool();
+        isBool = true;
     }
     while (it != objectList.end()) {
-        int op = (it++)->get().getInt();
-        unaryNot = (it++)->get().getBool();
-        bool v2 = (it++)->get().getBool();
-        switch (op) {
-            case EQ_EQ:
-                value = value == v2;
-                break;
-            case NOT_EQ:
-                value = value != v2;
-                break;
-            case LESS:
-                value = value < v2;
-                break;
-            case MORE:
-                value = value > v2;
-                break;
-            case LESS_EQ:
-                value = value <= v2;
-                break;
-            case MORE_EQ:
-            default:
-                value = value >= v2;
-                break;
+        Token &op = static_cast<Token &>((it++)->get());
+        first = (it++)->get();
+        unaryNot = first.get().getObjectType() == ObjectType::OT_UnaryNot;
+        Obj &valueObject2 = first;
+        bool v2, isBool2 = false;
+        if(unaryNot) {
+            valueObject2 = (it++)->get();
         }
         if (unaryNot) {
-            value = not value;
+            v2 = not valueObject.getBool();
+            isBool2 = true;
+        }
+        ObjectType ot1 = valueObject.getObjectType(), ot2=valueObject2.getObjectType();
+        if(isBool or isBool2 or ot1 == ObjectType::OT_Bool or ot2 == ObjectType::OT_Bool){
+            value = getValue<bool>((isBool)?value:valueObject.getBool(), (isBool2)?v2:valueObject.getBool(), op.getType());
+        }
+        else if(ot1 == ObjectType::OT_DOUBLE or ot2 == ObjectType::OT_DOUBLE){
+            value = getValue<double>(valueObject.getDouble(), valueObject2.getDouble(), op.getType());
+        }
+        else if(ot1 == ObjectType::OT_INT and ot2 == ObjectType::OT_INT){
+            value = getValue<int>(valueObject.getInt(), valueObject2.getInt(), op.getType());
+        }
+        else if(ot1 == ObjectType::OT_STRING and ot2 == ObjectType::OT_STRING){
+            value = getValue<std::string>(valueObject.getString(), valueObject2.getString(), op.getType());
         }
     }
     return value;
@@ -106,8 +110,4 @@ bool OrExpression::getBool() const {
 
 ObjectType OrExpression::getObjectType() const {
     return ObjectType::OT_OrExpression;
-}
-
-Obj &OrExpression::getObject() {
-    return objectList.front();
 }

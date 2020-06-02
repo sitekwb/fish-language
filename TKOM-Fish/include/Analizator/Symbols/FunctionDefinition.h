@@ -14,6 +14,9 @@
 class BlockInstruction;
 using BlockInstructionUP = std::unique_ptr<BlockInstruction>;
 
+class ParameterList;
+using ParameterListUP = std::unique_ptr<ParameterList>;
+
 class FunctionDefinition : public Symbol {
     TokenUPD def;
     TypeUP typeOptional;
@@ -22,15 +25,16 @@ class FunctionDefinition : public Symbol {
     ParameterListUP parameterList;
     TokenUPD  bracketClose;
     BlockInstructionUP blockInstruction;
-    // INTERP
-    std::list<std::reference_wrapper<Obj>>objectList;
+    // INTERPRETER
+    BlockInstructionUP &blockInstructionCopy;
 public:
     std::string getName();
     FunctionDefinition();
+    FunctionDefinition(FunctionDefinition &f);
+    void initialize(Env &env);
     void execute(Env &env) override;
     int getInt()const override;
     ObjectType getObjectType() const override;
-    std::list<std::reference_wrapper<Obj>>&getList();
 };
 using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
 

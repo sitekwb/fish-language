@@ -52,6 +52,11 @@ public:
 
     ObjectType getObjectType() const override;
     friend class Test;
+    bool isFinal() const override;
+
+    int getInt()const override;
+    double getDouble()const override;
+    std::string getName()const;
 };
 
 

@@ -23,6 +23,7 @@ protected:
 public:
     WhileStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using WhileStatementUP = std::unique_ptr<WhileStatement>;
 

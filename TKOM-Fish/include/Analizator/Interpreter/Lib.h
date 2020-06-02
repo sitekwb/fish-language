@@ -9,9 +9,14 @@
 #include <string>
 
 class Lib : public Obj{
+    std::string name;
+
+    void initStd();
 public:
     Lib(std::string name);
+    void execute(Env &env);
     ObjectType getObjectType()const override;
+    bool isFinal() const override;
 };
 using LibUP = std::unique_ptr<Lib>;
 

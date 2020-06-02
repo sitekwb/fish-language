@@ -18,6 +18,7 @@ protected:
 public:
     NewStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
 };
 using NewStatementUP = std::unique_ptr<NewStatement>;
 

@@ -15,7 +15,7 @@ protected:
 public:
     AddOperator();
     void execute(Env &env) override;
-    bool getBool();
+    ObjectType getObjectType() const override;
     friend class Test;
 
 };

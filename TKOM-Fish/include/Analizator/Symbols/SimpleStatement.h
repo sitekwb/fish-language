@@ -25,6 +25,9 @@ using ExpressionStatementUP = std::unique_ptr<ExpressionStatement>;
 class NewStatement;
 using NewStatementUP = std::unique_ptr<NewStatement>;
 
+class AssignStatement;
+using AssignStatementUP = std::unique_ptr<AssignStatement>;
+
 
 class SimpleStatement : public Symbol{
 protected:
@@ -38,6 +41,7 @@ protected:
 public:
     SimpleStatement();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
     friend class Test;
 };
 using SimpleStatementUP = std::unique_ptr<SimpleStatement>;

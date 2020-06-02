@@ -15,7 +15,7 @@ protected:
 public:
     RelativeOperator();
     void execute(Env &env) override;
-    const std::string &getValue() const;
+    ObjectType getObjectType() const override;
 };
 using RelativeOperatorUP = std::unique_ptr<RelativeOperator>;
 

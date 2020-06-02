@@ -15,7 +15,7 @@ public:
     UnarySign();
     void execute(Env &env) override;
     bool getBool()const override;
-
+    ObjectType getObjectType() const override;
 };
 using UnarySignUP = std::unique_ptr<UnarySign>;
 

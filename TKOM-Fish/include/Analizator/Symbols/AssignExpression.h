@@ -17,8 +17,8 @@ protected:
     AssignOperatorUP assignOperator;
     ConditionalExpressionUP conditionalExpression;
 
-    //INTERPRETER done
-    TermUP newObject;
+    //INTERPRETER
+    TokenUP doubleObject;
 public:
     AssignExpression();
     void execute(Env &env) override;

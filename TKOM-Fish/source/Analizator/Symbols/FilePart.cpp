@@ -19,6 +19,7 @@ void FilePart::execute(Env &env) {
         return;
     }
     if(functionDefinition) {
+        functionDefinition->initialize(env);
         env.setSymbol(functionDefinition->getName(), *functionDefinition);
     }
     else if(classDefinition) {
@@ -28,7 +29,6 @@ void FilePart::execute(Env &env) {
     else if(statement) {
         statement->execute(env);
     }
-    //done
 }
 
 ObjectType FilePart::getObjectType() const {

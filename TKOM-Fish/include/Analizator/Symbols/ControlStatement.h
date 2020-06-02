@@ -13,7 +13,6 @@ class ControlStatement : public Symbol{
 protected:
     TokenUPD controlToken;
     ConditionalExpressionUP conditionalExpressionOptional;
-    //INTERP done
 public:
     ControlStatement();
     void execute(Env &env) override;

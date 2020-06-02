@@ -15,6 +15,8 @@ public:
 
     Identifier(Token &token);
     Identifier(std::string value);
+    ObjectType getObjectType() const override;
+    bool isFinal() const override;
     friend class Test;
 };
 

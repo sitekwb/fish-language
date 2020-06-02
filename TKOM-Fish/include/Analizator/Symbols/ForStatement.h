@@ -12,9 +12,10 @@
 #include "BlockInstruction.h"
 
 class Expression;
+
 using ExpressionUP = std::unique_ptr<Expression>;
 
-class ForStatement : public Symbol{
+class ForStatement : public Symbol {
 protected:
     TokenUPD forToken;
     TokenUPD bracketOpen;
@@ -27,9 +28,12 @@ protected:
     BlockInstructionUP blockInstruction;
 public:
     ForStatement();
+
     void execute(Env &env) override;
+
     ObjectType getObjectType() const override;
 };
+
 using ForStatementUP = std::unique_ptr<ForStatement>;
 
 #endif //FISH_FORSTATEMENT_H

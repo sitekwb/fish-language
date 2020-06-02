@@ -9,6 +9,11 @@
 #include <Analizator/Symbol.h>
 #include "BlockInstruction.h"
 
+
+
+class UnsignedIntTerm;
+using UnsignedIntTermUP = std::unique_ptr<UnsignedIntTerm>;
+
 class ForiStatement : public Symbol{
 protected:
     TokenUPD foriToken;

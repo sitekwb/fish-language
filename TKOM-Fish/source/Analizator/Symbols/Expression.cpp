@@ -23,14 +23,6 @@ void Expression::execute(Env &env) {
     }
 }
 
-Obj &Expression::getObject() {
-    if(conditionalExpression){
-        return conditionalExpression->getObject();
-    }
-    return newExpression->getObject();
-    //done
-}
-
 ObjectType Expression::getObjectType() const {
     return ObjectType::OT_Expression;
 }

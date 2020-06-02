@@ -9,9 +9,14 @@ UnarySign::UnarySign() {
 }
 
 void UnarySign::execute(Env &env) {
-//nothing
+    objectList.push_back(*token);
+    evaluateList();
 }
 
 bool UnarySign::getBool() const {
     return token->getType() == PLUS;
+}
+
+ObjectType UnarySign::getObjectType() const {
+    return ObjectType::OT_UnarySign;
 }

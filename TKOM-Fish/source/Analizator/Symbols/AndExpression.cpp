@@ -23,6 +23,7 @@ bool AndExpression::buildRepeat() {
 }
 
 void AndExpression::execute(Env& env) {
+    objectList.clear();
     if (!constructed) {
         return;
     }
@@ -34,6 +35,7 @@ void AndExpression::execute(Env& env) {
         expr->execute(env);
         objectList.push_back(*expr);
     }
+    evaluateList();
 }
 
 double AndExpression::getDouble() const {
@@ -60,9 +62,5 @@ bool AndExpression::getBool() const {
 
 ObjectType AndExpression::getObjectType() const {
     return ObjectType::OT_AndExpression;
-}
-
-Obj &AndExpression::getObject() {
-    return objectList.front();
 }
 

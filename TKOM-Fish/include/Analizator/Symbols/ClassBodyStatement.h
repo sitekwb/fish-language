@@ -13,17 +13,19 @@
 class FunctionDefinition;
 using FunctionDefinitionUP = std::unique_ptr<FunctionDefinition>;
 
+class MemberDefinition;
+using MemberDefinitionUP = std::unique_ptr<MemberDefinition>;
+
+
 class ClassBodyStatement : public Symbol{
 protected:
     MemberDefinitionUP memberDefinition;
     FunctionDefinitionUP functionDefinition;
-    // INTERP
-    std::reference_wrapper<Obj> object;
 public:
     ClassBodyStatement();
     void execute(Env &env) override;
-    std::string getName() const override;
-    Obj &getObject() override;
+    std::string getName() const;
+    ObjectType getObjectType() const override;
 };
 using ClassBodyStatementUP = std::unique_ptr<ClassBodyStatement>;
 

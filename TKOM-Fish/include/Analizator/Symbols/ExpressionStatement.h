@@ -15,7 +15,6 @@ using ExpressionUP = std::unique_ptr<Expression>;
 class ExpressionStatement : public Symbol{
 protected:
     ExpressionUP expression;
-    //d
 public:
     ExpressionStatement();
     void execute(Env &env) override;

@@ -8,29 +8,29 @@
 
 ForiStatement::ForiStatement() {
     constructed = buildToken("fori", foriToken)
-            and buildToken("(", bracketOpen)
-            and buildSymbol<UnsignedIntTerm>(unsignedIntTerm)
-            and buildToken(")", bracketClose)
-            and buildSymbol<BlockInstruction>(blockInstruction);
+                  and buildToken("(", bracketOpen)
+                  and buildSymbol<UnsignedIntTerm>(unsignedIntTerm)
+                  and buildToken(")", bracketClose)
+                  and buildSymbol<BlockInstruction>(blockInstruction);
 }
 
 void ForiStatement::execute(Env &env) {
-    if(!constructed){
+    if (!constructed) {
         return;
     }
-
     unsignedIntTerm->execute(env);
-    for(int i=0; i<unsignedIntTerm->getInt();i++){
-        Env localEnv = Env(env);
+    int n = unsignedIntTerm->getInt();
+    for (int i = 0; i < n; i++) {
+        Env localEnv(env);
         Token token(INT, std::to_string(i));
         localEnv.setSymbol("i", token);
         try {
             blockInstruction->execute(localEnv);
         }
-        catch(BreakException &e){
+        catch (BreakException &e) {
             break;
         }
-        catch(ContinueException &e){
+        catch (ContinueException &e) {
 
         }
     }

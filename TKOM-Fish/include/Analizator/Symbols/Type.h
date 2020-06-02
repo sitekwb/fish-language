@@ -15,6 +15,8 @@ public:
     Type();
     std::string getName();
     void execute(Env &env) override;
+    ObjectType getObjectType() const override;
+
     friend class Test;
 };
 using TypeUP = std::unique_ptr<Type>;

@@ -19,18 +19,12 @@ class ConditionalExpression : public Symbol {
 
     bool buildRepeat();
     //INTERPRETER
-    std::list<std::reference_wrapper<Obj>> objectList;
 public:
     ConditionalExpression();
 
     void execute(Env &env) override;
-
-    double getDouble() const override;
-    int getInt() const override;
-    std::string getString() const override;
     bool getBool() const override;
     ObjectType getObjectType() const override;
-    Obj &getObject() override;
 };
 
 using ConditionalExpressionUP = std::unique_ptr<ConditionalExpression>;

@@ -3,37 +3,83 @@
 //
 
 #include <Analizator/Interpreter/NotImplementedException.h>
+#include <Analizator/Interpreter/BreakException.h>
 #include "Analizator/Interpreter/Obj.h"
 
 
-Obj &Obj::getObject() {
-    throw NotImplementedException();
+Obj &Obj::evaluateObject() {
+    evaluateList();
+    if(objectList.empty()){
+        throw BreakException();
+    }
+    return objectList.front();
 }
 
-void Obj::execute(Env &env) {
-    throw NotImplementedException();
-}
-
-std::string Obj::getName() const {
-    throw NotImplementedException();
-}
-
-Obj &Obj::operator[](int i) {
-    throw NotImplementedException();
-}
 
 int Obj::getInt() const {
-    throw NotImplementedException();
+    if(objectList.empty()){
+        return 0;
+    }
+    return objectList.front().get().getInt();
 }
 
 double Obj::getDouble() const {
-    throw NotImplementedException();
+    if(objectList.empty()){
+        return 0;
+    }
+    return objectList.front().get().getDouble();
 }
 
 std::string Obj::getString() const {
-    throw NotImplementedException();
+    if(objectList.empty()){
+        return "";
+    }
+    return objectList.front().get().getString();
 }
 
 bool Obj::getBool() const {
-    throw NotImplementedException();
+    if(objectList.empty()){
+        return true;
+    }
+    return objectList.front().get().getBool();
 }
+
+bool Obj::isFinal() const {
+    return false;
+}
+
+ObjectList &Obj::evaluateList() {
+    for(auto &e:objectList) {
+        while (not e.get().isFinal()) {
+            try {
+                e = e.get().evaluateObject();
+            }
+            catch(BreakException &e){
+                break;
+            }
+        }
+    }
+    return objectList;
+}
+
+Obj &Obj::getObject() {
+    if(objectList.empty()){
+        return *this;
+    }
+    return objectList.front();
+}
+
+Obj &Obj::operator[](int n) {
+    auto it = objectList.begin();
+    for(int i=0; i<n; ++i) {
+        ++it;
+    }
+    return *it;
+}
+//
+//std::string Obj::getName() const {
+//    if(objectList.empty()){
+//        return "";
+//    }
+//    return objectList.front().get().getName();
+//}

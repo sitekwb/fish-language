@@ -1,0 +1,15 @@
+def hasPair(n){
+    return (n % 2 == 0)
+}
+
+fori(5){
+    if(not hasPair(i)) break
+}
+
+def concatStr(a, b){
+    new i = 5
+    new str = a + b + i
+    return str
+}
+
+concatStr("Dzien dobry, ", "Uzytkowniku!")

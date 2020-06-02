@@ -17,18 +17,15 @@ protected:
     ArgumentUP argumentOptional;
     std::list<std::pair<TokenUPD, ArgumentUP>>repeatListOptional;
     bool buildRepeat();
-    // INTERPRETER done
-    std::list<std::reference_wrapper<Obj>>objectList;
 public:
     ArgumentList();
     ArgumentList(int);
     ArgumentList(ArgumentList &argumentList);
     void execute(Env &env) override;
-    int getInt() const override;
+    int getSize() const;
     friend class Test;
     friend class ArgumentList;
     ObjectType getObjectType() const override;
-    std::list<std::reference_wrapper<Obj>> &getList();
 };
 using ArgumentListUP = std::unique_ptr<ArgumentList>;
 
