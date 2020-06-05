@@ -4,13 +4,13 @@
 
 #include "Context.h"
 
-Context::Context() : lineNumber(0), signNumber(0), signNumberInLine(0) {
+Context::Context() : lineNumber(1), signNumber(1), signNumberInLine(1) {
 
 }
 
 void Context::nextLineNumber() {
     ++lineNumber;
-    signNumberInLine = 0;
+    signNumberInLine = 1;
 }
 
 void Context::nextSignNumber() {

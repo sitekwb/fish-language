@@ -6,7 +6,6 @@
 #define FISH_SOURCE_H
 
 #include <memory>
-#include <Analizator/Tokens/TokenType.h>
 
 class Source {
 

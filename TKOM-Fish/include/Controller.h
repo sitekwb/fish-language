@@ -6,18 +6,13 @@
 #define FISH_CONTROLLER_H
 
 #include <memory>
-#include <Analizator/Lexer.h>
+#include <Analizator/Lexer/Lexer.h>
 #include <Context.h>
 #include <Sources/Source.h>
-#include <Analizator/Parser.h>
+#include <Analizator/Parser/Parser.h>
 
 class Controller {
-
-    std::unique_ptr<Parser> parser;
-    SourceUP source;
-
-    void resetFile(FileUP &file);
-    void resetFilePart(FilePartUP &filePart);
+    LexerUP lexer;
 public:
     Controller(SourceUP source);
     void execute();

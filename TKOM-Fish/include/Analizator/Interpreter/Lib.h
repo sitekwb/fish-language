@@ -5,18 +5,15 @@
 #ifndef FISH_LIB_H
 #define FISH_LIB_H
 
-#include "Obj.h"
 #include <string>
 
-class Lib : public Obj{
+class Lib {
     std::string name;
 
-    void initStd();
+//    void initStd();
 public:
-    Lib(std::string name);
-    void execute(Env &env);
-    ObjectType getObjectType()const override;
-    bool isFinal() const override;
+    Lib(std::string &&name);
+//    void execute(Env &env);
 };
 using LibUP = std::unique_ptr<Lib>;
 

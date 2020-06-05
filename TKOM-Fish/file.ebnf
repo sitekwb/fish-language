@@ -1,33 +1,33 @@
 IDENTIFIER = Letter, {Letter | Digit | "_"};
 CONSTANT = "_", UpperLetter, {UpperLetter};
 
-File = {FilePart};
-FilePart = FunctionDefinition | ClassDefinition | Statement;
-Statement = (CompoundStatement | SimpleStatement), [";"];
+File = {(FunctionDefinition | ClassDefinition | Statement), [";"]};
+Statement = IfStatement
+                | WhileStatement
+                | ForStatement
+                | ForiStatement
+                | ForeachStatement
+                | DeleteStatement
+                | ImportStatement
+                | ControlStatement
+                | AliasStatement
+                | NewStatement
+                | AssignStatementOrMethodOrFunctionCall
 
-SimpleStatement = ExpressionStatement
-    | DeleteStatement 
-    | ImportStatement 
-    | NewStatement 
-    | AssignStatement 
-    | ControlStatement 
-    | AliasStatement;
+AssignStatementOrMethodOrFunctionCall = IDENTIFIER, (AssignStatement | MethodCallOrPropertyAssign | FunctionCall);
+AssignStatement = AssignOperator, ConditionalExpression;
+FunctionCall = '(', ArgumentList, ')';
+MethodCallOrPropertyAssign = {'.', IDENTIFIER}, (AssignStatement | FunctionCall);
 
-ExpressionStatement = Expression;
 DeleteStatement = "delete", IDENTIFIER;
 ImportStatement = "import", IDENTIFIER, ["as", IDENTIFIER];
-NewStatement = NewExpression;
-AssignStatement = AssignExpression;
-ControlStatement = "break" | "continue" | "return", [ConditionalExpression];
+AssignStatement = AssignStatement;
+ControlStatement = "break" | "continue" | "return", [ConditionalExpression | ';'];
 AliasStatement = "alias", Type, Type;
+NewStatement = "new", ["mut"], ["static"], [Type], IDENTIFIER, ['(', ArgumentList, ')' | AssignOperator, ConditionalExpresion];
 
-Type = IDENTIFIER;
-Bool = "true" | "false"
+BOOL = "true" | "false"
 
-Expression = ConditionalExpression | NewExpression | AssignExpression;
-
-NewExpression = "new", ["mut"], ["static"], [Type], (IDENTIFIER | CONSTANT), ['(', ArgumentList, ')'] [AssignOperator, ConditionalExpresion];
-AssignExpression = IDENTIFIER, AssignOperator, ConditionalExpression;
 
 ConditionalExpression = AndExpression, {"or", AndExpression};
 AndExpression = OrExpression, {"and", OrExpression};
@@ -37,8 +37,7 @@ RelativeExpression = '(' ConditionalExpression ')' | ArithmeticExpression;
 ArithmeticExpression = AddExpression, {AddOperator, AddExpression};
 AddExpression = MultiplyExpression, {MultiplyOperator, MultiplyExpression};
 MultiplyExpression = [UnarySign], Term;
-Term = Int | Dbl | Str | Bool | '(', ArithmeticExpression, ')'
-      | (IDENTIFIER | CONSTANT | FunctionCall), {ArraySubscript}, {'.', (IDENTIFIER | CONSTANT | FunctionCall), {ArraySubscript}}
+Term = Int | Dbl | Str | Bool | '(', ArithmeticExpression, ')' | (IDENTIFIER, {'.', IDENTIFIER}, [FunctionCall]);
 
 
 FunctionCall = IDENTIFIER, '(', ArgumentList, ')';
@@ -53,17 +52,14 @@ MultiplyOperator = "*" | "/" | "%";
 UnarySign = "+" | "-";
 UnaryNot = "not" | "!";
 
-ArraySubscript = "[", UnsignedIntTerm, "]";
-UnsignedIntTerm = Term;
 
 
-CompoundStatement = IfStatement | WhileStatement | ForStatement | ForiStatement | ForeachStatement;
 BlockInstruction = ("{", {Statement}, "}") | Statement;
 
 IfStatement = "if", '(', ConditionalExpression, ')', BlockInstruction, ["else", BlockInstruction];
 WhileStatement = "while", '(', ConditionalExpression, ')', BlockInstruction;
-ForStatement = "for", '(', [Expression], ';', ConditionalExpression, ';' [Expression], ')', BlockInstruction;
-ForiStatement = "fori", '(', UnsignedIntTerm, ')', BlockInstruction;
+ForStatement = "for", '(', [NewStatement | AssignStatement], ';', ConditionalExpression, ';' [Expression], ')', BlockInstruction;
+ForiStatement = "fori", '(', ArithmeticExpression, ')', BlockInstruction;
 ForeachStatement = "foreach", '(', IDENTIFIER, "in", Term, ')', BlockInstruction;
 FunctionDefinition = "def", [Type], IDENTIFIER, '(', ParameterList, ')', BlockInstruction;
 ClassDefinition = "class", Type, '{', ClassBody, '}';
@@ -73,6 +69,6 @@ Parameter = [Type], IDENTIFIER, ['=', Default];
 Default = Term;
 
 
-ClassBody = {ClassBodyStatement};
-ClassBodyStatement = MemberDefinition | FunctionDefinition;
-MemberDefinition = ["public" | "private" | "secret"], ["mut"], ["static"], [Type], IDENTIFIER, ['(', ArgumentList, ')'];
+ClassBody = {ClassStatement};
+ClassStatement = (MemberDefinition | FunctionDefinition), [';'];
+MemberDefinition = ["public" | "private" | "secret"], ["mut"], ["static"], [Type], IDENTIFIER;

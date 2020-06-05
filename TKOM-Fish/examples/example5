@@ -1,3 +1,4 @@
+
 import print;
 fori(10) {
     print(i);
@@ -6,3 +7,20 @@ fori(10) {
 def bool equals_five(a){
     return (a == 5)
 }
+
+new a = 5;
+
+class D{
+    public int a;
+    public int b;
+    def func(a){
+        return a + 1;
+    };
+}
+
+if(equals_five(10-5)){
+    print("ok");
+}
+else{
+    print("wrong");
+};

@@ -1,9 +1,7 @@
 
-#include <Controller.h>
 #include <iostream>
-#include <Sources/CommandLineSource.h>
+#include <Controller.h>
 #include <ProgramOptions.h>
-#include <Sources/FileSource.h>
 
 using namespace std;
 namespace po = boost::program_options;

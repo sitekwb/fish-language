@@ -1,5 +1,7 @@
+
+if(a == 5) return true;
+if)(
 not a or (b and !c);
-id = type(a);
 b == 9 or c == 10;
 f(arg1, 5+9*func(1));
 print("Hello world!")
@@ -15,3 +17,4 @@ alias ax bx;
 a = -5+8*4;
 a += 5
 a[10]
+49y7rehufoadijs[

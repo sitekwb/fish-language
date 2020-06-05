@@ -4,60 +4,25 @@
 
 #include <iostream>
 #include <memory>
-#include <Analizator/EndOfFileException.h>
-#include <Analizator/Symbols/File.h>
+#include <Analizator/Nodes/File.h>
 #include <Controller.h>
-#include <Analizator/Interpreter/NotImplementedException.h>
-#include <Analizator/Interpreter/SymbolNotFoundException.h>
+#include <Analizator/Parser/ParsingError.h>
 
 
 using namespace std;
 
-Controller::Controller(SourceUP source_) :source(move(source_)){
-    parser = make_unique<Parser>(
-            make_unique<Lexer>(*source));
+Controller::Controller(SourceUP source_)
+        : lexer(make_unique<Lexer>(move(source_))) {
 
 }
 
 void Controller::execute() {
     try {
-        Env env;
-        if (source->isFileSource()) {
-            FileUP file;
-            file = parser->parseFile();
-            file->execute(env);
-            resetFile(file);
-        } else {
-            do {
-                FilePartUP filePart;
-                filePart = parser->parseFilePart();
-                filePart->execute(env);
-                resetFilePart(filePart);
-            } while (true);
-        }
+        Parser parser(*lexer);
+        FileUP file = parser.parseFile();
+        //TODO interpreter
     }
-    catch (EndOfFileException &e) {
-        // we discovered end of file
+    catch (ParsingError &e) {
+        std::cout << e.what();
     }
-    catch (Token &token) {
-        cout << token.getErrorMessage();
-    }
-    catch(NotImplementedException &e){
-        std::cout << "Not implemented exception";
-    }
-    catch(SymbolNotFoundException &e){
-        std::cout << "SymbolNotFoundException";
-    }
-}
-
-void Controller::resetFile(FileUP &file) {
-    TokenDeleter::setTokenSaving(false);
-    file.reset();
-    TokenDeleter::setTokenSaving(true);
-}
-
-void Controller::resetFilePart(FilePartUP &filePart) {
-    TokenDeleter::setTokenSaving(false);
-    filePart.reset();
-    TokenDeleter::setTokenSaving(true);
 }
